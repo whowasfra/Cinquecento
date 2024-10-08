@@ -1,3 +1,101 @@
-#intro .buttons .button {
-    border: 3px solid black ;
+:root{
+    --card-width-lg:157px;
+    --card-height-lg:220px;
+
+    --card-width-sm:120px;
+    --card-height-sm:168px;
+
 }
+
+.man{
+    position: absolute;
+    height: 1000px;
+    width: 500px;
+}
+
+.table-container{
+    border: 3px solid black;
+    position: relative;
+    height: 100%;
+    width: 80%;
+    display: grid;
+    grid-template-areas: ". adversary ."
+                         "remaining . played ."
+                         ". player ." ;                     
+}   
+
+.adversary-cards-container{
+    grid-area: adversary;
+    position: relative;
+    height: 30%;
+    width: calc(var(--card-width-lg) * 5);
+    display: grid;
+    grid-template-areas: "adversary-pos-a adversary-pos-b adversary-pos-c adversary-pos-d adversary-pos-e";
+}
+
+.remaining-cards-container{
+    grid-area: remaining;
+    position: relative;
+    height: 40%;
+    width: var(--card-width-lg);
+}
+
+.adversary-card-pos-a .adversary-card-pos-b .adversary-card-pos-c .adversary-card-pos-d .adversary-card-pos-e{
+    position: relative;
+    height: var(--card-height-lg);
+    width: var(--card-width-lg);
+}
+
+.adversary-card-pos-a{
+    grid-area: adversary-pos-a;
+}
+
+.adversary-card-pos-b{
+    grid-area: adversary-pos-b;
+}
+
+.adversary-card-pos-c{
+    grid-area: adversary-pos-c;}
+
+.adversary-card-pos-d{ 
+    grid-area: adversary-pos-d;
+}
+
+.adversary-card-pos-e{
+    grid-area: adversary-pos-e;
+}
+
+.played-cards-container{
+    grid-area: played;
+    position: relative;
+    height: 30%;
+    width: calc(var(--card-width-lg) * 5);
+    display: grid;
+    grid-template-areas: "player-pos-a player-pos-b, player-pos-c, player-pos-d, player-pos-e";
+}
+
+.player-card-pos-a .player-card-pos-b .player-card-pos-c .player-card-pos-d .player-card-pos-e{
+    position: relative;
+    height: var(--card-height-lg);
+    width: var(--card-width-lg);   
+}
+.player-card-pos-a{
+    grid-area: player-pos-a;
+}
+
+.player-card-pos-b{
+    grid-area: player-pos-b;
+}
+
+.player-card-pos-c{
+    grid-area: player-pos-c;
+}
+
+.player-card-pos-d{
+    grid-area: player-pos-d;
+}   
+
+.player-card-pos-e{
+    grid-area: player-pos-e;
+}
+
