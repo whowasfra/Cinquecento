@@ -7,10 +7,10 @@
 
 }
 
-.man{
+.main{
     position: absolute;
-    height: 1000px;
-    width: 500px;
+    /* height: 1000px; */
+    /* width: 500px; */
 }
 
 .table-container{
@@ -19,83 +19,47 @@
     height: 100%;
     width: 80%;
     display: grid;
-    grid-template-areas: ". adversary ."
-                         "remaining . played ."
-                         ". player ." ;                     
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas: "adversary adversary adversary"
+                         "remaining played  ."
+                         "player player player" ;                     
 }   
 
 .adversary-cards-container{
     grid-area: adversary;
     position: relative;
-    height: 30%;
-    width: calc(var(--card-width-lg) * 5);
-    display: grid;
-    grid-template-areas: "adversary-pos-a adversary-pos-b adversary-pos-c adversary-pos-d adversary-pos-e";
+    display: flex;
+    justify-content: center;    
 }
 
 .remaining-cards-container{
     grid-area: remaining;
-    position: relative;
-    height: 40%;
-    width: var(--card-width-lg);
+    justify-content: left;
 }
 
-.adversary-card-pos-a .adversary-card-pos-b .adversary-card-pos-c .adversary-card-pos-d .adversary-card-pos-e{
-    position: relative;
+.adversary-card-pos-a, .adversary-card-pos-b, .adversary-card-pos-c, .adversary-card-pos-d, .adversary-card-pos-e{
     height: var(--card-height-lg);
     width: var(--card-width-lg);
-}
-
-.adversary-card-pos-a{
-    grid-area: adversary-pos-a;
-}
-
-.adversary-card-pos-b{
-    grid-area: adversary-pos-b;
-}
-
-.adversary-card-pos-c{
-    grid-area: adversary-pos-c;}
-
-.adversary-card-pos-d{ 
-    grid-area: adversary-pos-d;
-}
-
-.adversary-card-pos-e{
-    grid-area: adversary-pos-e;
 }
 
 .played-cards-container{
     grid-area: played;
     position: relative;
-    height: 30%;
-    width: calc(var(--card-width-lg) * 5);
-    display: grid;
-    grid-template-areas: "player-pos-a player-pos-b, player-pos-c, player-pos-d, player-pos-e";
+    display: flex;
+    justify-content: center;    
 }
 
-.player-card-pos-a .player-card-pos-b .player-card-pos-c .player-card-pos-d .player-card-pos-e{
+.player-cards-container {
+    grid-area: player;
     position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.player-card-pos-a, .player-card-pos-b, .player-card-pos-c, .player-card-pos-d, .player-card-pos-e{
     height: var(--card-height-lg);
     width: var(--card-width-lg);   
 }
-.player-card-pos-a{
-    grid-area: player-pos-a;
-}
 
-.player-card-pos-b{
-    grid-area: player-pos-b;
-}
-
-.player-card-pos-c{
-    grid-area: player-pos-c;
-}
-
-.player-card-pos-d{
-    grid-area: player-pos-d;
-}   
-
-.player-card-pos-e{
-    grid-area: player-pos-e;
-}
 
