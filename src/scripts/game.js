@@ -21,6 +21,9 @@ function shuffleDeck(deck){
     return deck;
 }
 
+let adversary_cards = [];
+let player_cards = [];
+
 
 // <div class="adversary-cards-container">
 //     <div class="adversary-card-pos-a">
