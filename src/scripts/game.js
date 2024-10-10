@@ -13,6 +13,15 @@ function createDeck(){
 let deck = createDeck();
 console.log(deck);
 
+function shuffleDeck(deck){
+    for(let i = deck.lenght-1; i> 0; i--){
+        const j = Math.floor(Math.random() * (i-1));
+        [deck(i),deck(j)] = [deck(j),deck(i)];
+    }
+    return deck;
+}
+
+
 // <div class="adversary-cards-container">
 //     <div class="adversary-card-pos-a">
 //         <img src="images/carte/dorso.bmp" alt="dorso">
