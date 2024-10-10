@@ -1,6 +1,6 @@
 
 const cards = [
-    {id:1b, imagePath:"images/carte/1b.bmp"},
+    {id:1b, imagePath:""},
     {id:2b, imagePath:"images/carte/2b.bmp"},
     {id:3b, imagePath:"images/carte/3b.bmp"},
     {id:4b, imagePath:"images/carte/4b.bmp"},
