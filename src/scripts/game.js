@@ -1,6 +1,6 @@
 const suits = ['coppe', 'spade', 'oro', 'bastoni'];
 const values = ['1', '2', '3', '4', '5' , '6', '7', '8', '9', '10'];
-const points = ['11','0','0','0','0','0','0','2','3','4'];
+const points = ['11','0','10','0','0','0','0','2','3','4'];
 
 function createDeck(){
     let deck = [];
@@ -23,6 +23,17 @@ function shuffleDeck(deck){
 
 let adversary_cards = [];
 let player_cards = [];
+
+function dealCards(deck){
+    adversary_cards = deck.splice(0,5);
+    player_cards = deck.splice(0,5);
+}
+
+dealCards(deck);
+
+console.log(adversary_cards);
+console.log(player_cards);
+console.log(deck);
 
 
 // <div class="adversary-cards-container">
