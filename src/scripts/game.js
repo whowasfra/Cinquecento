@@ -1,6 +1,7 @@
 const suits = ['coppe', 'spade', 'oro', 'bastoni'];
 const values = ['1', '2', '3', '4', '5' , '6', '7', '8', '9', '10'];
 const points = ['11','0','10','0','0','0','0','2','3','4'];
+let cheat = false;
 
 function startGame(){
     let deck = createDeck();
@@ -35,6 +36,16 @@ function dealHands(deck){
 }
 
 function renderCards(){
+    let adversaryCards = document.querySelector('.adversary-cards-container');
+    adversaryCards.innerHTML = '';
+    for(let i = 0; i < adversary_hand.length; i++){
+        adversaryCards.innerHTML += `
+            <div class="adversary-card-pos-${i}">
+                <img src="images/carte/${adversary_hand[i].suit}${adversary_hand[i].value}.bmp" alt="${adversary_hand[i].suit}${adversary_hand[i].value}">
+            </div>
+        `;
+    }
+    
     let playerCards = document.querySelector('.player-cards-container');
     playerCards.innerHTML = '';
     for(let i = 0; i < player_hand.length; i++){      
@@ -49,24 +60,3 @@ function renderCards(){
 console.log(adversary_hand);
 console.log(player_hand);
 document.addEventListener("DOMContentLoaded", startGame);
-
-
-// <div class="adversary-cards-container">
-//     <div class="adversary-card-pos-a">
-//         <img src="images/carte/dorso.bmp" alt="dorso">
-//     </div>
-//     <div class="adversary-card-pos-b">
-//         <img src="images/carte/dorso.bmp" alt="dorso">
-//     </div>
-//     <div class="adversary-card-pos-c">
-//         <img src="images/carte/dorso.bmp" alt="dorso">
-//     </div>
-//     <div class="adversary-card-pos-d">
-//         <img src="images/carte/dorso.bmp" alt="dorso">
-//     </div>
-//     <div class="adversary-card-pos-e">
-//         <img src="images/carte/dorso.bmp" alt="dorso">
-//     </div>
-// </div>
-
-

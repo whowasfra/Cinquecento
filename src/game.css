@@ -1,6 +1,6 @@
 :root{
     --card-width-lg:157px;
-    --card-height-lg:220px;
+    --card-height-lg:120px;
 
     --card-width-sm:120px;
     --card-height-sm:168px;
@@ -21,7 +21,7 @@
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto auto auto;
     grid-template-areas: "adversary adversary adversary"
-                         "remaining played  ."
+                         "remaining played ."
                          "player player player" ;                     
 }   
 
@@ -35,6 +35,7 @@
 .remaining-cards-container{
     grid-area: remaining;
     justify-content: left;
+    margin: 20%;
 }
 
 .adversary-card-pos-a, .adversary-card-pos-b, .adversary-card-pos-c, .adversary-card-pos-d, .adversary-card-pos-e{
@@ -46,7 +47,10 @@
     grid-area: played;
     position: relative;
     display: flex;
-    justify-content: center;    
+    justify-content: center;
+    height: var(--card-height-lg);
+    width: var(--card-width-lg);
+    margin: 20%;  
 }
 
 .player-cards-container {
@@ -61,4 +65,8 @@
     width: var(--card-width-lg);   
 }
 
-
+img{
+    border-radius: 10px ;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    margin: 5px;
+}
