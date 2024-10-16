@@ -128,7 +128,7 @@ function adversaryTurn(){
         adversary_hand.splice(cardPosition, 1);
         // Aggiorna la grafica
         renderCards();
-        determineWinner(); // Determina il vincitore della mano
+        setTimeout(determineWinner, 1000); // Determina il vincitore della mano con un timeout di 500ms
         // L'avversario ha giocato una carta
         isPlayerTurn = true;
     }
@@ -137,8 +137,8 @@ function determineWinner(){
     // Determina il vincitore della mano
     let playerCard = played_card_p[0];
     let adversaryCard = played_card_a[0];
-    let playerCardValue = values.indexOf(playerCard.value);
-    let adversaryCardValue = values.indexOf(adversaryCard.value);
+    let playerCardValue = points.indexOf(playerCard.value);
+    let adversaryCardValue = points.indexOf(adversaryCard.value);
     let playerCardSuit = suits.indexOf(playerCard.suit);
     let adversaryCardSuit = suits.indexOf(adversaryCard.suit);
 
