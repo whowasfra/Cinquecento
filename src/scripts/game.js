@@ -1,6 +1,6 @@
 const suits = ['coppe', 'spade', 'oro', 'bastoni'];
 const values = ['1', '2', '3', '4', '5' , '6', '7', '8', '9', '10'];
-const points = ['11','0','10','0','0','0','0','2','3','4'];
+const points = ['11', '0', '10', '0', '0', '0', '0', '2', '3', '4'];
 let cheat = false;
 
 let deck = [];  
@@ -139,29 +139,28 @@ function determineWinner(){
     // Determina il vincitore della mano
     let playerCard = played_card_p[0];
     let adversaryCard = played_card_a[0];
-    let playerCardValue = points.indexOf(playerCard.value);
-    let adversaryCardValue = points.indexOf(adversaryCard.value);
+    let playerCardValue = points[values.indexOf(playerCard.value)];
+    let adversaryCardValue = points[values.indexOf(adversaryCard.value)];
 
     // Se le carte hanno lo stesso seme
     if(playerCard.suit === adversaryCard.suit){
         if(playerCardValue > adversaryCardValue){
-            console.log('Player wins');
+            console.log(`Player wins with ${playerCardValue} vs ${adversaryCardValue}`);
             player_won_cards.push(playerCard, adversaryCard);
         } else {
-            console.log('Adversary wins');
+            console.log(`Adversary wins with ${adversaryCardValue} vs ${playerCardValue}`);
             adversary_won_cards.push(playerCard, adversaryCard);
         }
     } else {
         // Se le carte hanno semi diversi
         if(playerCard.suit === briscola){
-            console.log('Player wins');
+            console.log(`Player wins with ${playerCardValue} vs ${adversaryCardValue}`);
             player_won_cards.push(playerCard, adversaryCard);
         } else if(adversaryCard.suit === briscola){
-            console.log('Adversary wins');
-            adversary_won_cards.push(playerCard, adversaryCard);
+            console.log(`Adversary wins with ${adversaryCardValue} of ${adversaryCard.suit} vs ${playerCardValue}`); 
         } else {
             // Comanda il seme della prima carta tirata 
-            console.log('Player wins');
+            console.log(`Player wins with ${playerCardValue} vs ${adversaryCardValue} `);
             player_won_cards.push(playerCard, adversaryCard);
         }
     }
@@ -196,8 +195,8 @@ function determineGameWinner(){
     if(playerPoints > adversaryPoints){
         console.log(`Player wins the game with ${playerPoints} points. Adversary has ${adversaryPoints} points.`);
     } else if(adversaryPoints > playerPoints){
-        console.log('Adversary wins the game with ${adversaryPoints} points. Player has ${playerPoints} points.');
+        console.log(`Adversary wins the game with ${adversaryPoints} points. Player has ${playerPoints} points.`);
     } else {
-        console.log('The game is a draw with ${playerPoints} points each.');
+        console.log(`The game is a draw with ${playerPoints} points each.`);
     }
 }
