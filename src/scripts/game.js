@@ -7,6 +7,7 @@ let deck = [];
 let adversary_hand = [];
 let player_hand = [];
 let played_cards = [];
+let isPlayerTurn = true;  // Flag per controllare se il giocatore ha giocato una carta
 
 document.addEventListener("DOMContentLoaded", function(){
     console.log("DOM completamente caricato e analizzato");
@@ -14,8 +15,16 @@ document.addEventListener("DOMContentLoaded", function(){
     deck = shuffleDeck(deck);
     dealHands(deck);
     renderCards();
-    playCard();
+    turn();
 });
+
+function restartGame(){
+    deck = createDeck();
+    deck = shuffleDeck(deck);
+    dealHands(deck);
+    played_cards = [];
+    renderCards();
+}
 
 function createDeck(){
     deck = [];
@@ -74,11 +83,11 @@ function renderCards(){
 
 }
 
-function playCard(){
+function turn(){
     // Aggiungo un event listener per il click su ogni carta del giocatore
     document.querySelector('.player-cards-container').addEventListener('click', function(event){
         // Controlla se l'elemento cliccato è l'immagine di una carta nella mano del giocatore
-        if(event.target.tagName === 'IMG'){
+        if(event.target.tagName === 'IMG' && isPlayerTurn){
             // Ottengo la posizione della carta cliccata
             let cardPosition = event.target.parentElement.className.split('-')[3];
             // Converto la posizione della carta da carattere a numero
@@ -89,7 +98,26 @@ function playCard(){
             player_hand.splice(cardPosition, 1);
             // Aggiorno la grafica
             renderCards();
+            // Il giocatore ha giocato una carta
+            isPlayerTurn = false;
+            adversaryTurn();
         }
     } 
     );
 }
+
+function adversaryTurn(){
+    if(adversary_hand.length > 0 && !isPlayerTurn){
+        // Scegli una carta casuale dalla mano dell'avversario
+        let cardPosition = Math.floor(Math.random() * adversary_hand.length);
+        // Aggiungi la carta giocata all'array delle carte giocate
+        played_cards.push(adversary_hand[cardPosition]);
+        // Rimuovi la carta dalla mano dell'avversario
+        adversary_hand.splice(cardPosition, 1);
+        // Aggiorna la grafica
+        renderCards();
+        // L'avversario ha giocato una carta
+        isPlayerTurn = true;
+    }
+}
+
