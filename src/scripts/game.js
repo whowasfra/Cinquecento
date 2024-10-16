@@ -9,7 +9,8 @@ let player_hand = [];
 let briscola = null; // Briscola null, sarà assegnata appena un giocatore dichiara
 let played_card_a = []; // Carta giocata dall'avversario
 let played_card_p = []; // Carta giocata dal giocatore
-
+let player_won_cards = []; // Carte vinte dal giocatore
+let adversary_won_cards = []; // Carte vinte dall'avversario
 
 let isPlayerTurn = true;  // Flag per controllare se il giocatore ha giocato una carta
 
@@ -27,6 +28,8 @@ function restartGame(){
     deck = shuffleDeck(deck);
     dealHands(deck);
     played_cards = [];
+    player_won_cards = [];
+    adversary_won_cards = [];
     renderCards();
 }
 
@@ -46,8 +49,6 @@ function shuffleDeck(deck){
     }
     return deck;
 }
-
-
 
 function dealHands(deck){
     adversary_hand = deck.splice(0,5);
@@ -133,6 +134,7 @@ function adversaryTurn(){
         isPlayerTurn = true;
     }
 }
+
 function determineWinner(){
     // Determina il vincitore della mano
     let playerCard = played_card_p[0];
@@ -144,18 +146,23 @@ function determineWinner(){
     if(playerCard.suit === adversaryCard.suit){
         if(playerCardValue > adversaryCardValue){
             console.log('Player wins');
+            player_won_cards.push(playerCard, adversaryCard);
         } else {
             console.log('Adversary wins');
+            adversary_won_cards.push(playerCard, adversaryCard);
         }
     } else {
         // Se le carte hanno semi diversi
         if(playerCard.suit === briscola){
             console.log('Player wins');
+            player_won_cards.push(playerCard, adversaryCard);
         } else if(adversaryCard.suit === briscola){
             console.log('Adversary wins');
+            adversary_won_cards.push(playerCard, adversaryCard);
         } else {
             // Comanda il seme della prima carta tirata 
             console.log('Player wins');
+            player_won_cards.push(playerCard, adversaryCard);
         }
     }
 
@@ -173,6 +180,24 @@ function determineWinner(){
         }
     }
 
+    // Se il mazzo è vuoto e i giocatori non hanno più carte in mano, determina il vincitore del gioco
+    if(deck.length === 0 && player_hand.length === 0 && adversary_hand.length === 0){
+        determineGameWinner();
+    }
+
     // Aggiorna la grafica
     renderCards();
+}
+
+function determineGameWinner(){
+    let playerPoints = player_won_cards.reduce((sum, card) => sum + parseInt(points[values.indexOf(card.value)]), 0);
+    let adversaryPoints = adversary_won_cards.reduce((sum, card) => sum + parseInt(points[values.indexOf(card.value)]), 0);
+
+    if(playerPoints > adversaryPoints){
+        console.log(`Player wins the game with ${playerPoints} points. Adversary has ${adversaryPoints} points.`);
+    } else if(adversaryPoints > playerPoints){
+        console.log('Adversary wins the game with ${adversaryPoints} points. Player has ${playerPoints} points.');
+    } else {
+        console.log('The game is a draw with ${playerPoints} points each.');
+    }
 }
