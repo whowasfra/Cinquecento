@@ -6,7 +6,11 @@ let cheat = false;
 let deck = [];  
 let adversary_hand = [];
 let player_hand = [];
-let played_cards = [];
+let briscola = null; // Briscola null, sarà assegnata appena un giocatore dichiara
+let played_card_a = []; // Carta giocata dall'avversario
+let played_card_p = []; // Carta giocata dal giocatore
+
+
 let isPlayerTurn = true;  // Flag per controllare se il giocatore ha giocato una carta
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -73,10 +77,19 @@ function renderCards(){
 
     let playedCardsContainer = document.querySelector('.played-cards-container');
     playedCardsContainer.innerHTML = '';
-    for(let i = 0; i < played_cards.length; i++){
+
+    if (played_card_p.length > 0) {
         playedCardsContainer.innerHTML += `
-            <div class="played-card-pos-${i}">
-                <img src="images/carte/${played_cards[i].suit}${played_cards[i].value}.bmp" alt="${played_cards[i].suit}${played_cards[i].value}">
+            <div class="played-card-pos-player">
+                <img src="images/carte/${played_card_p[0].suit}${played_card_p[0].value}.bmp" alt="${played_card_p[0].suit}${played_card_p[0].value}">
+            </div>
+        `;
+    }
+
+    if (played_card_a.length > 0) {
+        playedCardsContainer.innerHTML += `
+            <div class="played-card-pos-adversary">
+                <img src="images/carte/${played_card_a[0].suit}${played_card_a[0].value}.bmp" alt="${played_card_a[0].suit}${played_card_a[0].value}">
             </div>
         `;
     }
@@ -93,14 +106,13 @@ function turn(){
             // Converto la posizione della carta da carattere a numero
             cardPosition = parseInt(cardPosition);
             // Aggiungo la carta cliccata all'array delle carte giocate
-            played_cards.push(player_hand[cardPosition]);
+            played_card_p.push(player_hand[cardPosition]);
             // Rimuovo la carta dalla mano del giocatore
             player_hand.splice(cardPosition, 1);
             // Aggiorno la grafica
             renderCards();
-            // Il giocatore ha giocato una carta
-            isPlayerTurn = false;
-            adversaryTurn();
+            isPlayerTurn = false; // E' finito il turno del giocatore
+            setTimeout(adversaryTurn, 500); // Ritardo per simulare il pensiero dell'avversario
         }
     } 
     );
@@ -111,13 +123,46 @@ function adversaryTurn(){
         // Scegli una carta casuale dalla mano dell'avversario
         let cardPosition = Math.floor(Math.random() * adversary_hand.length);
         // Aggiungi la carta giocata all'array delle carte giocate
-        played_cards.push(adversary_hand[cardPosition]);
+        played_card_a.push(adversary_hand[cardPosition]);
         // Rimuovi la carta dalla mano dell'avversario
         adversary_hand.splice(cardPosition, 1);
         // Aggiorna la grafica
         renderCards();
+        determineWinner(); // Determina il vincitore della mano
         // L'avversario ha giocato una carta
         isPlayerTurn = true;
     }
 }
+function determineWinner(){
+    // Determina il vincitore della mano
+    let playerCard = played_card_p[0];
+    let adversaryCard = played_card_a[0];
+    let playerCardValue = values.indexOf(playerCard.value);
+    let adversaryCardValue = values.indexOf(adversaryCard.value);
+    let playerCardSuit = suits.indexOf(playerCard.suit);
+    let adversaryCardSuit = suits.indexOf(adversaryCard.suit);
 
+    // Se le carte hanno lo stesso seme
+    if(playerCard.suit === adversaryCard.suit){
+        if(playerCardValue > adversaryCardValue){
+            console.log('Player wins');
+        } else {
+            console.log('Adversary wins');
+        }
+    } else {
+        // Se le carte hanno semi diversi
+        if(playerCard.suit === briscola){
+            console.log('Player wins');
+        } else if(adversaryCard.suit === briscola){
+            console.log('Adversary wins');
+        } else {
+            // Comanda il seme della prima carta tirata 
+            console.log('Player wins');
+        }
+    }
+
+    // Svuota le carte giocate per la prossima mano
+    played_card_p = [];
+    played_card_a = [];
+    renderCards();
+}
