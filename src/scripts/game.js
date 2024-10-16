@@ -139,8 +139,6 @@ function determineWinner(){
     let adversaryCard = played_card_a[0];
     let playerCardValue = points.indexOf(playerCard.value);
     let adversaryCardValue = points.indexOf(adversaryCard.value);
-    let playerCardSuit = suits.indexOf(playerCard.suit);
-    let adversaryCardSuit = suits.indexOf(adversaryCard.suit);
 
     // Se le carte hanno lo stesso seme
     if(playerCard.suit === adversaryCard.suit){
@@ -164,5 +162,17 @@ function determineWinner(){
     // Svuota le carte giocate per la prossima mano
     played_card_p = [];
     played_card_a = [];
+
+    // Distribuisci una carta ciascuno se ci sono carte rimanenti nel mazzo
+    if(deck.length > 0){
+        if(player_hand.length < 5){
+            player_hand.push(deck.pop());
+        }
+        if(adversary_hand.length < 5){
+            adversary_hand.push(deck.pop());
+        }
+    }
+
+    // Aggiorna la grafica
     renderCards();
 }
