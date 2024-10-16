@@ -50,7 +50,7 @@
     justify-content: center;
     height: var(--card-height-lg);
     width: var(--card-width-lg);
-    margin: 20%;  
+    margin: 20%;
 }
 
 .player-cards-container {
