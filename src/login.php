@@ -6,8 +6,8 @@
     ini_set('session.use_only_cookies', 1); // Disabilita l'uso di ID di sessione nei parametri URL
     session_name('secure_session'); // Imposta un nome di sessione personalizzato
 
-    $user = $_POST["user"];
-    $password = $_POST["password"];
+    $user = trim($_POST["user"]);
+    $password = trim($_POST["password"]);
 
     // Controllo che i campi non siano vuoti
     if(empty($user) || empty($password)){
@@ -51,19 +51,22 @@
         mysqli_stmt_bind_param($statement, "s", $user);
         mysqli_stmt_execute($statement);
 
-        //Binding del risultato alla variabile $hash
+        //Binding del risultato alla variabile hash
         mysqli_stmt_bind_result($statement, $hash);
-        while(mysqli_stmt_fetch($statement)){
-            if(password_verify($password, $hash)){
-                echo("<script>alert('Login avvenuto con successo');
-                    window.history.back();
-                </script>");
-                exit();
-            }
-        }
+        if(mysqli_stmt_fetch($statement) && password_verify($password, $hash)){
+            // Rigenera l'id di sessione per evitare attacchi di session fixation
+            session_regenerate_id(true);
+            $_SESSION["user"] = $user;
+            echo("<script>alert('Login avvenuto con successo');
+                window.history.back();
+            </script>");
+            exit();
+        } else{
         echo("<script>alert('Login fallito');
             window.history.back();
         </script>");
+        }
     }
+?>
 
 
