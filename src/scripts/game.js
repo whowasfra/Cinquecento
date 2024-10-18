@@ -7,12 +7,13 @@ let deck = [];
 let adversary_hand = [];
 let player_hand = [];
 let briscola = null; // Briscola null, sarà assegnata appena un giocatore dichiara
-let played_card_a = []; // Carta giocata dall'avversario
-let played_card_p = []; // Carta giocata dal giocatore
+let adversary_played_card = []; // Carta giocata dall'avversario
+let player_played_card = []; // Carta giocata dal giocatore
 let player_won_cards = []; // Carte vinte dal giocatore
 let adversary_won_cards = []; // Carte vinte dall'avversario
-
 let isPlayerTurn = true;  // Flag per controllare se il giocatore ha giocato una carta
+let isEventListenerAdded = false; // Flag per controllare se l'event listener del click è stato aggiunto
+
 
 document.addEventListener("DOMContentLoaded", function(){
     console.log("DOM completamente caricato e analizzato");
@@ -27,7 +28,8 @@ function restartGame(){
     deck = createDeck();
     deck = shuffleDeck(deck);
     dealHands(deck);
-    played_cards = [];
+    adversary_played_card= [];
+    player_played_card = [];
     player_won_cards = [];
     adversary_won_cards = [];
     renderCards();
@@ -79,66 +81,84 @@ function renderCards(){
     let playedCardsContainer = document.querySelector('.played-cards-container');
     playedCardsContainer.innerHTML = '';
 
-    if (played_card_p.length > 0) {
+    if (player_played_card.length > 0) {
         playedCardsContainer.innerHTML += `
             <div class="played-card-pos-player">
-                <img src="images/carte/${played_card_p[0].suit}${played_card_p[0].value}.bmp" alt="${played_card_p[0].suit}${played_card_p[0].value}">
+                <img src="images/carte/${player_played_card[0].suit}${player_played_card[0].value}.bmp" alt="${player_played_card[0].suit}${player_played_card[0].value}">
             </div>
         `;
     }
 
-    if (played_card_a.length > 0) {
+    if (adversary_played_card.length > 0) {
         playedCardsContainer.innerHTML += `
             <div class="played-card-pos-adversary">
-                <img src="images/carte/${played_card_a[0].suit}${played_card_a[0].value}.bmp" alt="${played_card_a[0].suit}${played_card_a[0].value}">
+                <img src="images/carte/${adversary_played_card[0].suit}${adversary_played_card[0].value}.bmp" alt="${adversary_played_card[0].suit}${adversary_played_card[0].value}">
             </div>
         `;
     }
 
 }
-
+// Funzione che gestisce il turno di gioco
 function turn(){
-    // Aggiungo un event listener per il click su ogni carta del giocatore
-    document.querySelector('.player-cards-container').addEventListener('click', function(event){
-        // Controlla se l'elemento cliccato è l'immagine di una carta nella mano del giocatore
-        if(event.target.tagName === 'IMG' && isPlayerTurn){
-            // Ottengo la posizione della carta cliccata
-            let cardPosition = event.target.parentElement.className.split('-')[3];
-            // Converto la posizione della carta da carattere a numero
-            cardPosition = parseInt(cardPosition);
-            // Aggiungo la carta cliccata all'array delle carte giocate
-            played_card_p.push(player_hand[cardPosition]);
-            // Rimuovo la carta dalla mano del giocatore
-            player_hand.splice(cardPosition, 1);
-            // Aggiorno la grafica
-            renderCards();
-            isPlayerTurn = false; // E' finito il turno del giocatore
-            setTimeout(adversaryTurn, 500); // Ritardo per simulare il pensiero dell'avversario
-        }
-    } 
-    );
+    // Se il turno è del giocatore
+    if(isPlayerTurn){
+        playerTurn();
+    } else {
+        setTimeout(adversaryTurn, 500); // Ritardo per simulare il pensiero dell'avversario
+    }
+    setTimeout(determineWinner, 1000); // Determina il vincitore della mano con un timeout di 1000ms
 }
 
+// Funzione che gestisce il turno del giocatore
+function playerTurn(){
+    // Aggiungo un event listener per il click su ogni carta del giocatore
+    if(!isEventListenerAdded){
+        document.querySelector('.player-cards-container').addEventListener('click', function(event){
+            // Controlla se l'elemento cliccato è l'immagine di una carta nella mano del giocatore
+            if(event.target.tagName === 'IMG' && isPlayerTurn && !event.target.classList.contains('disabled')){
+                // Ottengo la posizione della carta cliccata
+                let cardPosition = event.target.parentElement.className.split('-')[3];
+                // Converto la posizione della carta da carattere a numero
+                cardPosition = parseInt(cardPosition);
+                // Aggiungo la carta cliccata all'array delle carte giocate
+                player_played_card.push(player_hand[cardPosition]);
+                // Rimuovo la carta dalla mano del giocatore
+                player_hand.splice(cardPosition, 1);
+                // Aggiorno la grafica
+                renderCards();
+                // Disabilito le carte del giocatore
+                document.querySelectorAll('.player-cards-container img').forEach(card => {
+                    card.classList.add('disabled');
+                });
+                isPlayerTurn = false; // E' finito il turno del giocatore
+                turn(); 
+            }
+        });
+        isEventListenerAdded = true; // L'event listener è stato aggiunto
+    }
+}
+
+// Funzione che gestisce il turno dell'avversario
 function adversaryTurn(){
     if(adversary_hand.length > 0 && !isPlayerTurn){
         // Scegli una carta casuale dalla mano dell'avversario
         let cardPosition = Math.floor(Math.random() * adversary_hand.length);
         // Aggiungi la carta giocata all'array delle carte giocate
-        played_card_a.push(adversary_hand[cardPosition]);
+        adversary_played_card.push(adversary_hand[cardPosition]);
         // Rimuovi la carta dalla mano dell'avversario
         adversary_hand.splice(cardPosition, 1);
         // Aggiorna la grafica
         renderCards();
-        setTimeout(determineWinner, 1000); // Determina il vincitore della mano con un timeout di 500ms
         // L'avversario ha giocato una carta
         isPlayerTurn = true;
+        turn();
     }
 }
 
+// Determina il vincitore della mano
 function determineWinner(){
-    // Determina il vincitore della mano
-    let playerCard = played_card_p[0];
-    let adversaryCard = played_card_a[0];
+    let playerCard = player_played_card[0];
+    let adversaryCard = adversary_played_card[0];
     let playerCardValue = points[values.indexOf(playerCard.value)];
     let adversaryCardValue = points[values.indexOf(adversaryCard.value)];
 
@@ -166,8 +186,8 @@ function determineWinner(){
     }
 
     // Svuota le carte giocate per la prossima mano
-    played_card_p = [];
-    played_card_a = [];
+    player_played_card = [];
+    adversary_played_card = [];
 
     // Distribuisci una carta ciascuno se ci sono carte rimanenti nel mazzo
     if(deck.length > 0){
