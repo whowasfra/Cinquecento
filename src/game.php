@@ -1,3 +1,10 @@
+<?php
+include 'src/session_config.php';
+
+// Verifica se l'utente è loggato
+$loggedInUser = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,12 +21,12 @@
             </div>
         </header>
         <main>
-            <!-- <div class="reset-button-container">
-                <button id="reset-button" onclick="restart();">Reset</button>
+            <div class="reset-button-container">
+                <button id="reset-button" onclick="restartGame();">Reset</button>
             </div>
             <div class="play-button-container">
                 <button id="play-button" onclick="startGame();">Gioca!</button>
-            </div> -->
+            </div>
 
             <div class="table-container">
                 <div class="adversary-cards-container">
