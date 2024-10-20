@@ -71,7 +71,7 @@ $loggedInUser = isset($_SESSION['user']) ? $_SESSION['user'] : null;
         </main>
         <footer>
             <div class="footer-title-container">
-                <h2>Realizzato da: <br> Francesco Cipolla</h2>
+                <h2>Realizzato da: <br> Francesco</h2>
             </div>
         </footer>
     </body>
