@@ -12,9 +12,10 @@ let adversary_played_card = null; // Carta giocata dall'avversario
 let player_played_card = null; // Carta giocata dal giocatore
 let player_won_cards = []; // Carte vinte dal giocatore
 let adversary_won_cards = []; // Carte vinte dall'avversario
-let isPlayerTurn = false;  // Flag per controllare se è il turno del giocatore
+let isPlayerTurn = true;  // Flag per controllare se è il turno del giocatore
 let isAdversaryTurn = false; //Flag per controllare se è il turno dell'avversario
-let briscolaDeclared = true; // Flag per controllare se la briscola è stata dichiarata
+
+let briscolaDeclared = false; // Flag per controllare se la briscola è stata dichiarata
 
 let playerPoints = 0;
 let adversaryPoints = 0;
@@ -33,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function(){
 function addCardEventListeners(){
     document.querySelector('.player-cards-container').addEventListener('click', function(event){
         // Controlla se l'elemento cliccato è l'immagine di una carta nella mano del giocatore e non è disabilitata al click
-        if(event.target.tagName === 'IMG' && !event.target.className.includes('disabled')){
+        if(player_played_card === null && event.target.tagName === 'IMG' && isPlayerTurn){
             // Ottengo la posizione della carta cliccata
             let cardPosition = event.target.parentElement.className.split('-')[3]; // player-card-pos-0 -> 0
             // Converto la posizione della carta da carattere a numero
@@ -42,11 +43,10 @@ function addCardEventListeners(){
             player_played_card = player_hand[cardPosition];
             // Rimuovo la carta dalla mano del giocatore
             player_hand.splice(cardPosition, 1);
-            // Disabilito le carte del giocatore
-            disablePlayerCards();
             // Aggiorno la grafica
             renderCards();
-            turn();
+            // Passo il turno all'avversario
+            turn();       
         }
     });
 }
@@ -180,19 +180,13 @@ function turn(){
     if(isPlayerTurn){
         checkForDeclaration();
 
-        //abilita le carte del giocatore
-        let playerCards = document.querySelectorAll('.player-cards-container img');
-        playerCards.forEach(card => {
-            card.classList.remove('disabled');
-        });
-
-        if(player_played_card !== null && adversary_played_card === null){
+        if(adversary_played_card === null && player_played_card !== null ){
             isPlayerTurn = false;
             isAdversaryTurn = true;
             if(briscola === null){ // Se la briscola non è stata dichiarata, assegna il seme della carta giocata dal giocatore come briscola per il turno attuale
                 briscola = player_played_card.suit;
             }
-            turn(); // Ricorsione per far giocare l'avversario
+            setTimeout(adversaryTurn,500); // é il turno dell'avversario
         }
     }
     else if(isAdversaryTurn){
@@ -207,14 +201,6 @@ function turn(){
     if(deck.length === 0 && player_hand.length === 0 && adversary_hand.length === 0){
         determineGameWinner();
     }
-}
-
-// Funzione per disabilitare le carte del giocatore
-function disablePlayerCards(){
-    let playerCards = document.querySelectorAll('.player-cards-container img');
-    playerCards.forEach(card => {
-        card.classList.add('disabled');
-    });
 }
 
 // Funzione che gestisce il turno dell'avversario
