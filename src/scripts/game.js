@@ -43,7 +43,7 @@ function addCardEventListeners(){
             // Rimuovo la carta dalla mano del giocatore
             player_hand.splice(cardPosition, 1);
             // Disabilito le carte del giocatore
-            // disablePlayerCards();
+            disablePlayerCards();
             // Aggiorno la grafica
             renderCards();
             turn();
@@ -181,10 +181,10 @@ function turn(){
         checkForDeclaration();
 
         //abilita le carte del giocatore
-        // let playerCards = document.querySelectorAll('.player-cards-container img');
-        // playerCards.forEach(card => {
-        //     card.classList.remove('disabled');
-        // });
+        let playerCards = document.querySelectorAll('.player-cards-container img');
+        playerCards.forEach(card => {
+            card.classList.remove('disabled');
+        });
 
         if(player_played_card !== null && adversary_played_card === null){
             isPlayerTurn = false;
@@ -194,15 +194,15 @@ function turn(){
             }
             turn(); // Ricorsione per far giocare l'avversario
         }
-
-        if(player_played_card !== null && adversary_played_card !== null){
-            setTimeout(determineWinner, 500); 
-        }
     }
-
     else if(isAdversaryTurn){
         setTimeout(adversaryTurn, 500); // Ritardo per simulare il pensiero dell'avversario
     }
+
+    if(player_played_card !== null && adversary_played_card !== null){
+        setTimeout(determineWinner, 500); 
+    }
+
         // Se il mazzo è vuoto e i giocatori non hanno più carte in mano, determina il vincitore del gioco
     if(deck.length === 0 && player_hand.length === 0 && adversary_hand.length === 0){
         determineGameWinner();
