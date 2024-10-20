@@ -16,6 +16,10 @@ let isPlayerTurn = false;  // Flag per controllare se è il turno del giocatore
 let isAdversaryTurn = true; //Flag per controllare se è il turno dell'avversario
 let briscolaDeclared = false; // Flag per controllare se la briscola è stata dichiarata
 
+let playerPoints = 0;
+let adversaryPoints = 0;
+
+
 document.addEventListener("DOMContentLoaded", function(){
     deck = createDeck();
     deck = shuffleDeck(deck);
@@ -119,12 +123,63 @@ function renderCards(){
             </div>
         `;
     }
+    
+}
+
+//funzione per controllare se è possibile dichiarare
+function checkForDeclaration(){
+    let suitsCount = {};
+    for(let card of player_hand){
+        if(!suitsCount[card.suit]){
+            suitsCount[card.suit] = [];
+        }
+        suitsCount[card.suit].push(card.value);
+    }
+
+    for(let suit in suitsCount){
+        if(suitsCount[suit].includes('9') && suitsCount[suit].includes('10')){
+            console.log(`Player can declare briscola ${suit}`);
+            showDeclarationButton(suit);
+        }
+    }
+    // Per ora non controlliamo se la dichiarazione è possibile per l'avversario
+}
+
+function showDeclarationButton(suit){
+    let declarationDiv = document.querySelector(`.declaration-${suit}`);
+
+    // Se il bottone non è già stato creato, lo crea
+    if(document.querySelector(`.declaration-${suit} button`) === null){
+        declarationDiv.innerHTML = `
+            <button onclick="declareBriscola('${suit}')">Dichiara ${suit}</button>
+        `;
+    }
+}
+
+function declareBriscola(suit){
+    if(!briscolaDeclared){
+        briscola = suit;
+        playerPoints += 40;
+    }
+    else{
+        console.log('Briscola already declared');
+        playerPoints += 20;
+    }
+    briscolaDeclared = true;
+    console.log(`Player declared ${suit} as briscola`);
+
+    // Nascondi il bottone di dichiarazione
+    let choosenDeclaration = document.querySelector(`.declaration-${suit}`);
+    choosenDeclaration.innerHTML = '';
+
 }
 
 // Funzione che gestisce il turno di gioco
 function turn(){
     // Se il turno è del giocatore
     if(isPlayerTurn){
+        checkForDeclaration();
+
         //abilita le carte del giocatore
         // let playerCards = document.querySelectorAll('.player-cards-container img');
         // playerCards.forEach(card => {
@@ -148,14 +203,11 @@ function turn(){
     else if(isAdversaryTurn){
         setTimeout(adversaryTurn, 500); // Ritardo per simulare il pensiero dell'avversario
     }
-
         // Se il mazzo è vuoto e i giocatori non hanno più carte in mano, determina il vincitore del gioco
     if(deck.length === 0 && player_hand.length === 0 && adversary_hand.length === 0){
         determineGameWinner();
     }
-
 }
-
 
 // Funzione per disabilitare le carte del giocatore
 function disablePlayerCards(){
@@ -193,43 +245,43 @@ function determineWinner(){
     let playerCard = player_played_card;
     let adversaryCard = adversary_played_card;
     let playerCardPoints = points[playerCard.value - 1];
-    let AdversaryCardPoints = points[adversaryCard.value - 1];
+    let adversaryCardPoints = points[adversaryCard.value - 1];
 
     // Se le carte hanno lo stesso seme vanno confrontate
     if (playerCard.suit === adversaryCard.suit) {
-        if (playerCardPoints === AdversaryCardPoints) { // Se le carte hanno lo stesso punteggio (la maggior parte = 0 ) confronta i valori nominali
+        if (playerCardPoints === adversaryCardPoints) { // Se le carte hanno lo stesso punteggio (la maggior parte = 0 ) confronta i valori nominali
             if (playerCard.value > adversaryCard.value) { // Se il valore nominale della carta del giocatore è maggiore
-                console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${AdversaryCardPoints}`);
+                console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${adversaryCardPoints}`);
                 player_won_cards.push(playerCard, adversaryCard);
                 isAdversaryTurn = false;
                 isPlayerTurn = true;
             } else { // Se il valore nominale della carta dell'avversario è maggiore
-                console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${AdversaryCardPoints} + ${playerCardPoints}`);
+                console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${adversaryCardPoints} + ${playerCardPoints}`);
                 adversary_won_cards.push(playerCard, adversaryCard);
                 isAdversaryTurn = true;
                 isPlayerTurn = false;
             }
         } 
-        else if (playerCardPoints > AdversaryCardPoints) { // Se il giocatore ha giocato una carta che vale più punti vince
-            console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${AdversaryCardPoints}`);
+        else if (playerCardPoints > adversaryCardPoints) { // Se il giocatore ha giocato una carta che vale più punti vince
+            console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${adversaryCardPoints}`);
             player_won_cards.push(playerCard, adversaryCard);
             isAdversaryTurn = false;
             isPlayerTurn = true;
         }
         else { // Se l'avversario ha giocato una carta che vale più punti vince
-            console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${AdversaryCardPoints} + ${playerCardPoints}`);
+            console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${adversaryCardPoints} + ${playerCardPoints}`);
             adversary_won_cards.push(playerCard, adversaryCard);
             isAdversaryTurn = true;
             isPlayerTurn = false;
         }
     } else { // Se le carte hanno semi diversi
         if(playerCard.suit === briscola ){
-            console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${AdversaryCardPoints}`);
+            console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${adversaryCardPoints}`);
             player_won_cards.push(playerCard, adversaryCard);
             isAdversaryTurn = false;
             isPlayerTurn = true;
         } else if(adversaryCard.suit === briscola){
-            console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${AdversaryCardPoints} + ${playerCardPoints}`); 
+            console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${adversaryCardPoints} + ${playerCardPoints}`); 
             isAdversaryTurn = true;
             isPlayerTurn = false;
         } 
@@ -237,12 +289,11 @@ function determineWinner(){
         // nascosto per il momento
         // else {
         //     // Comanda il seme della prima carta tirata 
-        //     console.log(`Player wins with ${playerCardPoints} vs ${AdversaryCardPoints} `);
+        //     console.log(`Player wins with ${playerCardPoints} vs ${adversaryCardPoints} `);
         //     player_won_cards.push(playerCard, adversaryCard);
         //     isAdversaryTurn = false;
         //     isPlayerTurn = true;
         // }
-
     }
 
     // Svuota le carte giocate per la prossima mano

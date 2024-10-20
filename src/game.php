@@ -68,6 +68,13 @@ $loggedInUser = isset($_SESSION['user']) ? $_SESSION['user'] : null;
                     </div>
                 </div>
             </div>
+
+            <div class="declaration-container">
+                <div class="declaration-bastoni"></div>
+                <div class="declaration-spade"></div>
+                <div class="declaration-oro"></div>
+                <div class="declaration-coppe"></div>
+                </div>
         </main>
         <footer>
             <div class="footer-title-container">
