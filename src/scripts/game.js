@@ -1,39 +1,62 @@
 const suits = ['coppe', 'spade', 'oro', 'bastoni'];
 const values = ['1', '2', '3', '4', '5' , '6', '7', '8', '9', '10'];
 const points = ['11', '0', '10', '0', '0', '0', '0', '2', '3', '4'];
-let cheat = false;
+
+// let cheat = false;
 
 let deck = [];  
 let adversary_hand = [];
 let player_hand = [];
-let briscola = null; // Briscola null, sarà assegnata appena un giocatore dichiara
-let adversary_played_card = []; // Carta giocata dall'avversario
-let player_played_card = []; // Carta giocata dal giocatore
+let briscola = null; // Briscola null, sarà assegnata la prima volta che un giocatore dichiara
+let adversary_played_card = null; // Carta giocata dall'avversario
+let player_played_card = null; // Carta giocata dal giocatore
 let player_won_cards = []; // Carte vinte dal giocatore
 let adversary_won_cards = []; // Carte vinte dall'avversario
-let isPlayerTurn = true;  // Flag per controllare se il giocatore ha giocato una carta
-let isEventListenerAdded = false; // Flag per controllare se l'event listener del click è stato aggiunto
-
+let isPlayerTurn = false;  // Flag per controllare se è il turno del giocatore
+let isAdversaryTurn = true; //Flag per controllare se è il turno dell'avversario
+let briscolaDeclared = false; // Flag per controllare se la briscola è stata dichiarata
 
 document.addEventListener("DOMContentLoaded", function(){
-    console.log("DOM completamente caricato e analizzato");
     deck = createDeck();
     deck = shuffleDeck(deck);
     dealHands(deck);
     renderCards();
+    addCardEventListeners();
     turn();
+    console.log("DOM completamente caricato e analizzato");
 });
 
-function restartGame(){
-    deck = createDeck();
-    deck = shuffleDeck(deck);
-    dealHands(deck);
-    adversary_played_card= [];
-    player_played_card = [];
-    player_won_cards = [];
-    adversary_won_cards = [];
-    renderCards();
+function addCardEventListeners(){
+    document.querySelector('.player-cards-container').addEventListener('click', function(event){
+        // Controlla se l'elemento cliccato è l'immagine di una carta nella mano del giocatore e non è disabilitata al click
+        if(event.target.tagName === 'IMG' && !event.target.className.includes('disabled')){
+            // Ottengo la posizione della carta cliccata
+            let cardPosition = event.target.parentElement.className.split('-')[3]; // player-card-pos-0 -> 0
+            // Converto la posizione della carta da carattere a numero
+            cardPosition = parseInt(cardPosition);
+            // Aggiungo la carta cliccata all'array delle carte giocate
+            player_played_card = player_hand[cardPosition];
+            // Rimuovo la carta dalla mano del giocatore
+            player_hand.splice(cardPosition, 1);
+            // Disabilito le carte del giocatore
+            // disablePlayerCards();
+            // Aggiorno la grafica
+            renderCards();
+            turn();
+        }
+    });
 }
+
+// function restartGame(){
+//     deck = createDeck();
+//     deck = shuffleDeck(deck);
+//     dealHands(deck);
+//     adversary_played_card= [];
+//     player_played_card = [];
+//     player_won_cards = [];
+//     adversary_won_cards = [];
+//     renderCards();
+// }
 
 function createDeck(){
     deck = [];
@@ -81,113 +104,154 @@ function renderCards(){
     let playedCardsContainer = document.querySelector('.played-cards-container');
     playedCardsContainer.innerHTML = '';
 
-    if (player_played_card.length > 0) {
+    if (player_played_card !== null) {
         playedCardsContainer.innerHTML += `
-            <div class="played-card-pos-player">
-                <img src="images/carte/${player_played_card[0].suit}${player_played_card[0].value}.bmp" alt="${player_played_card[0].suit}${player_played_card[0].value}">
+            <div class="played-card-player">
+                <img src="images/carte/${player_played_card.suit}${player_played_card.value}.bmp" alt="${player_played_card.suit}${player_played_card.value}">
             </div>
         `;
     }
 
-    if (adversary_played_card.length > 0) {
+    if (adversary_played_card !== null) {
         playedCardsContainer.innerHTML += `
-            <div class="played-card-pos-adversary">
-                <img src="images/carte/${adversary_played_card[0].suit}${adversary_played_card[0].value}.bmp" alt="${adversary_played_card[0].suit}${adversary_played_card[0].value}">
+            <div class="played-card-adversary">
+                <img src="images/carte/${adversary_played_card.suit}${adversary_played_card.value}.bmp" alt="${adversary_played_card.suit}${adversary_played_card.value}">
             </div>
         `;
     }
-
 }
+
 // Funzione che gestisce il turno di gioco
 function turn(){
     // Se il turno è del giocatore
     if(isPlayerTurn){
-        playerTurn();
-    } else {
+        //abilita le carte del giocatore
+        // let playerCards = document.querySelectorAll('.player-cards-container img');
+        // playerCards.forEach(card => {
+        //     card.classList.remove('disabled');
+        // });
+
+        if(player_played_card !== null && adversary_played_card === null){
+            isPlayerTurn = false;
+            isAdversaryTurn = true;
+            if(briscola === null){ // Se la briscola non è stata dichiarata, assegna il seme della carta giocata dal giocatore come briscola per il turno attuale
+                briscola = player_played_card.suit;
+            }
+            turn(); // Ricorsione per far giocare l'avversario
+        }
+
+        if(player_played_card !== null && adversary_played_card !== null){
+            setTimeout(determineWinner, 500); 
+        }
+    }
+
+    else if(isAdversaryTurn){
         setTimeout(adversaryTurn, 500); // Ritardo per simulare il pensiero dell'avversario
     }
-    setTimeout(determineWinner, 1000); // Determina il vincitore della mano con un timeout di 1000ms
+
+        // Se il mazzo è vuoto e i giocatori non hanno più carte in mano, determina il vincitore del gioco
+    if(deck.length === 0 && player_hand.length === 0 && adversary_hand.length === 0){
+        determineGameWinner();
+    }
+
 }
 
-// Funzione che gestisce il turno del giocatore
-function playerTurn(){
-    // Aggiungo un event listener per il click su ogni carta del giocatore
-    if(!isEventListenerAdded){
-        document.querySelector('.player-cards-container').addEventListener('click', function(event){
-            // Controlla se l'elemento cliccato è l'immagine di una carta nella mano del giocatore
-            if(event.target.tagName === 'IMG' && isPlayerTurn && !event.target.classList.contains('disabled')){
-                // Ottengo la posizione della carta cliccata
-                let cardPosition = event.target.parentElement.className.split('-')[3];
-                // Converto la posizione della carta da carattere a numero
-                cardPosition = parseInt(cardPosition);
-                // Aggiungo la carta cliccata all'array delle carte giocate
-                player_played_card.push(player_hand[cardPosition]);
-                // Rimuovo la carta dalla mano del giocatore
-                player_hand.splice(cardPosition, 1);
-                // Aggiorno la grafica
-                renderCards();
-                // Disabilito le carte del giocatore
-                document.querySelectorAll('.player-cards-container img').forEach(card => {
-                    card.classList.add('disabled');
-                });
-                isPlayerTurn = false; // E' finito il turno del giocatore
-                turn(); 
-            }
-        });
-        isEventListenerAdded = true; // L'event listener è stato aggiunto
-    }
+
+// Funzione per disabilitare le carte del giocatore
+function disablePlayerCards(){
+    let playerCards = document.querySelectorAll('.player-cards-container img');
+    playerCards.forEach(card => {
+        card.classList.add('disabled');
+    });
 }
 
 // Funzione che gestisce il turno dell'avversario
 function adversaryTurn(){
-    if(adversary_hand.length > 0 && !isPlayerTurn){
-        // Scegli una carta casuale dalla mano dell'avversario
-        let cardPosition = Math.floor(Math.random() * adversary_hand.length);
-        // Aggiungi la carta giocata all'array delle carte giocate
-        adversary_played_card.push(adversary_hand[cardPosition]);
-        // Rimuovi la carta dalla mano dell'avversario
-        adversary_hand.splice(cardPosition, 1);
-        // Aggiorna la grafica
-        renderCards();
-        // L'avversario ha giocato una carta
+    // Scegli una carta casuale dalla mano dell'avversario
+    let cardPosition = Math.floor(Math.random() * adversary_hand.length);
+    // Aggiungi la carta giocata all'array delle carte giocate
+    adversary_played_card = adversary_hand[cardPosition];
+    // Rimuovi la carta dalla mano dell'avversario
+    adversary_hand.splice(cardPosition, 1);
+    // Aggiorna la grafica 
+    renderCards();
+    if(player_played_card === null){ // Se il giocatore non ha ancora giocato
+        isAdversaryTurn = false;
         isPlayerTurn = true;
+        if(briscola === null ){ // Se la briscola non è stata dichiarata, assegna il seme della carta giocata dall'avversario come briscola per il turno attuale
+            briscola = adversary_played_card.suit;
+        }
         turn();
+    }
+    if(player_played_card !== null){ // Se entrambi i giocatori hanno giocato trova il vincitore
+        setTimeout(determineWinner, 500);
     }
 }
 
 // Determina il vincitore della mano
 function determineWinner(){
-    let playerCard = player_played_card[0];
-    let adversaryCard = adversary_played_card[0];
-    let playerCardValue = points[values.indexOf(playerCard.value)];
-    let adversaryCardValue = points[values.indexOf(adversaryCard.value)];
+    let playerCard = player_played_card;
+    let adversaryCard = adversary_played_card;
+    let playerCardPoints = points[playerCard.value - 1];
+    let AdversaryCardPoints = points[adversaryCard.value - 1];
 
-    // Se le carte hanno lo stesso seme
-    if(playerCard.suit === adversaryCard.suit){
-        if(playerCardValue > adversaryCardValue){
-            console.log(`Player wins with ${playerCardValue} vs ${adversaryCardValue}`);
+    // Se le carte hanno lo stesso seme vanno confrontate
+    if (playerCard.suit === adversaryCard.suit) {
+        if (playerCardPoints === AdversaryCardPoints) { // Se le carte hanno lo stesso punteggio (la maggior parte = 0 ) confronta i valori nominali
+            if (playerCard.value > adversaryCard.value) { // Se il valore nominale della carta del giocatore è maggiore
+                console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${AdversaryCardPoints}`);
+                player_won_cards.push(playerCard, adversaryCard);
+                isAdversaryTurn = false;
+                isPlayerTurn = true;
+            } else { // Se il valore nominale della carta dell'avversario è maggiore
+                console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${AdversaryCardPoints} + ${playerCardPoints}`);
+                adversary_won_cards.push(playerCard, adversaryCard);
+                isAdversaryTurn = true;
+                isPlayerTurn = false;
+            }
+        } 
+        else if (playerCardPoints > AdversaryCardPoints) { // Se il giocatore ha giocato una carta che vale più punti vince
+            console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${AdversaryCardPoints}`);
             player_won_cards.push(playerCard, adversaryCard);
-        } else {
-            console.log(`Adversary wins with ${adversaryCardValue} vs ${playerCardValue}`);
+            isAdversaryTurn = false;
+            isPlayerTurn = true;
+        }
+        else { // Se l'avversario ha giocato una carta che vale più punti vince
+            console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${AdversaryCardPoints} + ${playerCardPoints}`);
             adversary_won_cards.push(playerCard, adversaryCard);
+            isAdversaryTurn = true;
+            isPlayerTurn = false;
         }
-    } else {
-        // Se le carte hanno semi diversi
-        if(playerCard.suit === briscola){
-            console.log(`Player wins with ${playerCardValue} vs ${adversaryCardValue}`);
+    } else { // Se le carte hanno semi diversi
+        if(playerCard.suit === briscola ){
+            console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${AdversaryCardPoints}`);
             player_won_cards.push(playerCard, adversaryCard);
+            isAdversaryTurn = false;
+            isPlayerTurn = true;
         } else if(adversaryCard.suit === briscola){
-            console.log(`Adversary wins with ${adversaryCardValue} of ${adversaryCard.suit} vs ${playerCardValue}`); 
-        } else {
-            // Comanda il seme della prima carta tirata 
-            console.log(`Player wins with ${playerCardValue} vs ${adversaryCardValue} `);
-            player_won_cards.push(playerCard, adversaryCard);
-        }
+            console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${AdversaryCardPoints} + ${playerCardPoints}`); 
+            isAdversaryTurn = true;
+            isPlayerTurn = false;
+        } 
+
+        // nascosto per il momento
+        // else {
+        //     // Comanda il seme della prima carta tirata 
+        //     console.log(`Player wins with ${playerCardPoints} vs ${AdversaryCardPoints} `);
+        //     player_won_cards.push(playerCard, adversaryCard);
+        //     isAdversaryTurn = false;
+        //     isPlayerTurn = true;
+        // }
+
     }
 
     // Svuota le carte giocate per la prossima mano
-    player_played_card = [];
-    adversary_played_card = [];
+    player_played_card = null;
+    adversary_played_card = null;
+
+    if(!briscolaDeclared){
+        briscola = null;
+    }
 
     // Distribuisci una carta ciascuno se ci sono carte rimanenti nel mazzo
     if(deck.length > 0){
@@ -199,13 +263,9 @@ function determineWinner(){
         }
     }
 
-    // Se il mazzo è vuoto e i giocatori non hanno più carte in mano, determina il vincitore del gioco
-    if(deck.length === 0 && player_hand.length === 0 && adversary_hand.length === 0){
-        determineGameWinner();
-    }
-
     // Aggiorna la grafica
     renderCards();
+    turn();
 }
 
 function determineGameWinner(){
