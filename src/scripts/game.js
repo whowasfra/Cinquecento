@@ -13,8 +13,8 @@ let player_played_card = null; // Carta giocata dal giocatore
 let player_won_cards = []; // Carte vinte dal giocatore
 let adversary_won_cards = []; // Carte vinte dall'avversario
 let isPlayerTurn = false;  // Flag per controllare se è il turno del giocatore
-let isAdversaryTurn = true; //Flag per controllare se è il turno dell'avversario
-let briscolaDeclared = false; // Flag per controllare se la briscola è stata dichiarata
+let isAdversaryTurn = false; //Flag per controllare se è il turno dell'avversario
+let briscolaDeclared = true; // Flag per controllare se la briscola è stata dichiarata
 
 let playerPoints = 0;
 let adversaryPoints = 0;
