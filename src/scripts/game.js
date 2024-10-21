@@ -204,10 +204,6 @@ function turn(){
         setTimeout(determineWinner, 500); 
     }
 
-    // Se il mazzo è vuoto e i giocatori non hanno più carte in mano, determina il vincitore del gioco
-    if(deck.length === 0 && player_hand.length === 0 && adversary_hand.length === 0){
-        determineGameWinner();
-    }
 }
 
 // Funzione che gestisce il turno dell'avversario
@@ -312,12 +308,16 @@ function determineWinner(){
 
     // Aggiorna la grafica
     renderCards();
+    // Se il mazzo è vuoto e i giocatori non hanno più carte in mano, determina il vincitore del gioco
+    if(deck.length === 0 && player_hand.length === 0 && adversary_hand.length === 0 && player_played_card === null && adversary_played_card === null){
+        determineGameWinner();
+    }
     turn();
 }
 
 function determineGameWinner(){
-    let playerPoints = player_won_cards.reduce((sum, card) => sum + parseInt(points[values.indexOf(card.value)]), 0);
-    let adversaryPoints = adversary_won_cards.reduce((sum, card) => sum + parseInt(points[values.indexOf(card.value)]), 0);
+    playerPoints +=  player_won_cards.reduce((sum, card) => sum + parseInt(points[values.indexOf(card.value)]), 0);
+    adversaryPoints += adversary_won_cards.reduce((sum, card) => sum + parseInt(points[values.indexOf(card.value)]), 0);
 
     if(playerPoints > adversaryPoints){
         console.log(`Player wins the game with ${playerPoints} points. Adversary has ${adversaryPoints} points.`);
