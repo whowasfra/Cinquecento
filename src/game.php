@@ -21,12 +21,12 @@ $loggedInUser = isset($_SESSION['user']) ? $_SESSION['user'] : null;
             </div>
         </header>
         <main>
-            <div class="reset-button-container">
+            <!-- <div class="reset-button-container">
                 <button id="reset-button" onclick="restartGame();">Reset</button>
             </div>
             <div class="play-button-container">
                 <button id="play-button" onclick="startGame();">Gioca!</button>
-            </div>
+            </div> -->
 
             <div class="table-container">
                 <div class="adversary-cards-container">
