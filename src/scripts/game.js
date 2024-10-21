@@ -17,7 +17,8 @@ let player_played_card = null; // Carta giocata dal giocatore
 let player_won_cards = []; // Carte vinte dal giocatore
 let adversary_won_cards = []; // Carte vinte dall'avversario
 let isPlayerTurn = true;  // Flag per controllare se è il turno del giocatore
-let isAdversaryTurn = false; //Flag per controllare se è il turno dell'avversario
+
+let playerIsFirst = true; // Flag per controllare se il giocatore è il primo a giocare
 
 let briscolaDeclared = false; // Flag per controllare se la briscola è stata dichiarata
 
@@ -127,7 +128,6 @@ function renderCards(){
             </div>
         `;
     }
-    
 }
 
 //funzione per controllare se è possibile dichiarare
@@ -190,17 +190,13 @@ function turn(){
     // Se il turno è del giocatore
     if(isPlayerTurn){
         checkForDeclaration();
-
         if(adversary_played_card === null && player_played_card !== null ){
             isPlayerTurn = false;
-            isAdversaryTurn = true;
-            // if(briscola === null){ // Se la briscola non è stata dichiarata, assegna il seme della carta giocata dal giocatore come briscola per il turno attuale
-            //     briscola = player_played_card.suit;
-            // }
             setTimeout(adversaryTurn,500); // é il turno dell'avversario
         }
     }
-    else if(isAdversaryTurn){
+    // Se il turno è dell'avversario
+    else if(!isPlayerTurn){
         setTimeout(adversaryTurn, 500); // Ritardo per simulare il pensiero dell'avversario
     }
 
@@ -208,7 +204,7 @@ function turn(){
         setTimeout(determineWinner, 500); 
     }
 
-        // Se il mazzo è vuoto e i giocatori non hanno più carte in mano, determina il vincitore del gioco
+    // Se il mazzo è vuoto e i giocatori non hanno più carte in mano, determina il vincitore del gioco
     if(deck.length === 0 && player_hand.length === 0 && adversary_hand.length === 0){
         determineGameWinner();
     }
@@ -225,14 +221,10 @@ function adversaryTurn(){
     // Aggiorna la grafica 
     renderCards();
     if(player_played_card === null){ // Se il giocatore non ha ancora giocato
-        isAdversaryTurn = false;
         isPlayerTurn = true;
-        // if(briscola === null ){ // Se la briscola non è stata dichiarata, assegna il seme della carta giocata dall'avversario come briscola per il turno attuale
-        //     briscola = adversary_played_card.suit;
-        // }
         turn();
     }
-    if(player_played_card !== null){ // Se entrambi i giocatori hanno giocato trova il vincitore
+    else{ // Se entrambi i giocatori hanno giocato trova il vincitore
         setTimeout(determineWinner, 500);
     }
 }
@@ -250,47 +242,49 @@ function determineWinner(){
             if (playerCard.value > adversaryCard.value) { // Se il valore nominale della carta del giocatore è maggiore
                 console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${adversaryCardPoints}`);
                 player_won_cards.push(playerCard, adversaryCard);
-                isAdversaryTurn = false;
                 isPlayerTurn = true;
             } else { // Se il valore nominale della carta dell'avversario è maggiore
                 console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${adversaryCardPoints} + ${playerCardPoints}`);
                 adversary_won_cards.push(playerCard, adversaryCard);
-                isAdversaryTurn = true;
                 isPlayerTurn = false;
+                playerIsFirst = false;
             }
         } 
         else if (playerCardPoints > adversaryCardPoints) { // Se il giocatore ha giocato una carta che vale più punti vince
             console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${adversaryCardPoints}`);
             player_won_cards.push(playerCard, adversaryCard);
-            isAdversaryTurn = false;
             isPlayerTurn = true;
         }
         else { // Se l'avversario ha giocato una carta che vale più punti vince
             console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${adversaryCardPoints} + ${playerCardPoints}`);
             adversary_won_cards.push(playerCard, adversaryCard);
-            isAdversaryTurn = true;
             isPlayerTurn = false;
+            playerIsFirst = false;
         }
     } else { // Se le carte hanno semi diversi
         if(playerCard.suit === briscola ){
             console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${adversaryCardPoints}`);
             player_won_cards.push(playerCard, adversaryCard);
-            isAdversaryTurn = false;
             isPlayerTurn = true;
         } else if(adversaryCard.suit === briscola){
             console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${adversaryCardPoints} + ${playerCardPoints}`); 
-            isAdversaryTurn = true;
+            adversary_won_cards.push(playerCard, adversaryCard);
             isPlayerTurn = false;
-        } 
-
-        // nascosto per il momento
-        // else {
-        //     // Comanda il seme della prima carta tirata 
-        //     console.log(`Player wins with ${playerCardPoints} vs ${adversaryCardPoints} `);
-        //     player_won_cards.push(playerCard, adversaryCard);
-        //     isAdversaryTurn = false;
-        //     isPlayerTurn = true;
-        // }
+            playerIsFirst = false;
+        } else {         // comanda il seme della prima carta giocata
+            if(playerIsFirst){
+                console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCardPoints} + ${adversaryCardPoints}`);
+                player_won_cards.push(playerCard, adversaryCard);
+                isPlayerTurn = true;
+                
+            }
+            else{
+                console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${adversaryCardPoints} + ${playerCardPoints}`); 
+                adversary_won_cards.push(playerCard, adversaryCard);
+                isPlayerTurn = false;
+                playerIsFirst = false;
+            }
+        }        
     }
 
     // Svuota le carte giocate per la prossima mano
