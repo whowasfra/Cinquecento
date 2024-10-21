@@ -1,3 +1,7 @@
+// TODO : controllare se la dichiarazione è possibile per l'avversario
+// TODO : sistemare la funzione determineWinner
+// TODO : sistemare il calcolo dei punti
+
 const suits = ['coppe', 'spade', 'oro', 'bastoni'];
 const values = ['1', '2', '3', '4', '5' , '6', '7', '8', '9', '10'];
 const points = ['11', '0', '10', '0', '0', '0', '0', '2', '3', '4'];
@@ -137,9 +141,12 @@ function checkForDeclaration(){
     }
 
     for(let suit in suitsCount){
-        if(suitsCount[suit].includes('9') && suitsCount[suit].includes('10')){
+        if(suitsCount[suit].includes('9') && suitsCount[suit].includes('10') && briscola !== suit ){
             console.log(`Player can declare briscola ${suit}`);
             showDeclarationButton(suit);
+        }
+        else{
+            hideDeclarationButton(suit);
         }
     }
     // Per ora non controlliamo se la dichiarazione è possibile per l'avversario
@@ -156,6 +163,12 @@ function showDeclarationButton(suit){
     }
 }
 
+// Nasconde il bottone di dichiarazione
+function hideDeclarationButton(suit){
+    let choosenDeclaration = document.querySelector(`.declaration-${suit}`);
+    choosenDeclaration.innerHTML = '';
+}
+
 function declareBriscola(suit){
     if(!briscolaDeclared){
         briscola = suit;
@@ -169,9 +182,7 @@ function declareBriscola(suit){
     console.log(`Player declared ${suit} as briscola`);
 
     // Nascondi il bottone di dichiarazione
-    let choosenDeclaration = document.querySelector(`.declaration-${suit}`);
-    choosenDeclaration.innerHTML = '';
-
+    hideDeclarationButton(suit);
 }
 
 // Funzione che gestisce il turno di gioco
@@ -183,9 +194,9 @@ function turn(){
         if(adversary_played_card === null && player_played_card !== null ){
             isPlayerTurn = false;
             isAdversaryTurn = true;
-            if(briscola === null){ // Se la briscola non è stata dichiarata, assegna il seme della carta giocata dal giocatore come briscola per il turno attuale
-                briscola = player_played_card.suit;
-            }
+            // if(briscola === null){ // Se la briscola non è stata dichiarata, assegna il seme della carta giocata dal giocatore come briscola per il turno attuale
+            //     briscola = player_played_card.suit;
+            // }
             setTimeout(adversaryTurn,500); // é il turno dell'avversario
         }
     }
@@ -216,9 +227,9 @@ function adversaryTurn(){
     if(player_played_card === null){ // Se il giocatore non ha ancora giocato
         isAdversaryTurn = false;
         isPlayerTurn = true;
-        if(briscola === null ){ // Se la briscola non è stata dichiarata, assegna il seme della carta giocata dall'avversario come briscola per il turno attuale
-            briscola = adversary_played_card.suit;
-        }
+        // if(briscola === null ){ // Se la briscola non è stata dichiarata, assegna il seme della carta giocata dall'avversario come briscola per il turno attuale
+        //     briscola = adversary_played_card.suit;
+        // }
         turn();
     }
     if(player_played_card !== null){ // Se entrambi i giocatori hanno giocato trova il vincitore
