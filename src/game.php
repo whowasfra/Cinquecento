@@ -30,42 +30,17 @@ $loggedInUser = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
             <div class="table-container">
                 <div class="adversary-cards-container">
-                    <div class="adversary-card-pos-a">
-                    </div>
-                    <div class="adversary-card-pos-b">
-                    </div>
-                    <div class="adversary-card-pos-c">
-                    </div>
-                    <div class="adversary-card-pos-d">
-                    </div>
-                    <div class="adversary-card-pos-e">
-                    </div>
                 </div>
         
-                <div class="remaining-cards-container">
-                    <div class="remaining-cards">
-                        <img src="images/carte/dorso.bmp" alt="dorso">
-                    </div>
+                <div class="deck-container">
                 </div>
+
+                <div class="briscola-container"></div>
         
                 <div class="played-cards-container">
-                    <div class="played-card-pos-a">
-                    </div>
-                    <div class="played-card-pos-b">
-                    </div>
                 </div>
 
                 <div class="player-cards-container">
-                    <div class="player-card-pos-a">
-                    </div>
-                    <div class="player-card-pos-b">
-                    </div>
-                    <div class="player-card-pos-c">
-                    </div>
-                    <div class="player-card-pos-d">
-                    </div>
-                    <div class="player-card-pos-e">
-                    </div>
                 </div>
             </div>
 
@@ -74,7 +49,7 @@ $loggedInUser = isset($_SESSION['user']) ? $_SESSION['user'] : null;
                 <div class="declaration-spade"></div>
                 <div class="declaration-oro"></div>
                 <div class="declaration-coppe"></div>
-                </div>
+            </div>
         </main>
         <footer>
             <div class="footer-title-container">

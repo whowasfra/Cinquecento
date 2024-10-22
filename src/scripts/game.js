@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function(){
     deck = createDeck();
     deck = shuffleDeck(deck);
     dealHands(deck);
+    renderDeck();
     renderCards();
     addCardEventListeners();
     turn();
@@ -56,16 +57,6 @@ function addCardEventListeners(){
     });
 }
 
-// function restartGame(){
-//     deck = createDeck();
-//     deck = shuffleDeck(deck);
-//     dealHands(deck);
-//     adversary_played_card= [];
-//     player_played_card = [];
-//     player_won_cards = [];
-//     adversary_won_cards = [];
-//     renderCards();
-// }
 
 function createDeck(){
     deck = [];
@@ -87,6 +78,21 @@ function shuffleDeck(deck){
 function dealHands(deck){
     adversary_hand = deck.splice(0,5);
     player_hand = deck.splice(0,5);
+}
+
+
+function renderDeck(){
+    let deckContainer = document.querySelector('.deck-container');
+    if (deck.length > 0) {
+        deckContainer.innerHTML = `
+        <div class="deck">
+            <img src="images/carte/dorso.bmp" alt="dorso">
+        </div>
+    `;
+    }
+    else {
+        deckContainer.innerHTML = '';
+    }
 }
 
 function renderCards(){
@@ -184,6 +190,7 @@ function declareBriscola(suit){
     // Nascondi il bottone di dichiarazione
     hideDeclarationButton(suit);
 }
+
 
 // Funzione che gestisce il turno di gioco
 function turn(){
@@ -304,6 +311,10 @@ function determineWinner(){
         if(adversary_hand.length < 5){
             adversary_hand.push(deck.pop());
         }
+    }
+    else{
+        console.log('Deck is empty');
+        renderDeck();
     }
 
     // Aggiorna la grafica
