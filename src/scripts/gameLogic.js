@@ -1,4 +1,4 @@
-import {Deck, Card} from './deck.js';
+import Deck from './deck.js';
 import Player from './player.js';
 
 class Game{
@@ -6,6 +6,8 @@ class Game{
         this.deck = new Deck();
         this.player = new Player();
         this.adversary = new Player();
+        this.player.hand = this.deck.cards.splice(0, 5);
+        this.adversary.hand = this.deck.cards.splice(0, 5);
         this.briscola = null;
         this.playerIsFirst = true;
         this.isPlayerTurn = true;
@@ -39,7 +41,7 @@ class Game{
 
     renderCards(){
         let deckContainer = document.querySelector('.deck-container');
-        if (deck.length > 0) {
+        if (this.deck.cards.length > 0) {
             deckContainer.innerHTML = `
             <div class="deck">
                 <img src="images/carte/dorso.bmp" alt="dorso">
@@ -53,10 +55,10 @@ class Game{
         // Mostra le carte del giocatore
         let playerContainer = document.querySelector('.player-cards-container');
         playerContainer.innerHTML = '';
-        for (let i = 0; i> this.player.hand.length; i++){
+        for (let i = 0; i < this.player.hand.length; i++){
             playerContainer.innerHTML += `
             <div class="player-card-pos-${i}">
-                <img src="images/carte/${this.player.hand[i].suit}-${this.player.hand[i].value}.bmp" alt="${this.player.hand[i].suit}-${this.player.hand[i].value}">
+                <img src="images/carte/${this.player.hand[i].suit}${this.player.hand[i].value}.bmp" alt="${this.player.hand[i].suit}-${this.player.hand[i].value}">
             </div>
             `;
         }
@@ -64,16 +66,17 @@ class Game{
         // Mostra le carte dell'avversario
         let adversaryContainer = document.querySelector('.adversary-cards-container');
         adversaryContainer.innerHTML = '';
-        for (let i = 0; i> this.adversary.hand.length; i++){
+        for (let i = 0; i < this.adversary.hand.length; i++){
             adversaryContainer.innerHTML += `
             <div class="adversary-card-pos-${i}">
-                <img src="images/carte/${this.adversary.hand[i].suit}-${this.adversary.hand[i].value}.bmp" alt="${this.adversary.hand[i].suit}-${this.adversary.hand[i].value}">
+                <img src="images/carte/${this.adversary.hand[i].suit}${this.adversary.hand[i].value}.bmp" alt="${this.adversary.hand[i].suit}-${this.adversary.hand[i].value}">
             </div>
             `;
         }
 
         // Mostra le carte sul tavolo
-        let tableContainer = document.querySelector('.played-cards-container');
+        let playedCardsContainer = document.querySelector('.played-cards-container');
+        playedCardsContainer.innerHTML = '';
         if (this.player.playedCard !== null) {
             playedCardsContainer.innerHTML += `
                 <div class="played-card-player">
@@ -97,7 +100,7 @@ class Game{
         if (this.isPlayerTurn) {
             this.checkForDeclaration();
             if (this.adversary.playedCard === null && this.player.playedCard !== null) {
-                isPlayerTurn = false;
+                this.isPlayerTurn = false;
                 setTimeout(() => this.adversaryTurn(), 500); // Ritardo per simulare il pensiero dell'avversario
             }
         }
@@ -107,7 +110,7 @@ class Game{
         }
 
         if (this.player.playedCard !== null && this.adversary.playedCard !== null) {
-            setTimeout(determineWinner, 500);
+            setTimeout(() => this.determineWinner(), 500);
         }
     }
 
@@ -138,7 +141,7 @@ class Game{
                 }
             }
             else {
-                if (playerCardPoints > adversaryCardPoints) { // Se il giocatore ha giocato una carta che vale più punti vince
+                if (playerCard.points > adversaryCard.points) { // Se il giocatore ha giocato una carta che vale più punti vince
                     this.winsRound(playerCard, adversaryCard, 'player');
                 }
                 else { // Se l'avversario ha giocato una carta che vale più punti vince
@@ -146,12 +149,12 @@ class Game{
                 }
             }
         } else { // Se le carte hanno semi diversi
-            if (playerCard.suit === briscola) {
+            if (playerCard.suit === this.briscola) {
                 this.winsRound(playerCard, adversaryCard, 'player');
-            } else if (adversaryCard.suit === briscola) {
+            } else if (adversaryCard.suit === this.briscola) {
                 this.winsRound(playerCard, adversaryCard, 'adversary');
             } else {         // comanda il seme della prima carta giocata
-                if (playerIsFirst) {
+                if (this.playerIsFirst) {
                     this.winsRound(playerCard, adversaryCard, 'player');
                 }
                 else {
@@ -159,7 +162,13 @@ class Game{
                 }
             }
         }
-    }
+        this.player.playedCard = null;
+        this.adversary.playedCard = null;
+
+        // definire metodo per controllare se le carte sono finite
+        // definire metodo per controllare se la partita è finita
+        // definire metodo per distribuire una carta a ciascun giocatore
+   }
 
     // Metodo per assegnare le carte vinte al vincitore del round
     winsRound(playerCard, adversaryCard, whoWon) {
@@ -180,7 +189,7 @@ class Game{
     checkForDeclaration() {
         let suitsCount = {};
         for (let card of this.player.hand) {
-            if (suitsCount[card.suit]) {
+            if (!suitsCount[card.suit]) {
                 suitsCount[card.suit] = [];
             }
             else{
@@ -254,3 +263,5 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
     new Game();
 });
+
+export default Game;
