@@ -12,6 +12,7 @@ class Deck {
         this.values = ['1', '2', '3', '4', '5' , '6', '7', '8', '9', '10'];
         this.points = ['11', '0', '10', '0', '0', '0', '0', '2', '3', '4'];
         this.cards = this.createDeck();
+        this.shuffleDeck();
     }
 
     createDeck(){
@@ -33,9 +34,6 @@ class Deck {
         }
     }
 
-    dealHands(){
-        return [this.cards.splice(0,5),this.cards.splice(0,5)];
-    }
 }
 
-export {Deck, Card};
+export default Deck;
