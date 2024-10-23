@@ -299,10 +299,6 @@ function determineWinner(){
     player_played_card = null;
     adversary_played_card = null;
 
-    if(!briscolaDeclared){
-        briscola = null;
-    }
-
     // Distribuisci una carta ciascuno se ci sono carte rimanenti nel mazzo
     if(deck.length > 0){
         if(player_hand.length < 5){
