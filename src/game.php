@@ -11,7 +11,7 @@ $loggedInUser = isset($_SESSION['user']) ? $_SESSION['user'] : null;
         <meta charset="utf-8">
         <title>Cinquecento</title>
         <link rel="stylesheet" href="game.css">
-        <script src="./scripts/game.js"></script>
+        <script type='module' src="./scripts/gameLogic.js"></script>
     </head>
 
     <body>
