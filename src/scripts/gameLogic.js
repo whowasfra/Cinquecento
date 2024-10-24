@@ -6,19 +6,25 @@ class Game{
         this.deck = new Deck();
         this.player = new Player();
         this.adversary = new Player();
-        this.player.hand = this.deck.cards.splice(0, 5);
-        this.adversary.hand = this.deck.cards.splice(0, 5);
+        this.player.hand = [];
+        this.adversary.hand = [];
+        this.firstHand();
         this.briscola = null;
         this.briscolaDeclared = false;
         this.playerIsFirst = true;
         this.isPlayerTurn = true;
-        // this.canvas = document.getElementById('gameCanvas');
-        // this.ctx = this.canvas.getContext('2d');
         this.addCardEventListeners();
         this.renderCards();
         this.turn();
     }
-
+    
+    firstHand(){
+        for(let i = 0; i < 5; i++){
+            this.player.hand.push(this.deck.dealCard());
+            this.adversary.hand.push(this.deck.dealCard());
+        }
+    }
+    
     addCardEventListeners(){
         document.querySelector('.player-cards-container').addEventListener('click', (event) => {
             // Controlla se l'elemento cliccato è l'immagine di una carta nella mano del giocatore e non è disabilitata al click
@@ -115,8 +121,7 @@ class Game{
 
     adversaryTurn() {
         let cardPosition = Math.floor(Math.random() * this.adversary.hand.length);
-        this.adversary.playedCard = this.adversary.hand[cardPosition];
-        this.adversary.playCard(cardPosition);
+        this.adversary.playedCard = this.adversary.playCard(cardPosition);
         this.renderCards();
         if (this.player.playedCard === null) {
             this.isPlayerTurn = true;
@@ -202,14 +207,12 @@ class Game{
 
     // Metodo per controllare se il giocatore può dichiarare
     checkForDeclaration() {
-        let suitsCount = {};
+        let suitsCount = [];
         for (let card of this.player.hand) {
             if (!suitsCount[card.suit]) {
                 suitsCount[card.suit] = [];
             }
-            else{
-                suitsCount[card.suit].push(card.value);
-            }
+            suitsCount[card.suit].push(card.value);
         }
 
         for (let suit in suitsCount) {
@@ -228,9 +231,10 @@ class Game{
     showDeclarationButton(suit){
         let declarationDiv = document.querySelector(`.declaration-${suit}`);
 
-        if(declarationDiv === null){
+        if(document.querySelector(`.declaration-${suit} button`) === null){
+            const declareFunction = this.declare.bind(this, suit); // necessario per definire il contesto
             declarationDiv.innerHTML += `
-                <button class="declaration-button" onclick="declare('${suit}')">Dichiara ${suit}</button>
+                <button class="declaration-button" onclick="(${declareFunction})()">Dichiara ${suit}</button>
             `;
         }
     }
@@ -276,7 +280,8 @@ class Game{
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
-    new Game();
+    const game = new Game();
+    window.gameInstance = game;
 });
 
 export default Game;
