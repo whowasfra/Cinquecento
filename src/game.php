@@ -1,9 +1,3 @@
-<!-- <?php
-include 'session_config.php';
-
-// Verifica se l'utente è loggato
-$loggedInUser = isset($_SESSION['user']) ? $_SESSION['user'] : null;
-?> -->
 
 <!DOCTYPE html>
 <html>
