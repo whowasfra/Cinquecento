@@ -9,7 +9,9 @@ class Player{
     }
 
     playCard(index){
-        this.playedCard = this.hand.splice(index, 1)[0];
+        let card = this.hand[index];
+        this.hand.splice(index, 1);
+        return card;
     }
     
 }
