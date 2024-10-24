@@ -9,9 +9,9 @@ class Game{
         this.player.hand = this.deck.cards.splice(0, 5);
         this.adversary.hand = this.deck.cards.splice(0, 5);
         this.briscola = null;
+        this.briscolaDeclared = false;
         this.playerIsFirst = true;
         this.isPlayerTurn = true;
-
         // this.canvas = document.getElementById('gameCanvas');
         // this.ctx = this.canvas.getContext('2d');
         this.addCardEventListeners();
@@ -84,7 +84,6 @@ class Game{
                 </div>
             `;
         }
-        
         if(this.adversary.playedCard !== null){
             playedCardsContainer.innerHTML += `
                 <div class="played-card-adversary">
@@ -165,9 +164,25 @@ class Game{
         this.player.playedCard = null;
         this.adversary.playedCard = null;
 
-        // definire metodo per controllare se le carte sono finite
-        // definire metodo per controllare se la partita è finita
-        // definire metodo per distribuire una carta a ciascun giocatore
+        // se le carte non sono finite distribuire una carta a ciascun giocatore
+        if(this.deck.cards.length > 0){
+            if(this.player.hand.length < 5){
+                this.player.hand.push(this.deck.cards.pop());
+            }
+            if(this.adversary.hand.length < 5){
+                this.adversary.hand.push(this.deck.cards.pop());
+            }
+        } else {
+            console.log('Carte finite');
+        }
+
+        this.renderCards();
+        // se la partita è finita bisogna definire il vincitore
+        if(this.deck.cards.length === 0 && this.player.hand.length === 0 && this.adversary.hand.length === 0 && this.player.playedCard === null && this.adversary.playedCard === null){
+            this.determineGameWinner();
+        }
+
+        this.turn();
    }
 
     // Metodo per assegnare le carte vinte al vincitore del round
@@ -227,7 +242,7 @@ class Game{
 
     // Metodo per dichiarare un seme
     declare(suit){
-        if(this.briscola === null){
+        if(!this.briscolaDeclared){
             this.briscola = suit;
             // this.player.declared = true;
             // this.adversary.declared = true;
