@@ -10,30 +10,32 @@ class Deck {
     constructor() {
         this.suits = ['coppe', 'spade', 'oro', 'bastoni'];
         this.values = ['1', '2', '3', '4', '5' , '6', '7', '8', '9', '10'];
-        this.points = ['11', '0', '10', '0', '0', '0', '0', '2', '3', '4'];
+        this.points = [11, 0, 10, 0, 0, 0, 0, 2, 3, 4];
         this.cards = this.createDeck();
-        this.shuffleDeck();
+        
     }
 
     createDeck(){
         let deck = [];
         for (let suit of this.suits){
             for (let value of this.values){
-                for (let points of this.points){
-                    deck.push(new Card(suit, value, points));
-                } 
-            }
+                deck.push(new Card(suit, value, this.points[value-1]));
+            } 
         }
-        return deck;
+        return this.shuffleDeck(deck);
     }
 
-    shuffleDeck(){
-        for(let i = this.cards.length-1; i> 0; i--){
+    shuffleDeck(deck){
+        for(let i = deck.length-1; i> 0; i--){
             const j = Math.floor(Math.random() * (i+1));
-            [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]] ;
+            [deck[i], deck[j]] = [deck[j], deck[i]] ;
         }
+        return deck; 
     }
 
+    dealCard(){
+        return this.cards.pop();
+    }
 }
 
 export default Deck;
