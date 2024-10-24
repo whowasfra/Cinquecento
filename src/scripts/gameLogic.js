@@ -231,11 +231,13 @@ class Game{
     showDeclarationButton(suit){
         let declarationDiv = document.querySelector(`.declaration-${suit}`);
 
-        if(document.querySelector(`.declaration-${suit} button`) === null){
+        if(declarationDiv.querySelector(`button`) === null){
             const declareFunction = this.declare.bind(this, suit); // necessario per definire il contesto
             declarationDiv.innerHTML += `
-                <button class="declaration-button" onclick="(${declareFunction})()">Dichiara ${suit}</button>
+                <button class="declaration-button">Dichiara ${suit}</button>
             `;
+            const button = declarationDiv.querySelector(`button`);
+            button.onclick = declareFunction;
         }
     }
     
