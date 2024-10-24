@@ -118,10 +118,54 @@ class Game{
             setTimeout(() => this.determineWinner(), 500);
         }
     }
-
+    // Metodo per simulare il turno dell'avversario in modo più intelligente
     adversaryTurn() {
-        let cardPosition = Math.floor(Math.random() * this.adversary.hand.length);
-        this.adversary.playedCard = this.adversary.playCard(cardPosition);
+        // Logica per scegliere la carta migliore da giocare
+        let bestCardIndex = 0;
+        let bestCardValue = -1;
+        let lowestCardIndex = 0;
+        let lowestCardValue = Infinity;
+
+        for (let i = 0; i < this.adversary.hand.length; i++) {
+            let card = this.adversary.hand[i];
+            let cardValue = card.points;
+
+            // Se la briscola è stata dichiarata, le carte di briscola hanno più valore
+            if (this.briscola && card.suit === this.briscola) {
+                cardValue += 10;
+            }
+
+            // Se il giocatore ha già giocato una carta, considera il seme della carta giocata
+            if (this.player.playedCard) {
+                if (card.suit === this.player.playedCard.suit) {
+                    cardValue += 5;
+                } else if (card.suit === this.briscola) {
+                    cardValue += 3;
+                }
+            }
+
+            if (cardValue > bestCardValue) {
+                bestCardValue = cardValue;
+                bestCardIndex = i;
+            }
+
+            if (cardValue < lowestCardValue) {
+                lowestCardValue = cardValue;
+                lowestCardIndex = i;
+            }
+        }
+
+        // Se il giocatore ha già giocato una carta alta di un dato seme e l'avversario non può superarlo, sceglie la carta con il valore minore
+        if (this.player.playedCard) {
+            let playerCard = this.player.playedCard;
+            let canBeatPlayer = this.adversary.hand.some(card => card.suit === playerCard.suit && card.points > playerCard.points);
+
+            if (!canBeatPlayer) {
+                bestCardIndex = lowestCardIndex;
+            }
+        }
+
+        this.adversary.playedCard = this.adversary.playCard(bestCardIndex);
         this.renderCards();
         if (this.player.playedCard === null) {
             this.isPlayerTurn = true;
@@ -130,6 +174,7 @@ class Game{
             setTimeout(() => this.determineWinner(), 500);
         }
     }
+
     //Determina il vincitore del round
     determineWinner() {
         let playerCard = this.player.playedCard;
