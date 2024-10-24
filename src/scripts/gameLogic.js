@@ -155,7 +155,7 @@ class Game{
             }
         }
 
-        // Se il giocatore ha già giocato una carta alta di un dato seme e l'avversario non può superarlo, sceglie la carta con il valore minore
+        // Se il giocatore ha già giocato una carta di un dato seme e l'avversario non può superarlo, sceglie la carta con il valore minore
         if (this.player.playedCard) {
             let playerCard = this.player.playedCard;
             let canBeatPlayer = this.adversary.hand.some(card => card.suit === playerCard.suit && card.points > playerCard.points);
