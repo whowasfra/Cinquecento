@@ -9,6 +9,7 @@
         <title>Cinquecento</title>
         <link rel="stylesheet" href="game.css">
         <script type='module' src="./scripts/gameLogic.js"></script>
+        <!-- <script src="./src/ui.js"></script> -->
     </head>
 
     <body>
@@ -30,28 +31,21 @@
             </div>
         </header>
         <main>
-            <!-- <div class="reset-button-container">
-                <button id="reset-button" onclick="restartGame();">Reset</button>
-            </div>
-            <div class="play-button-container">
-                <button id="play-button" onclick="startGame();">Gioca!</button>
-            </div> -->
-
-            <div class="table-container">
+            <div class="table-container" id ="table-container">
                 <div class="adversary-cards-container">
                 </div>
-        
+            
                 <div class="deck-container">
                 </div>
 
                 <div class="briscola-container"></div>
-        
+            
                 <div class="played-cards-container">
                 </div>
 
                 <div class="player-cards-container">
                 </div>
-            </div>
+                </div>
 
             <div class="declaration-container">
                 <div class="declaration-bastoni"></div>
