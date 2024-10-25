@@ -1,13 +1,13 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #F3F6FB; 
-    color: #333; 
+    background-color: #F4E1C1; /* Colore sabbia */
+    color: #5D4037; /* Colore marrone */
     margin: 0;
     padding: 0;
 }
 
 header {
-    background-color: #4A90E2;
+    background-color: #5D4037; /* Colore marrone */
     color: white;
     text-align: center;
     padding: 1em 0;
@@ -33,7 +33,7 @@ nav ul li {
 
 nav ul li a {
     text-decoration: none;
-    color: #4A90E2;
+    color: #5D4037; /* Colore marrone */
     font-weight: bold;
 }
 
@@ -52,7 +52,7 @@ section {
 }
 
 .button {
-    background-color: #4A90E2;
+    background-color: #5D4037; /* Colore marrone */
     color: white;
     border: none;
     border-radius: 50px; /* Bottoni rotondi */
@@ -66,11 +66,11 @@ section {
 }
 
 .button:hover {
-    background-color: #357ABD;
+    background-color: #3E2723; /* Colore marrone scuro */
 }
 
 footer {
-    background-color: #4A90E2;
+    background-color: #5D4037; /* Colore marrone */
     color: white;
     text-align: center;
     padding: 1em 0;
