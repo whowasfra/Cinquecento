@@ -1,15 +1,17 @@
 :root{
-    --card-width-lg:157px;
-    --card-height-lg:120px;
+    --card-width-lg:10vw;
+    --card-height-lg:8vw;
 
-    --card-width-sm:120px;
-    --card-height-sm:168px;
+    --card-width-sm:8vw;
+    --card-height-sm:11vw;
 
 }
 
 .main{
     display: flex;
     justify-content: center;
+    height: 100vh;
+    width: 100vw;
 }
 
 .table-container{
@@ -29,7 +31,7 @@
     position: relative;
     display: flex;
     justify-content: center;
-    margin: 10%;    
+    margin: 5%;    
 }
 
 .deck-container{
@@ -50,7 +52,7 @@
     justify-content: center;
     height: var(--card-height-lg);
     width: var(--card-width-lg);
-    margin: 20%;
+    margin: 5%;
 }
 
 .player-cards-container {
@@ -59,7 +61,7 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
-    margin: 10%;
+    margin: 5%;
 }
 
 .player-card-pos-0, .player-card-pos-1, .player-card-pos-2, .player-card-pos-3, .player-card-pos-4{
@@ -71,4 +73,12 @@ img{
     border-radius: 10px ;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     margin: 5px;
+}
+
+.user-info-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1rem;
+    color: #333;
 }

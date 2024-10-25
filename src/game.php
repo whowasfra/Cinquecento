@@ -1,3 +1,7 @@
+<?php 
+    include_once("session_config.php");
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -11,6 +15,18 @@
         <header>
             <div class="header-title-container">
                 <h1>Cinquecento</h1>
+            </div>
+
+            <div class="user-info-container">
+                <?php
+                    if(isset($_SESSION["user"])){
+                        echo("<p>Benvenuto, " . $_SESSION["user"] . " <a href='./logout.php'>Logout</a> </p>");
+                    }
+                    else{
+                        echo("<p>Utente non autenticato</p>");
+                    }
+                ?>
+
             </div>
         </header>
         <main>
