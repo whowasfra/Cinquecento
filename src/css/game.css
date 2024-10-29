@@ -11,66 +11,6 @@
     width: 100vw;
 }
 
-.table-container{
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto auto auto;
-    grid-template-areas: "adversary adversary adversary"
-                         "deck played ."
-                         "player player player" ;                     
-}   
-
-.adversary-cards-container{
-    grid-area: adversary;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    margin: 5%;  
-    height: var(--card-height-lg);  
-}
-
-.deck-container{
-    grid-area: deck;
-    justify-content: left;
-    margin: 10%;
-    height: var(--card-height-lg);
-    width: var(--card-width-lg);
-    margin: var(--card-margin);
-}
-
-.adversary-card-pos-0, .adversary-card-pos-1, .adversary-card-pos-2, .adversary-card-pos-3, .adversary-card-pos-4{
-    height: var(--card-height-lg);
-    width: var(--card-width-lg);
-    margin: var(--card-margin);
-}
-
-.played-cards-container{
-    grid-area: played;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    height: var(--card-height-lg);
-    width: var(--card-width-lg);
-    margin: 5%;
-}
-
-.player-cards-container {
-    grid-area: player;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    margin: 5%;
-    height: var(--card-height-lg);
-}
-
-.player-card-pos-0, .player-card-pos-1, .player-card-pos-2, .player-card-pos-3, .player-card-pos-4{
-    height: var(--card-height-lg);
-    width: var(--card-width-lg);
-    margin: var(--card-margin);   
-}
-
 img{
     border-radius: 10px ;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
