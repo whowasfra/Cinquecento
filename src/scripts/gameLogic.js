@@ -5,6 +5,8 @@ class Game{
     constructor(){
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
+        this.cardWidth = 75;
+        this.cardHeight = 120;
         this.deck = new Deck();
         this.player = new Player();
         this.adversary = new Player();
@@ -36,10 +38,10 @@ class Game{
             // controlla se l'elemento cliccato è una carta del giocatore
             if(this.isPlayerTurn){
                 for(let i = 0; i < this.player.hand.length; i++){
-                    const cardX = 50 + i * 100;
+                    const cardX = 50 + i * (this.cardWidth + 5);
                     const cardY = 400;
 
-                    if(x > cardX && x < cardX + 71 && y > cardY && y < cardY + 96){
+                    if(x > cardX && x < cardX + this.cardWidth && y > cardY && y < cardY + this.cardHeight){
                         this.player.playedCard = this.player.playCard(i);
                         this.renderCards();
                         this.turn();
@@ -59,7 +61,7 @@ class Game{
             const img = new Image();
             img.src = `../images/carte/${card.suit}${card.value}.bmp`;
             img.onload = () => {
-                this.ctx.drawImage(img, 50 + i * 100, 400, 71, 96);
+                this.ctx.drawImage(img, 50 + i * (this.cardWidth + 5 ), 400, this.cardWidth, this.cardHeight);
             };
         }
 
@@ -69,7 +71,7 @@ class Game{
             const img = new Image();
             img.src = `../images/carte/dorso.bmp`;
             img.onload = () => {
-                this.ctx.drawImage(img, 50 + i * 100, 50, 71, 96);
+                this.ctx.drawImage(img, 50 + i * (this.cardWidth + 5 ), 50, this.cardWidth, this.cardHeight);
             };
         }
 
@@ -79,7 +81,7 @@ class Game{
             const img = new Image();
             img.src = `../images/carte/${card.suit}${card.value}.bmp`;
             img.onload = () => {
-                this.ctx.drawImage(img, 350, 250, 71, 96);
+                this.ctx.drawImage(img, 350, 250, this.cardWidth, this.cardHeight);
             };
         }
         
@@ -88,7 +90,7 @@ class Game{
             const img = new Image();
             img.src = `../images/carte/${card.suit}${card.value}.bmp`;
             img.onload = () => {
-                this.ctx.drawImage(img, 450, 250, 71, 96);
+                this.ctx.drawImage(img, 450, 250, this.cardWidth, this.cardHeight);
             };
         }
     }
