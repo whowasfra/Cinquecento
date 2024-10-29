@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <title>Cinquecento</title>
-        <link rel="stylesheet" href="game.css">
+        <link rel="stylesheet" href="../src/css/game.css">
         <script type='module' src="./scripts/gameLogic.js"></script>
         <!-- <script src="./src/ui.js"></script> -->
     </head>
