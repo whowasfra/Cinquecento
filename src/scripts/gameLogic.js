@@ -3,6 +3,8 @@ import Player from './player.js';
 
 class Game{
     constructor(){
+        this.canvas = document.getElementById('gameCanvas');
+        this.ctx = this.canvas.getContext('2d');
         this.deck = new Deck();
         this.player = new Player();
         this.adversary = new Player();
@@ -26,78 +28,69 @@ class Game{
     }
     
     addCardEventListeners(){
-        document.querySelector('.player-cards-container').addEventListener('click', (event) => {
-            // Controlla se l'elemento cliccato è l'immagine di una carta nella mano del giocatore e non è disabilitata al click
-            if(this.player.playedCard === null && event.target.tagName === 'IMG' && this.isPlayerTurn){
-                // Ottengo la posizione della carta cliccata
-                let cardPosition = event.target.parentElement.className.split('-')[3]; // player-card-pos-0 -> 0
-                // Converto la posizione della carta da carattere a numero
-                cardPosition = parseInt(cardPosition);
-                // Aggiungo la carta cliccata all'array delle carte giocate
-                this.player.playedCard = this.player.hand[cardPosition];
-                // Rimuovo la carta dalla mano del giocatore
-                this.player.hand.splice(cardPosition, 1);
-                // Aggiorno la grafica
-                this.renderCards();
-                // Passo il turno all'avversario
-                this.turn();       
+        this.canvas.addEventListener('click', (event) => {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            // controlla se l'elemento cliccato è una carta del giocatore
+            if(this.isPlayerTurn){
+                for(let i = 0; i < this.player.hand.length; i++){
+                    const cardX = 50 + i * 100;
+                    const cardY = 400;
+
+                    if(x > cardX && x < cardX + 71 && y > cardY && y < cardY + 96){
+                        this.player.playedCard = this.player.playCard(i);
+                        this.renderCards();
+                        this.turn();
+                        break;
+                    }
+                }
             }
         });
     }
 
     renderCards(){
-        let deckContainer = document.querySelector('.deck-container');
-        if (this.deck.cards.length > 0) {
-            deckContainer.innerHTML = `
-            <div class="deck">
-                <img src="images/carte/dorso.bmp" alt="dorso">
-            </div>
-            `;
-        }
-        else {
-            deckContainer.innerHTML = '';
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Disegna le carte del giocatore
+        for(let i = 0; i < this.player.hand.length; i++){
+            const card = this.player.hand[i];
+            const img = new Image();
+            img.src = `../images/carte/${card.suit}${card.value}.bmp`;
+            img.onload = () => {
+                this.ctx.drawImage(img, 50 + i * 100, 400, 71, 96);
+            };
         }
 
-        // Mostra le carte del giocatore
-        let playerContainer = document.querySelector('.player-cards-container');
-        playerContainer.innerHTML = '';
-        for (let i = 0; i < this.player.hand.length; i++){
-            playerContainer.innerHTML += `
-            <div class="player-card-pos-${i}">
-                <img src="images/carte/${this.player.hand[i].suit}${this.player.hand[i].value}.bmp" alt="${this.player.hand[i].suit}-${this.player.hand[i].value}">
-            </div>
-            `;
+        // Disegna le carte dell'avversario
+        for(let i = 0; i < this.adversary.hand.length; i++){
+            const card = this.player.hand[i];
+            const img = new Image();
+            img.src = `../images/carte/dorso.bmp`;
+            img.onload = () => {
+                this.ctx.drawImage(img, 50 + i * 100, 50, 71, 96);
+            };
         }
 
-        // Mostra le carte dell'avversario
-        let adversaryContainer = document.querySelector('.adversary-cards-container');
-        adversaryContainer.innerHTML = '';
-        for (let i = 0; i < this.adversary.hand.length; i++){
-            adversaryContainer.innerHTML += `
-            <div class="adversary-card-pos-${i}">
-                <img src="images/carte/${this.adversary.hand[i].suit}${this.adversary.hand[i].value}.bmp" alt="${this.adversary.hand[i].suit}-${this.adversary.hand[i].value}">
-            </div>
-            `;
+        // Disengna le carte giocate
+        if(this.player.playedCard){
+            const card = this.player.playedCard;
+            const img = new Image();
+            img.src = `../images/carte/${card.suit}${card.value}.bmp`;
+            img.onload = () => {
+                this.ctx.drawImage(img, 350, 250, 71, 96);
+            };
         }
-
-        // Mostra le carte sul tavolo
-        let playedCardsContainer = document.querySelector('.played-cards-container');
-        playedCardsContainer.innerHTML = '';
-        if (this.player.playedCard !== null) {
-            playedCardsContainer.innerHTML += `
-                <div class="played-card-player">
-                    <img src="images/carte/${this.player.playedCard.suit}${this.player.playedCard.value}.bmp" alt="${this.player.playedCard.suit}${this.player.playedCard.value}">
-                </div>
-            `;
+        
+        if(this.adversary.playedCard){
+            const card = this.adversary.playedCard;
+            const img = new Image();
+            img.src = `../images/carte/${card.suit}${card.value}.bmp`;
+            img.onload = () => {
+                this.ctx.drawImage(img, 450, 250, 71, 96);
+            };
         }
-        if(this.adversary.playedCard !== null){
-            playedCardsContainer.innerHTML += `
-                <div class="played-card-adversary">
-                    <img src="images/carte/${this.adversary.playedCard.suit}${this.adversary.playedCard.value}.bmp" alt="${this.adversary.playedCard.suit}${this.adversary.playedCard.value}">
-                </div>
-            `;
-        }
-
     }
 
     turn() {
