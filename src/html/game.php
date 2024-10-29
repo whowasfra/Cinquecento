@@ -31,14 +31,13 @@
             </div>
         </header>
         <main>
+            <canvas id = "gameCanvas" width="800" height="600" ></canvas>
             <div class="declaration-container">
                 <div class="declaration-bastoni"></div>
                 <div class="declaration-spade"></div>
                 <div class="declaration-oro"></div>
                 <div class="declaration-coppe"></div>
             </div>
-            
-            <canvas id = "gameCanvas" width="800" height="600"></canvas>
         </main>
         <footer>
             <div class="footer-title-container">
