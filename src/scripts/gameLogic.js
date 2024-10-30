@@ -1,20 +1,26 @@
-import Deck from './deck.js';
-import Player from './player.js';
-
 class Game{
     constructor(){
+        // this.canvas = document.getElementById('gameCanvas');
+        // this.ctx = this.canvas.getContext('2d');
+        // this.cardWidth = 75;
+        // this.cardHeight = 120;
+
         this.deck = new Deck();
         this.player = new Player();
         this.adversary = new Player();
         this.player.hand = [];
         this.adversary.hand = [];
+
         this.firstHand();
         this.briscola = null;
         this.briscolaDeclared = false;
         this.playerIsFirst = true;
         this.isPlayerTurn = true;
         this.addCardEventListeners();
-        this.renderCards();
+        this.ui = new ui(this);
+        this.ui.drawAdversaryHand();
+        this.ui.drawPlayerHand();
+        this.ui.drawDeck();
         this.turn();
     }
     
@@ -26,78 +32,26 @@ class Game{
     }
     
     addCardEventListeners(){
-        document.querySelector('.player-cards-container').addEventListener('click', (event) => {
-            // Controlla se l'elemento cliccato è l'immagine di una carta nella mano del giocatore e non è disabilitata al click
-            if(this.player.playedCard === null && event.target.tagName === 'IMG' && this.isPlayerTurn){
-                // Ottengo la posizione della carta cliccata
-                let cardPosition = event.target.parentElement.className.split('-')[3]; // player-card-pos-0 -> 0
-                // Converto la posizione della carta da carattere a numero
-                cardPosition = parseInt(cardPosition);
-                // Aggiungo la carta cliccata all'array delle carte giocate
-                this.player.playedCard = this.player.hand[cardPosition];
-                // Rimuovo la carta dalla mano del giocatore
-                this.player.hand.splice(cardPosition, 1);
-                // Aggiorno la grafica
-                this.renderCards();
-                // Passo il turno all'avversario
-                this.turn();       
+        document.getElementById('gameCanvas').addEventListener('click', (event) => {
+            const rect = this.ui.canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            // controlla se l'elemento cliccato è una carta del giocatore
+            if(this.isPlayerTurn){
+                for(let i = 0; i < this.player.hand.length; i++){
+                    const cardX = 50 + i * (this.ui.cardWidth + 5);
+                    const cardY = 400;
+
+                    if(x > cardX && x < cardX + this.ui.cardWidth && y > cardY && y < cardY + this.ui.cardHeight){
+                        this.player.playedCard = this.player.playCard(i);
+                        this.ui.drawPlayedCards(this);
+                        this.turn();
+                        break;
+                    }
+                }
             }
         });
-    }
-
-    renderCards(){
-        let deckContainer = document.querySelector('.deck-container');
-        if (this.deck.cards.length > 0) {
-            deckContainer.innerHTML = `
-            <div class="deck">
-                <img src="images/carte/dorso.bmp" alt="dorso">
-            </div>
-            `;
-        }
-        else {
-            deckContainer.innerHTML = '';
-        }
-
-        // Mostra le carte del giocatore
-        let playerContainer = document.querySelector('.player-cards-container');
-        playerContainer.innerHTML = '';
-        for (let i = 0; i < this.player.hand.length; i++){
-            playerContainer.innerHTML += `
-            <div class="player-card-pos-${i}">
-                <img src="images/carte/${this.player.hand[i].suit}${this.player.hand[i].value}.bmp" alt="${this.player.hand[i].suit}-${this.player.hand[i].value}">
-            </div>
-            `;
-        }
-
-        // Mostra le carte dell'avversario
-        let adversaryContainer = document.querySelector('.adversary-cards-container');
-        adversaryContainer.innerHTML = '';
-        for (let i = 0; i < this.adversary.hand.length; i++){
-            adversaryContainer.innerHTML += `
-            <div class="adversary-card-pos-${i}">
-                <img src="images/carte/${this.adversary.hand[i].suit}${this.adversary.hand[i].value}.bmp" alt="${this.adversary.hand[i].suit}-${this.adversary.hand[i].value}">
-            </div>
-            `;
-        }
-
-        // Mostra le carte sul tavolo
-        let playedCardsContainer = document.querySelector('.played-cards-container');
-        playedCardsContainer.innerHTML = '';
-        if (this.player.playedCard !== null) {
-            playedCardsContainer.innerHTML += `
-                <div class="played-card-player">
-                    <img src="images/carte/${this.player.playedCard.suit}${this.player.playedCard.value}.bmp" alt="${this.player.playedCard.suit}${this.player.playedCard.value}">
-                </div>
-            `;
-        }
-        if(this.adversary.playedCard !== null){
-            playedCardsContainer.innerHTML += `
-                <div class="played-card-adversary">
-                    <img src="images/carte/${this.adversary.playedCard.suit}${this.adversary.playedCard.value}.bmp" alt="${this.adversary.playedCard.suit}${this.adversary.playedCard.value}">
-                </div>
-            `;
-        }
-
     }
 
     turn() {
@@ -143,7 +97,6 @@ class Game{
                     cardValue += 3;
                 }
             }
-
             if (cardValue > bestCardValue) {
                 bestCardValue = cardValue;
                 bestCardIndex = i;
@@ -166,7 +119,7 @@ class Game{
         }
 
         this.adversary.playedCard = this.adversary.playCard(bestCardIndex);
-        this.renderCards();
+        this.ui.drawPlayedCards();
         if (this.player.playedCard === null) {
             this.isPlayerTurn = true;
             this.turn();
@@ -213,6 +166,7 @@ class Game{
         }
         this.player.playedCard = null;
         this.adversary.playedCard = null;
+        this.ui.drawPlayedCards();
 
         // se le carte non sono finite distribuire una carta a ciascun giocatore
         if(this.deck.cards.length > 0){
@@ -223,10 +177,14 @@ class Game{
                 this.adversary.hand.push(this.deck.cards.pop());
             }
         } else {
+            this.ui.clearDeck();
             console.log('Carte finite');
         }
 
-        this.renderCards();
+
+        this.ui.drawPlayerHand(this);
+        this.ui.drawAdversaryHand(this);
+
         // se la partita è finita bisogna definire il vincitore
         if(this.deck.cards.length === 0 && this.player.hand.length === 0 && this.adversary.hand.length === 0 && this.player.playedCard === null && this.adversary.playedCard === null){
             this.determineGameWinner();
@@ -330,5 +288,3 @@ document.addEventListener('DOMContentLoaded', () => {
     const game = new Game();
     window.gameInstance = game;
 });
-
-export default Game;
