@@ -177,6 +177,7 @@ class Game{
                 this.adversary.hand.push(this.deck.cards.pop());
             }
         } else {
+            this.ui.clearDeck();
             console.log('Carte finite');
         }
 

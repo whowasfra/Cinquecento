@@ -7,6 +7,10 @@ class ui{
         this.game = myGame;
     }
 
+    clearDeck(){
+        this.ctx.clearRect(0,this.canvas.height/2 - this.cardHeight/2, this.cardWidth, this.cardHeight);
+    }
+
     renderCards(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
