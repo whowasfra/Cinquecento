@@ -1,24 +1,26 @@
-import Deck from './deck.js';
-import Player from './player.js';
-
 class Game{
     constructor(){
-        this.canvas = document.getElementById('gameCanvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.cardWidth = 75;
-        this.cardHeight = 120;
+        // this.canvas = document.getElementById('gameCanvas');
+        // this.ctx = this.canvas.getContext('2d');
+        // this.cardWidth = 75;
+        // this.cardHeight = 120;
+
         this.deck = new Deck();
         this.player = new Player();
         this.adversary = new Player();
         this.player.hand = [];
         this.adversary.hand = [];
+
         this.firstHand();
         this.briscola = null;
         this.briscolaDeclared = false;
         this.playerIsFirst = true;
         this.isPlayerTurn = true;
         this.addCardEventListeners();
-        this.renderCards();
+        this.ui = new ui(this);
+        this.ui.drawAdversaryHand();
+        this.ui.drawPlayerHand();
+        this.ui.drawDeck();
         this.turn();
     }
     
@@ -30,69 +32,26 @@ class Game{
     }
     
     addCardEventListeners(){
-        this.canvas.addEventListener('click', (event) => {
-            const rect = this.canvas.getBoundingClientRect();
+        document.getElementById('gameCanvas').addEventListener('click', (event) => {
+            const rect = this.ui.canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
 
             // controlla se l'elemento cliccato è una carta del giocatore
             if(this.isPlayerTurn){
                 for(let i = 0; i < this.player.hand.length; i++){
-                    const cardX = 50 + i * (this.cardWidth + 5);
+                    const cardX = 50 + i * (this.ui.cardWidth + 5);
                     const cardY = 400;
 
-                    if(x > cardX && x < cardX + this.cardWidth && y > cardY && y < cardY + this.cardHeight){
+                    if(x > cardX && x < cardX + this.ui.cardWidth && y > cardY && y < cardY + this.ui.cardHeight){
                         this.player.playedCard = this.player.playCard(i);
-                        this.renderCards();
+                        this.ui.drawPlayedCards(this);
                         this.turn();
                         break;
                     }
                 }
             }
         });
-    }
-
-    renderCards(){
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Disegna le carte del giocatore
-        for(let i = 0; i < this.player.hand.length; i++){
-            const card = this.player.hand[i];
-            const img = new Image();
-            img.src = `../images/carte/${card.suit}${card.value}.bmp`;
-            img.onload = () => {
-                this.ctx.drawImage(img, 50 + i * (this.cardWidth + 5 ), 400, this.cardWidth, this.cardHeight);
-            };
-        }
-
-        // Disegna le carte dell'avversario
-        for(let i = 0; i < this.adversary.hand.length; i++){
-            const card = this.player.hand[i];
-            const img = new Image();
-            img.src = `../images/carte/dorso.bmp`;
-            img.onload = () => {
-                this.ctx.drawImage(img, 50 + i * (this.cardWidth + 5 ), 50, this.cardWidth, this.cardHeight);
-            };
-        }
-
-        // Disengna le carte giocate
-        if(this.player.playedCard){
-            const card = this.player.playedCard;
-            const img = new Image();
-            img.src = `../images/carte/${card.suit}${card.value}.bmp`;
-            img.onload = () => {
-                this.ctx.drawImage(img, 350, 250, this.cardWidth, this.cardHeight);
-            };
-        }
-        
-        if(this.adversary.playedCard){
-            const card = this.adversary.playedCard;
-            const img = new Image();
-            img.src = `../images/carte/${card.suit}${card.value}.bmp`;
-            img.onload = () => {
-                this.ctx.drawImage(img, 450, 250, this.cardWidth, this.cardHeight);
-            };
-        }
     }
 
     turn() {
@@ -138,7 +97,6 @@ class Game{
                     cardValue += 3;
                 }
             }
-
             if (cardValue > bestCardValue) {
                 bestCardValue = cardValue;
                 bestCardIndex = i;
@@ -161,7 +119,7 @@ class Game{
         }
 
         this.adversary.playedCard = this.adversary.playCard(bestCardIndex);
-        this.renderCards();
+        this.ui.drawPlayedCards();
         if (this.player.playedCard === null) {
             this.isPlayerTurn = true;
             this.turn();
@@ -208,6 +166,7 @@ class Game{
         }
         this.player.playedCard = null;
         this.adversary.playedCard = null;
+        this.ui.drawPlayedCards();
 
         // se le carte non sono finite distribuire una carta a ciascun giocatore
         if(this.deck.cards.length > 0){
@@ -221,7 +180,10 @@ class Game{
             console.log('Carte finite');
         }
 
-        this.renderCards();
+
+        this.ui.drawPlayerHand(this);
+        this.ui.drawAdversaryHand(this);
+
         // se la partita è finita bisogna definire il vincitore
         if(this.deck.cards.length === 0 && this.player.hand.length === 0 && this.adversary.hand.length === 0 && this.player.playedCard === null && this.adversary.playedCard === null){
             this.determineGameWinner();
@@ -325,5 +287,3 @@ document.addEventListener('DOMContentLoaded', () => {
     const game = new Game();
     window.gameInstance = game;
 });
-
-export default Game;

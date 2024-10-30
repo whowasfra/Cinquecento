@@ -8,8 +8,10 @@
         <meta charset="utf-8">
         <title>Cinquecento</title>
         <link rel="stylesheet" href="../css/game.css">
-        <script type='module' src="../scripts/gameLogic.js"></script>
-        <!-- <script src="./src/ui.js"></script> -->
+        <script src="../scripts/deck.js"></script>
+        <script src="../scripts/player.js"></script>
+        <script src="../scripts/gameLogic.js"></script>
+        <script src="../scripts/ui.js"></script>
     </head>
 
     <body>
@@ -31,13 +33,15 @@
             </div>
         </header>
         <main>
-            <canvas id = "gameCanvas" width="800" height="600" ></canvas>
-            <div class="declaration-container">
-                <div class="declaration-bastoni"></div>
-                <div class="declaration-spade"></div>
-                <div class="declaration-oro"></div>
-                <div class="declaration-coppe"></div>
-            </div>
+            <div class="table">
+                <canvas id = "gameCanvas" width="800" height="600" ></canvas>
+            </div>    
+                <div class="declaration-container">
+                    <div class="declaration-bastoni"></div>
+                    <div class="declaration-spade"></div>
+                    <div class="declaration-oro"></div>
+                    <div class="declaration-coppe"></div>
+                </div>
         </main>
         <footer>
             <div class="footer-title-container">

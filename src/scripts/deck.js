@@ -37,5 +37,3 @@ class Deck {
         return this.cards.pop();
     }
 }
-
-export default Deck;
