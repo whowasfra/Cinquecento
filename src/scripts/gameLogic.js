@@ -254,9 +254,7 @@ class Game{
             console.log('Hai già dichiarato');
             this.player.points += 20;
         }
-
         console.log(`Hai dichiarato ${suit}`);
-
         this.hideDeclarationButton(suit);
     }
 
@@ -274,6 +272,8 @@ class Game{
         }
 
     }
+    
+    
 }
 
 document.addEventListener('DOMContentLoaded', () => {
