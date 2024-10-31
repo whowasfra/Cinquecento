@@ -7,6 +7,20 @@ class ui{
         this.game = myGame;
     }
 
+    setShadows(){
+        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; 
+        this.ctx.shadowBlur = 20;
+        this.ctx.shadowOffsetX = 5;
+        this.ctx.shadowOffsetY = 5;
+    }
+
+    resetShadows(){
+        this.ctx.shadowColor = 'transparent';
+        this.ctx.shadowBlur = 0;
+        this.ctx.shadowOffsetX = 0;
+        this.ctx.shadowOffsetY = 0;
+    }
+
     clearDeck(){
         this.ctx.clearRect(0,this.canvas.height/2 - this.cardHeight/2, this.cardWidth, this.cardHeight);
     }
@@ -14,10 +28,9 @@ class ui{
     renderCards(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-        this.ctx.shadowBlur = 10;
+        this.ctx.shadowBlur = 5;
         this.ctx.shadowOffsetX = 5;
         this.ctx.shadowOffsetY = 5;
-
     }
 
 
@@ -69,6 +82,7 @@ class ui{
                 this.ctx.drawImage(img, 350, 250, this.cardWidth, this.cardHeight);
             };
         }
+
         if(this.game.adversary.playedCard){
             const card = this.game.adversary.playedCard;
             const img = new Image();

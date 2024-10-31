@@ -1,16 +1,10 @@
 class Game{
     constructor(){
-        // this.canvas = document.getElementById('gameCanvas');
-        // this.ctx = this.canvas.getContext('2d');
-        // this.cardWidth = 75;
-        // this.cardHeight = 120;
-
         this.deck = new Deck();
         this.player = new Player();
         this.adversary = new Player();
         this.player.hand = [];
         this.adversary.hand = [];
-
         this.firstHand();
         this.briscola = null;
         this.briscolaDeclared = false;
@@ -180,7 +174,6 @@ class Game{
             this.ui.clearDeck();
             console.log('Carte finite');
         }
-
 
         this.ui.drawPlayerHand(this);
         this.ui.drawAdversaryHand(this);
