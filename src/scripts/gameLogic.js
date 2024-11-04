@@ -273,11 +273,65 @@ class Game{
 
     }
     
+    // Metodo per salvare la partita 
+    async saveGame(){
+        const gameState = {
+            deck: this.deck,
+            player: this.player,
+            adversary: this.adversary,
+            briscola: this.briscola,
+            briscolaDeclared: this.briscolaDeclared,
+            playerIsFirst: this.playerIsFirst,
+            isPlayerTurn: this.isPlayerTurn
+        };
+
+        const response = await fetch('game.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(gameState)
+        });
     
+        const result = await response.json();
+        console.log(result);
+    }
+    
+    async loadGame(){
+        const response = await fetch('game.php');
+        const gameState = await response.json();
+        
+        if(gameState.status !== 'no_saved_game'){
+            this.deck = gameState.deck;
+            this.player = gameState.player;
+            this.adversary = gameState.adversary;
+            this.briscola = gameState.briscola;
+            this.briscolaDeclared = gameState.briscolaDeclared;
+            this.playerIsFirst = gameState.playerIsFirst;
+            this.isPlayerTurn = gameState.isPlayerTurn;
+            this.ui.drawAdversaryHand();
+            this.ui.drawPlayerHand();
+            this.ui.drawDeck();
+            this.turn();
+            console.log('Game loaded');
+        } else{
+            console.log('No saved game found');
+        }
+    }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed');
+function startGame(){
     const game = new Game();
     window.gameInstance = game;
-});
+}
+
+function endGame(){
+    window.gameInstance.ui.ctx.clearRect(0, 0, window.gameInstance.ui.canvas.width, window.gameInstance.ui.canvas.height);
+    window.gameInstance = null;
+}
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     console.log('DOM fully loaded and parsed');
+//     const game = new Game();
+//     window.gameInstance = game;
+// });
