@@ -276,35 +276,47 @@ class Game{
     // Metodo per salvare la partita 
     async saveGame(){
         const gameState = {
-            deck: this.deck,
-            player: this.player,
-            adversary: this.adversary,
+            deck: this.deck.cards,
+            player: {
+                hand: this.player.hand,
+                wonCards: this.player.wonCards,
+                points: this.player.points
+            },
+            adversary: {
+                hand: this.adversary.hand,
+                wonCards: this.adversary.wonCards,
+                points: this.adversary.points
+            },
             briscola: this.briscola,
             briscolaDeclared: this.briscolaDeclared,
             playerIsFirst: this.playerIsFirst,
             isPlayerTurn: this.isPlayerTurn
         };
 
-        const response = await fetch('game.php', {
+        const response = await fetch('save_game.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(gameState)
         });
-    
+
         const result = await response.json();
         console.log(result);
     }
-    
+
     async loadGame(){
-        const response = await fetch('game.php');
+        const response = await fetch('load_game.php');
         const gameState = await response.json();
         
         if(gameState.status !== 'no_saved_game'){
-            this.deck = gameState.deck;
-            this.player = gameState.player;
-            this.adversary = gameState.adversary;
+            this.deck.cards = gameState.deck;
+            this.player.hand = gameState.player.hand;
+            this.player.wonCards = gameState.player.wonCards;
+            this.player.points = gameState.player.points;
+            this.adversary.hand = gameState.adversary.hand;
+            this.adversary.wonCards = gameState.adversary.wonCards;
+            this.adversary.points = gameState.adversary.points;
             this.briscola = gameState.briscola;
             this.briscolaDeclared = gameState.briscolaDeclared;
             this.playerIsFirst = gameState.playerIsFirst;

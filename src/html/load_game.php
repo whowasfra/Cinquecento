@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $result = $statement->get_result();
     $gameState = $result->fetch_assoc();
 
-    if(gameState){
+    if ($gameState) {
         $gameState['deck'] = json_decode($gameState['deck']);
         $gameState['player'] = json_decode($gameState['player']);
         $gameState['adversary'] = json_decode($gameState['adversary']);
@@ -20,7 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $gameState['briscola_declared'] = json_decode($gameState['briscola_declared']);
         $gameState['player_is_first'] = json_decode($gameState['player_is_first']);
         $gameState['is_player_turn'] = json_decode($gameState['is_player_turn']);
-    }   else{
+        echo json_encode($gameState);
+    } else {
         echo json_encode(['status' => 'no_saved_game']);
     }
     $statement->close();
