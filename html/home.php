@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8"/>
         <title>Cinquecento</title>
-        <link rel="stylesheet" href="./src/css/style.css"> 
+        <link rel="stylesheet" href="./css/style.css"> 
     </head>    
         
     <body>
@@ -17,9 +17,9 @@
             <!--Sezione introduttiva con tasti rapidi-->
             <section id="Intro">
                 <div class="buttons">
-                    <a class="button" href="./src/html/game.php" title>Vai al gioco</a>
-                    <a class="button" href="./src/html/login.html" title>Accedi / Registrati</a>
-                    <a class="button" href="./src/html/regole.html" title>Regole</a>
+                    <a class="button" href="./html/game.php" title>Vai al gioco</a>
+                    <a class="button" href="./html/login.html" title>Accedi / Registrati</a>
+                    <a class="button" href="./html/regole.html" title>Regole</a>
                     <a class="button" href="statistiche.html" title>Statistiche</a>
                 </div>
             </section>
