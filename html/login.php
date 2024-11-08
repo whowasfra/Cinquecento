@@ -7,6 +7,7 @@
     </head>
 
     <body>
+        <?php include '../php/leftNavigation.php' ?>
         <form method="post" action="login.php">
             <label>User:</label><input type="text" name="user" placeholder="Franco" required>
             <label>Password:</label><input type="password" name="password" placeholder="Password" required>
