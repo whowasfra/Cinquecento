@@ -1,5 +1,5 @@
 <?php 
-    include_once("session_config.php");
+    include_once("../php/session_config.php");
     include_once("db_config.php");
 ?>
 
@@ -16,6 +16,7 @@
     </head>
 
     <body>
+        <?php include '../php/leftNavigation.php' ?>
         <header>
             <div class="header-title-container">
                 <h1>Cinquecento</h1>
