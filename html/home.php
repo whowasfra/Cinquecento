@@ -3,7 +3,25 @@
     <head>
         <meta charset="UTF-8"/>
         <title>Cinquecento</title>
-        <link rel="stylesheet" href="../css/style.css"> 
+        <link rel="stylesheet" href="../css/style.css" />
+        <link rel="stylesheet" href="../css/leftNavigation.css" /> 
+        <style>
+            main {
+                display: flex;
+                flex-direction: row;
+            }
+
+            main section {
+                display: flex;
+                justify-content: space-around;
+            }
+
+            main > div {
+                width: 50%;
+            }
+
+
+        </style>
     </head>    
         
     <body>

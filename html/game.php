@@ -1,6 +1,6 @@
 <?php 
     include_once("../php/session_config.php");
-    include_once("db_config.php");
+    include_once("../php/db_config.php");
 ?>
 
 <!DOCTYPE html>
@@ -8,7 +8,8 @@
     <head>
         <meta charset="utf-8">
         <title>Cinquecento</title>
-        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../css/style.css"/>
+        <link rel="stylesheet" href="../css/leftNavigation.css"/>
         <script src="../scripts/deck.js"></script>
         <script src="../scripts/player.js"></script>
         <script src="../scripts/gameLogic.js"></script>
