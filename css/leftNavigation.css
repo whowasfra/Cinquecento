@@ -1,10 +1,11 @@
-
 .leftNavigation{
     position: absolute;
+    top: 200px; 
+    left: 10px;
     width: 70px;
     margin: 0px 10px 0px 10px;
     
-    background-color: #F4E1C1;
+    background-color: #e3cba2;
     box-shadow: 0px 0px 3px rgb(0, 0, 0,0.2);
     border-radius: 10px; 
     
@@ -27,8 +28,6 @@
 .leftNavigation.opened{
     width: 250px;
     overflow: hidden;
-
-    
 }
 
 
@@ -89,7 +88,7 @@
     
     display: flex;
     flex-direction: column;
-    padding-left: 22px;
+    /* padding-left: 22px; */
     margin: 10px 10px 10px 0px;
 
 }
@@ -145,39 +144,28 @@
 }
 
 .icon.home{
-    content: url("../image-icon/home.svg");
-}
-.icon.players{
-    content: url("../image-icon/players.svg");
-}
-.icon.goboard{
-    content: url("../image-icon/game.svg");
-}
-.icon.playonline{
-    content: url("../image-icon/playonline.svg");
-}
-.icon.friends{
-    content: url("../image-icon/friends.svg");
-}
-.icon.tutorial{
-    content: url("../image-icon/tutorial.svg");
-}
-.icon.info{
-    content: url("../image-icon/info.svg");
-}
-.icon.profile{
-    content: url("../image-icon/profile.svg");
-}
-.icon.changeaccount{
-    content: url("../image-icon/change.svg");
-}
-.icon.logout{
-    content: url("../image-icon/logout.svg");
-}
-.icon.login{
-    content: url("../image-icon/login.svg");
+    content: url("../images/icons/home.svg");
 }
 
-.icon.share{
-    content: url("../image-icon/share.svg");
+.icon.games{
+    content: url("../images/icons/game.svg");
+}
+
+.icon.tutorial{
+    content: url("../images/icons/tutorial.svg");
+}
+.icon.info{
+    content: url("../images/icons/info.svg");
+}
+.icon.profile{
+    content: url("../images/icons/profile.svg");
+}
+.icon.changeaccount{
+    content: url("../images/icons/change.svg");
+}
+.icon.logout{
+    content: url("../images/icons/logout.svg");
+}
+.icon.login{
+    content: url("../images/icons/login.svg");
 }

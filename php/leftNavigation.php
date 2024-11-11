@@ -4,22 +4,19 @@
     <div class="menuToggle" onclick="this.parentElement.classList.toggle('opened')"></div>
     <ul>
         <?php
-        session_start();
-
-        // i path sono relativi ai file nella cartella ../html/--
 
         $links = [
             "Home"      => ["./home.php", "home"],
-            "Games"     => ["./mygames.php", "goboard"],
-            "Info"      => ["./documentazione.html", "info"],
+            "Games"     => ["./mygames.php", "games"],
+            "Info"      => ["./regole.html", "info"],
         ];
 
         // Login cases
-        if(isset($_SESSION['login']) && $_SESSION['login'] === true){
+        if(isset($_SESSION['initiated']) && $_SESSION['initiated'] === true){
 
             $links += [
                 "Profile"   => ["./profile.php", "profile"],
-             "Change Account"=>["./login.php", "changeaccount"],
+                "Change Account" => ["./login.php", "changeaccount"],
                 "Logout"    => ["../php/logout.php", "logout"],
             ];
 
