@@ -4,7 +4,8 @@
         <meta charset="UTF-8"/>
         <title>Cinquecento</title>
         <link rel="stylesheet" href="../css/style.css" />
-        <link rel="stylesheet" href="../css/leftNavigation.css" /> 
+        <link rel="stylesheet" href="../css/top_navigation.css"/>
+
         <style>
             main {
                 display: flex;
@@ -25,7 +26,7 @@
     </head>    
         
     <body>
-        <?php include '../php/leftNavigation.php' ?>
+        <?php include '../php/top_navigation.php' ?>
         <header>
             <div id="Cinquecento-logo">CINQUECENTO</div>
             <a class="toggle-menu" href="#"></a>
