@@ -33,31 +33,24 @@ class ui{
         this.ctx.shadowOffsetY = 5;
     }
 
-
-    // disegna le carte del giocatore
-    drawPlayerHand(){
-        this.ctx.clearRect(0, 400, this.canvas.width, this.cardHeight);
-        for(let i = 0; i < this.game.player.hand.length; i++){
-            const card = this.game.player.hand[i];
+    drawHand(hand, yPosition, isPlayer) {
+        this.ctx.clearRect(0, yPosition, this.canvas.width, this.cardHeight);
+        for (let i = 0; i < hand.length; i++) {
+            const card = hand[i];
             const img = new Image();
-            img.src = `../images/carte/${card.suit}${card.value}.bmp`;
+            img.src = isPlayer ? `../images/carte/${card.suit}${card.value}.bmp` : `../images/carte/dorso.bmp`;
             img.onload = () => {
-                this.ctx.drawImage(img, 50 + i * (this.cardWidth + 5 ), 400, this.cardWidth, this.cardHeight);
+                this.ctx.drawImage(img, 50 + i * (this.cardWidth + 5), yPosition, this.cardWidth, this.cardHeight);
             };
         }
     }
 
-    // disegna le carte dell'avversario
-    drawAdversaryHand(){
-        this.ctx.clearRect(0, 50, this.canvas.width, this.cardHeight);
-        for(let i = 0; i < this.game.adversary.hand.length; i++){
-            const card = this.game.adversary.hand[i];
-            const img = new Image();
-            img.src = `../images/carte/dorso.bmp`;
-            img.onload = () => {
-                this.ctx.drawImage(img, 50 + i * (this.cardWidth + 5 ), 50, this.cardWidth, this.cardHeight);
-            };
-        }
+    drawPlayerHand() {
+        this.drawHand(this.game.player.hand, 400, true);
+    }
+
+    drawAdversaryHand() {
+        this.drawHand(this.game.adversary.hand, 50, false);
     }
 
     // disegna il mazzo
