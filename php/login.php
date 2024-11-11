@@ -18,6 +18,9 @@
     if( mysqli_connect_errno() ) {
         exit('Connessione a database non riuscita. (' . mysqli_connect_error() . ')');
     }
+
+    // Aggiungi top navigation
+    include_once("topnavigation.php");
     
     // Devo registrare l'utente
     if(isset($_POST["register"])){
