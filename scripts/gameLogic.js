@@ -16,6 +16,7 @@ class Game{
         this.ui.drawPlayerHand();
         this.ui.drawDeck();
         this.turn();
+        this.declaredSuits = [];
     }
     
     firstHand(){
@@ -49,41 +50,37 @@ class Game{
     }
 
     turn() {
-        // Se il turno è del giocatore
         if (this.isPlayerTurn) {
             this.checkForDeclaration();
             if (this.adversary.playedCard === null && this.player.playedCard !== null) {
                 this.isPlayerTurn = false;
-                setTimeout(() => this.adversaryTurn(), 500); // Ritardo per simulare il pensiero dell'avversario
+                setTimeout(() => this.adversaryTurn(), 500);
             }
-        }
-        // Se il turno è dell'avversario
-        else {
-            setTimeout(() => this.adversaryTurn(), 500); // Ritardo per simulare il pensiero dell'avversario
+        } else {
+            setTimeout(() => this.adversaryTurn(), 500);
         }
 
         if (this.player.playedCard !== null && this.adversary.playedCard !== null) {
             setTimeout(() => this.determineWinner(), 500);
         }
     }
-    // Metodo per simulare il turno dell'avversario in modo più intelligente
+
+    // Metodo per simulare il turno dell'avversario in modo automatico
     adversaryTurn() {
-        // Logica per scegliere la carta migliore da giocare
         let bestCardIndex = 0;
         let bestCardValue = -1;
         let lowestCardIndex = 0;
         let lowestCardValue = Infinity;
+        let hasNineOrTen = false;
 
         for (let i = 0; i < this.adversary.hand.length; i++) {
             let card = this.adversary.hand[i];
             let cardValue = card.points;
 
-            // Se la briscola è stata dichiarata, le carte di briscola hanno più valore
             if (this.briscola && card.suit === this.briscola) {
                 cardValue += 10;
             }
 
-            // Se il giocatore ha già giocato una carta, considera il seme della carta giocata
             if (this.player.playedCard) {
                 if (card.suit === this.player.playedCard.suit) {
                     cardValue += 5;
@@ -91,6 +88,11 @@ class Game{
                     cardValue += 3;
                 }
             }
+
+            if (card.value === '9' || card.value === '10') {
+                hasNineOrTen = true;
+            }
+
             if (cardValue > bestCardValue) {
                 bestCardValue = cardValue;
                 bestCardIndex = i;
@@ -102,7 +104,6 @@ class Game{
             }
         }
 
-        // Se il giocatore ha già giocato una carta di un dato seme e l'avversario non può superarlo, sceglie la carta con il valore minore
         if (this.player.playedCard) {
             let playerCard = this.player.playedCard;
             let canBeatPlayer = this.adversary.hand.some(card => card.suit === playerCard.suit && card.points > playerCard.points);
@@ -110,6 +111,10 @@ class Game{
             if (!canBeatPlayer) {
                 bestCardIndex = lowestCardIndex;
             }
+        }
+
+        if (hasNineOrTen) {
+            bestCardIndex = lowestCardIndex;
         }
 
         this.adversary.playedCard = this.adversary.playCard(bestCardIndex);
@@ -120,6 +125,8 @@ class Game{
         } else {
             setTimeout(() => this.determineWinner(), 500);
         }
+
+        this.checkForAdversaryDeclaration();
     }
 
     //Determina il vincitore del round
@@ -244,15 +251,16 @@ class Game{
 
     // Metodo per dichiarare un seme
     declare(suit){
-        if(!this.briscolaDeclared){
+        if (!this.briscolaDeclared && !this.declaredSuits.includes(suit)) {
             this.briscola = suit;
-            // this.player.declared = true;
-            // this.adversary.declared = true;
             this.player.points += 40;
-        }
-        else{
-            console.log('Hai già dichiarato');
+            this.briscolaDeclared = true;
+            this.declaredSuits.push(suit);
+        } else if (this.briscolaDeclared && !this.declaredSuits.includes(suit)) {
             this.player.points += 20;
+            this.declaredSuits.push(suit);
+        } else {
+            console.log('Hai già dichiarato questo seme');
         }
         console.log(`Hai dichiarato ${suit}`);
         this.hideDeclarationButton(suit);
@@ -329,6 +337,40 @@ class Game{
         } else{
             console.log('No saved game found');
         }
+    }
+
+    // Method to check if the adversary can declare
+    checkForAdversaryDeclaration() {
+        let suitsCount = [];
+        for (let card of this.adversary.hand) {
+            if (!suitsCount[card.suit]) {
+                suitsCount[card.suit] = [];
+            }
+            suitsCount[card.suit].push(card.value);
+        }
+
+        for (let suit in suitsCount) {
+            if (suitsCount[suit].includes('9') && suitsCount[suit].includes('10') && this.briscola !== suit) {
+                this.adversaryDeclare(suit);
+                break;
+            }
+        }
+    }
+
+    // Method for the adversary to declare a suit
+    adversaryDeclare(suit) {
+        if (!this.briscolaDeclared && !this.declaredSuits.includes(suit)) {
+            this.briscola = suit;
+            this.adversary.points += 40;
+            this.briscolaDeclared = true;
+            this.declaredSuits.push(suit);
+        } else if (this.briscolaDeclared && !this.declaredSuits.includes(suit)) {
+            this.adversary.points += 20;
+            this.declaredSuits.push(suit);
+        } else {
+            console.log('L\'avversario ha già dichiarato questo seme');
+        }
+        console.log(`Adversary declared ${suit}`);
     }
 }
 
