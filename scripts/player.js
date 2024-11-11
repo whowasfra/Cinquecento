@@ -1,10 +1,9 @@
-class Player{
-    constructor(){
+class Player {
+    constructor() {
         this.hand = [];
         this.wonCards = [];
         this.playedCard = null;
         this.declared = false;
-        this.hand = [];
         this.points = 0;
     }
 
