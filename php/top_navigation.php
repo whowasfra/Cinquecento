@@ -28,7 +28,7 @@
 
         <nav class='userNav'>
             <ul>
-                <?php if (isset($_SESSION['initiated']) && $_SESSION['initiated'] == true): ?>
+                <?php if ($_SESSION['initiated'] == true): ?>
                     <li><a href="profile.php">Profilo</a></li>
                     <li><a href="./logout.php">Logout</a></li>
                 <?php else: ?>
