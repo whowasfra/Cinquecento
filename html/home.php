@@ -28,7 +28,6 @@
     <body>
         <?php include '../php/top_navigation.php' ?>
         <header>
-            <div id="Cinquecento-logo">CINQUECENTO</div>
             <a class="toggle-menu" href="#"></a>
         </header>
 
