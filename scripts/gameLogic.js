@@ -199,7 +199,7 @@ class Game{
             console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCard.points} + ${adversaryCard.points}`);
             this.player.wonCards.push(playerCard, adversaryCard);
             this.isPlayerTurn = true;
-            this.playerIsFirst = true;
+            this.playerIsFirst = true;  
         } else {
             console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${adversaryCard.points} + ${playerCard.points}`);
             this.adversary.wonCards.push(playerCard, adversaryCard);
