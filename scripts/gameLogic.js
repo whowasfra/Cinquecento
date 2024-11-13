@@ -67,6 +67,8 @@ class Game{
 
     // Metodo per simulare il turno dell'avversario in modo automatico
     adversaryTurn() {
+        this.checkForAdversaryDeclaration(); // Ensure adversary declares before playing a card
+
         let bestCardIndex = 0;
         let bestCardValue = -1;
         let lowestCardIndex = 0;
@@ -282,7 +284,7 @@ class Game{
     }
     
     // Metodo per salvare la partita 
-    async saveGame(){
+    async saveGame() {
         const gameState = {
             deck: this.deck.cards,
             player: {
@@ -301,41 +303,58 @@ class Game{
             isPlayerTurn: this.isPlayerTurn
         };
 
-        const response = await fetch('save_game.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(gameState)
-        });
+        try {
+            const response = await fetch('save_game.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(gameState)
+            });
 
-        const result = await response.json();
-        console.log(result);
+            if (!response.ok) {
+                throw new Error('Failed to save game');
+            }
+
+            const result = await response.json();
+            console.log(result);
+        } catch (error) {
+            console.error('Error saving game:', error);
+        }
     }
 
-    async loadGame(){
-        const response = await fetch('load_game.php');
-        const gameState = await response.json();
-        
-        if(gameState.status !== 'no_saved_game'){
-            this.deck.cards = gameState.deck;
-            this.player.hand = gameState.player.hand;
-            this.player.wonCards = gameState.player.wonCards;
-            this.player.points = gameState.player.points;
-            this.adversary.hand = gameState.adversary.hand;
-            this.adversary.wonCards = gameState.adversary.wonCards;
-            this.adversary.points = gameState.adversary.points;
-            this.briscola = gameState.briscola;
-            this.briscolaDeclared = gameState.briscolaDeclared;
-            this.playerIsFirst = gameState.playerIsFirst;
-            this.isPlayerTurn = gameState.isPlayerTurn;
-            this.ui.drawAdversaryHand();
-            this.ui.drawPlayerHand();
-            this.ui.drawDeck();
-            this.turn();
-            console.log('Game loaded');
-        } else{
-            console.log('No saved game found');
+    async loadGame() {
+        try {
+            const response = await fetch('load_game.php');
+
+            if (!response.ok) {
+                throw new Error('Failed to load game');
+            }
+
+            const gameState = await response.json();
+
+            if (gameState.status !== 'no_saved_game') {
+                this.deck.cards = gameState.deck;
+                this.player.hand = gameState.player.hand;
+                this.player.wonCards = gameState.player.wonCards;
+                this.player.points = gameState.player.points;
+                this.adversary.hand = gameState.adversary.hand;
+                this.adversary.wonCards = gameState.adversary.wonCards;
+                this.adversary.points = gameState.adversary.points;
+                this.briscola = gameState.briscola;
+                this.briscolaDeclared = gameState.briscolaDeclared;
+                this.playerIsFirst = gameState.playerIsFirst;
+                this.isPlayerTurn = gameState.isPlayerTurn;
+                this.ui.drawAdversaryHand();
+                this.ui.drawPlayerHand();
+                this.ui.drawDeck();
+                this.turn();
+                console.log('Game loaded');
+            } else {
+                console.log('No saved game found');
+            }
+        } catch (error) {
+            console.error('Error loading game:', error);
         }
     }
 
