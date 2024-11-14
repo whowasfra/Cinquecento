@@ -1,0 +1,11 @@
+html{
+    font-family: 'sans-serif';
+}
+body {
+    background-color: #f4f4f9; 
+    color: #333; 
+    margin: 0;
+    min-width: 900px;
+}
+
+

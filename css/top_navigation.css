@@ -1,0 +1,165 @@
+.dropdown-menu {
+    background-color: #f4f4f9; /* Updated background color */
+}
+
+.dropdown-item {
+    color: #333; /* Updated text color */
+}
+
+.topNavigation {
+    position: relative;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 0 0 auto;
+    font-family: 'Arial', sans-serif; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    background-color: #f4ffe5; 
+}
+
+.topNavigation .logo {
+    margin-left: 0px;
+    height: 100%;
+    font-family: 'Kolker Brush', cursive;
+    font-size: 2.5em; /* Reduced font size */
+    white-space: nowrap;
+    border: 1px inset black;
+    border-radius: 0 5px 10px 5px;
+    background-color: #f4ffe5; /* Updated background color */
+    display: flex;
+    align-items: center; 
+    padding: 0 10px; 
+}
+
+.topNavigation .logo h1 {
+    margin: 0;
+    font-size: 1em; 
+    font-weight: 400;
+}
+
+.topNavigation ul.center {
+    list-style: none;
+    padding-left: 10px;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-wrap: wrap;
+    overflow: hidden;
+    align-items: center;
+    flex-direction: row;
+    height: 60px;
+    gap: 15px;
+}
+
+.topNavigation ul.center li a {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 1.2em;
+    color: #444; /* Updated text color */
+    display: block;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.topNavigation .user {
+    position: relative;
+    right: 10px;
+    margin-left: 20px;
+    font-size: 1.1em;
+    min-width: 70px;
+    height: 88%;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Updated box shadow */
+    display: flex;
+    justify-content: space-between;
+}
+
+.topNavigation .user .userBox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    padding: 10px;
+}
+
+.topNavigation .user h2 {
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    margin: 0;
+    padding: 0px 8px 0px 32px;
+    white-space: nowrap;
+}
+
+.topNavigation .user .menutriangle {
+    position: relative;
+    top: 20px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 9.0px 7.5px 0 7.5px;
+    border-color: rgb(0, 0, 0, 0.2) transparent transparent transparent;
+    transition: 0.5s;
+}
+
+.topNavigation .user.opened .menutriangle {
+    transform: rotateX(180deg);
+}
+
+.topNavigation .userNav {
+    position: absolute;
+    right: 0;
+    top: 60px;
+    visibility: hidden;
+    z-index: 100;
+    width: 150px;
+    border-radius: 10px;
+    box-shadow: 0 1px 10px rgb(0, 0, 0, 0.15);
+    background-color: #fff; /* Updated background color */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: 0.1s;
+}
+
+.topNavigation .user {
+    white-space: nowrap;
+}
+
+.topNavigation .user.opened .userNav {
+    top: 64px;
+    visibility: visible;
+    transition: 0.2s;
+}
+
+.topNavigation .userNav ul {
+    width: fit-content;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    text-align: center;
+    font-size: 1em;
+    white-space: nowrap;
+    margin: 10px 0;
+    cursor: pointer;
+    color: #666; /* Updated text color */
+}
+
+.topNavigation .userNav li {
+    padding: 9px 10px;
+    width: fit-content;
+}
+
+.topNavigation .userNav li a {
+    text-decoration: none;
+}
+

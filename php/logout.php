@@ -14,5 +14,5 @@
     session_unset(); // Cancella tutte le variabili di sessione
     session_destroy(); // Cancella la sessione
     echo("<script>alert('Logout avvenuto con successo');</script>");
-    header("Location: ../index.html");
+    header("Location: ../../index.php");
 ?>

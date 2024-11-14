@@ -1,0 +1,92 @@
+<?php 
+    include_once("../php/session_config.php");
+    include_once("../php/db_config.php");
+?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Cinquecento</title>
+        <link rel="stylesheet" href="../css/style.css"/>
+        <link rel="stylesheet" href="../css/top_navigation.css"/>
+        <script src="../scripts/deck.js"></script>
+        <script src="../scripts/player.js"></script>
+        <script src="../scripts/gameLogic.js"></script>
+        <script src="../scripts/ui.js"></script>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f4f4f9;
+                color: #333;
+                line-height: 1.6;
+            }
+            .menu-container{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 20px;
+            }
+            .menu {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+            }
+            .table {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 20px;
+            }
+            .menu button {
+                background-color: #e3cba2;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 10px 2px;
+                cursor: pointer;
+                border-radius: 12px;
+                transition: background-color 0.3s ease;
+            }
+
+            .menu button:hover {
+                background-color: #3E2723;
+            }
+        </style>
+    </head>
+
+    <body>
+        <?php include '../php/top_navigation.php' ?>
+        <header>
+        </header>
+        <main>
+            <div class="menu-container">
+                <div class="menu">
+                    <button id="startGameButton" onclick="startGame()">Inizia partita</button>
+                    <button id="endGameButton" onclick="endGame()">Fine partita</button>
+                    <button id="saveGame" onclick="saveGame()">Salva la partita</button>
+                    <button id="loadGame" onclick="loadGame()">Carica una partita</button>
+                </div>
+            </div>
+            <div class="table">
+                <canvas id="gameCanvas" width="800" height="600"></canvas>
+            </div>    
+            <div class="declaration-container">
+                <div class="declaration-bastoni"></div>
+                <div class="declaration-spade"></div>
+                <div class="declaration-oro"></div>
+                <div class="declaration-coppe"></div>
+            </div>
+        </main>
+        <footer>
+            <div class="footer-title-container">
+                <h2>Realizzato da: <br> Francesco</h2>
+            </div>
+        </footer>
+    </body>
+</html>
+

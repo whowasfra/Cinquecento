@@ -1,16 +1,10 @@
 class Game{
     constructor(){
-        // this.canvas = document.getElementById('gameCanvas');
-        // this.ctx = this.canvas.getContext('2d');
-        // this.cardWidth = 75;
-        // this.cardHeight = 120;
-
         this.deck = new Deck();
         this.player = new Player();
         this.adversary = new Player();
         this.player.hand = [];
         this.adversary.hand = [];
-
         this.firstHand();
         this.briscola = null;
         this.briscolaDeclared = false;
@@ -22,6 +16,7 @@ class Game{
         this.ui.drawPlayerHand();
         this.ui.drawDeck();
         this.turn();
+        this.declaredSuits = [];
     }
     
     firstHand(){
@@ -55,41 +50,39 @@ class Game{
     }
 
     turn() {
-        // Se il turno è del giocatore
         if (this.isPlayerTurn) {
             this.checkForDeclaration();
             if (this.adversary.playedCard === null && this.player.playedCard !== null) {
                 this.isPlayerTurn = false;
-                setTimeout(() => this.adversaryTurn(), 500); // Ritardo per simulare il pensiero dell'avversario
+                setTimeout(() => this.adversaryTurn(), 500);
             }
-        }
-        // Se il turno è dell'avversario
-        else {
-            setTimeout(() => this.adversaryTurn(), 500); // Ritardo per simulare il pensiero dell'avversario
+        } else {
+            setTimeout(() => this.adversaryTurn(), 500);
         }
 
         if (this.player.playedCard !== null && this.adversary.playedCard !== null) {
             setTimeout(() => this.determineWinner(), 500);
         }
     }
-    // Metodo per simulare il turno dell'avversario in modo più intelligente
+
+    // Metodo per simulare il turno dell'avversario in modo automatico
     adversaryTurn() {
-        // Logica per scegliere la carta migliore da giocare
+        this.checkForAdversaryDeclaration(); // Ensure adversary declares before playing a card
+
         let bestCardIndex = 0;
         let bestCardValue = -1;
         let lowestCardIndex = 0;
         let lowestCardValue = Infinity;
+        let hasNineOrTen = false;
 
         for (let i = 0; i < this.adversary.hand.length; i++) {
             let card = this.adversary.hand[i];
             let cardValue = card.points;
 
-            // Se la briscola è stata dichiarata, le carte di briscola hanno più valore
             if (this.briscola && card.suit === this.briscola) {
                 cardValue += 10;
             }
 
-            // Se il giocatore ha già giocato una carta, considera il seme della carta giocata
             if (this.player.playedCard) {
                 if (card.suit === this.player.playedCard.suit) {
                     cardValue += 5;
@@ -97,6 +90,11 @@ class Game{
                     cardValue += 3;
                 }
             }
+
+            if (card.value === '9' || card.value === '10') {
+                hasNineOrTen = true;
+            }
+
             if (cardValue > bestCardValue) {
                 bestCardValue = cardValue;
                 bestCardIndex = i;
@@ -108,7 +106,6 @@ class Game{
             }
         }
 
-        // Se il giocatore ha già giocato una carta di un dato seme e l'avversario non può superarlo, sceglie la carta con il valore minore
         if (this.player.playedCard) {
             let playerCard = this.player.playedCard;
             let canBeatPlayer = this.adversary.hand.some(card => card.suit === playerCard.suit && card.points > playerCard.points);
@@ -116,6 +113,10 @@ class Game{
             if (!canBeatPlayer) {
                 bestCardIndex = lowestCardIndex;
             }
+        }
+
+        if (hasNineOrTen) {
+            bestCardIndex = lowestCardIndex;
         }
 
         this.adversary.playedCard = this.adversary.playCard(bestCardIndex);
@@ -126,6 +127,8 @@ class Game{
         } else {
             setTimeout(() => this.determineWinner(), 500);
         }
+
+        this.checkForAdversaryDeclaration();
     }
 
     //Determina il vincitore del round
@@ -181,7 +184,6 @@ class Game{
             console.log('Carte finite');
         }
 
-
         this.ui.drawPlayerHand(this);
         this.ui.drawAdversaryHand(this);
 
@@ -199,7 +201,7 @@ class Game{
             console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCard.points} + ${adversaryCard.points}`);
             this.player.wonCards.push(playerCard, adversaryCard);
             this.isPlayerTurn = true;
-            this.playerIsFirst = true;
+            this.playerIsFirst = true;  
         } else {
             console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${adversaryCard.points} + ${playerCard.points}`);
             this.adversary.wonCards.push(playerCard, adversaryCard);
@@ -251,19 +253,18 @@ class Game{
 
     // Metodo per dichiarare un seme
     declare(suit){
-        if(!this.briscolaDeclared){
+        if (!this.briscolaDeclared && !this.declaredSuits.includes(suit)) {
             this.briscola = suit;
-            // this.player.declared = true;
-            // this.adversary.declared = true;
             this.player.points += 40;
-        }
-        else{
-            console.log('Hai già dichiarato');
+            this.briscolaDeclared = true;
+            this.declaredSuits.push(suit);
+        } else if (this.briscolaDeclared && !this.declaredSuits.includes(suit)) {
             this.player.points += 20;
+            this.declaredSuits.push(suit);
+        } else {
+            console.log('Hai già dichiarato questo seme');
         }
-
         console.log(`Hai dichiarato ${suit}`);
-
         this.hideDeclarationButton(suit);
     }
 
@@ -281,10 +282,129 @@ class Game{
         }
 
     }
+    
+    // Metodo per salvare la partita 
+    async saveGame() {
+        const gameState = {
+            deck: this.deck.cards,
+            player: {
+                hand: this.player.hand,
+                wonCards: this.player.wonCards,
+                points: this.player.points
+            },
+            adversary: {
+                hand: this.adversary.hand,
+                wonCards: this.adversary.wonCards,
+                points: this.adversary.points
+            },
+            briscola: this.briscola,
+            briscolaDeclared: this.briscolaDeclared,
+            playerIsFirst: this.playerIsFirst,
+            isPlayerTurn: this.isPlayerTurn
+        };
+
+        try {
+            const response = await fetch('save_game.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(gameState)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save game');
+            }
+
+            const result = await response.json();
+            console.log(result);
+        } catch (error) {
+            console.error('Error saving game:', error);
+        }
+    }
+
+    async loadGame() {
+        try {
+            const response = await fetch('load_game.php');
+
+            if (!response.ok) {
+                throw new Error('Failed to load game');
+            }
+
+            const gameState = await response.json();
+
+            if (gameState.status !== 'no_saved_game') {
+                this.deck.cards = gameState.deck;
+                this.player.hand = gameState.player.hand;
+                this.player.wonCards = gameState.player.wonCards;
+                this.player.points = gameState.player.points;
+                this.adversary.hand = gameState.adversary.hand;
+                this.adversary.wonCards = gameState.adversary.wonCards;
+                this.adversary.points = gameState.adversary.points;
+                this.briscola = gameState.briscola;
+                this.briscolaDeclared = gameState.briscolaDeclared;
+                this.playerIsFirst = gameState.playerIsFirst;
+                this.isPlayerTurn = gameState.isPlayerTurn;
+                this.ui.drawAdversaryHand();
+                this.ui.drawPlayerHand();
+                this.ui.drawDeck();
+                this.turn();
+                console.log('Game loaded');
+            } else {
+                console.log('No saved game found');
+            }
+        } catch (error) {
+            console.error('Error loading game:', error);
+        }
+    }
+
+    // Method to check if the adversary can declare
+    checkForAdversaryDeclaration() {
+        let suitsCount = [];
+        for (let card of this.adversary.hand) {
+            if (!suitsCount[card.suit]) {
+                suitsCount[card.suit] = [];
+            }
+            suitsCount[card.suit].push(card.value);
+        }
+
+        for (let suit in suitsCount) {
+            if (suitsCount[suit].includes('9') && suitsCount[suit].includes('10') && this.briscola !== suit) {
+                this.adversaryDeclare(suit);
+                break;
+            }
+        }
+    }
+
+    // Method for the adversary to declare a suit
+    adversaryDeclare(suit) {
+        if (!this.briscolaDeclared && !this.declaredSuits.includes(suit)) {
+            this.briscola = suit;
+            this.adversary.points += 40;
+            this.briscolaDeclared = true;
+            this.declaredSuits.push(suit);
+        } else if (this.briscolaDeclared && !this.declaredSuits.includes(suit)) {
+            this.adversary.points += 20;
+            this.declaredSuits.push(suit);
+        } else {
+            console.log('L\'avversario ha già dichiarato questo seme');
+        }
+        console.log(`Adversary declared ${suit}`);
+    }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed');
+function startGame(){
     const game = new Game();
     window.gameInstance = game;
-});
+}
+
+function endGame(){
+    window.gameInstance.ui.ctx.clearRect(0, 0, window.gameInstance.ui.canvas.width, window.gameInstance.ui.canvas.height);
+    window.gameInstance = null;
+}
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     console.log('DOM fully loaded and parsed');
+//     const game = new Game();
+//     window.gameInstance = game;
+// });
