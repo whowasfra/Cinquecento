@@ -30,6 +30,8 @@ class Game{
     
     addCardEventListeners(){
         document.getElementById('gameCanvas').addEventListener('click', (event) => {
+            if (!this.isPlayerTurn) return; // Ensure it's the player's turn before proceeding
+
             const rect = this.ui.canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
@@ -183,7 +185,6 @@ class Game{
             }
         } else {
             this.ui.clearDeck();
-            console.log('Carte finite');
         }
 
         this.ui.drawPlayerHand(this);
@@ -191,7 +192,7 @@ class Game{
 
         // se la partita è finita bisogna definire il vincitore
         if(this.deck.cards.length === 0 && this.player.hand.length === 0 && this.adversary.hand.length === 0 && this.player.playedCard === null && this.adversary.playedCard === null){
-            this.determineGameWinner();
+            this.determineSetWinner();
         }
 
         this.turn();
@@ -271,7 +272,7 @@ class Game{
     }
 
     // Metodo per determinare il vincitore della partita
-    determineGameWinner(){
+    determineSetWinner(){
         this.player.points += this.player.wonCards.reduce((acc, card) => acc + card.points, 0);
         this.adversary.points += this.adversary.wonCards.reduce((acc, card) => acc + card.points, 0);
 
@@ -401,7 +402,9 @@ class Game{
     startNewSet() {
         this.deck = new Deck();
         this.player.hand = [];
+        this.player.wonCards = [];
         this.adversary.hand = [];
+        this.adversary.wonCards = [];
         this.firstHand();
         this.briscola = null;
         this.briscolaDeclared = false;
@@ -421,8 +424,10 @@ function startGame(){
 }
 
 function endGame(){
-    window.gameInstance.ui.ctx.clearRect(0, 0, window.gameInstance.ui.canvas.width, window.gameInstance.ui.canvas.height);
-    window.gameInstance = null;
+    if(window.gameInstance){
+        window.gameInstance.ui.clearCanvas();
+        window.gameInstance = null;
+    }
 }
 
 // document.addEventListener('DOMContentLoaded', () => {
