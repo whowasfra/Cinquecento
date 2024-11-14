@@ -25,7 +25,7 @@
             margin-top: 20px;
             font-size: 1.8em;
         }
-        p, ul {
+        p {
             margin: 20px;
             padding: 0;
             color: #666;
@@ -34,9 +34,7 @@
             list-style-type: disc;
             padding-left: 40px;
         }
-        li {
-            margin-bottom: 10px;
-        }
+       
         .container {
             max-width: 800px;
             margin: auto;
