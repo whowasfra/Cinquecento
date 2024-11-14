@@ -17,6 +17,8 @@ class Game{
         this.ui.drawDeck();
         this.turn();
         this.declaredSuits = [];
+        this.totalPointsToWin = 500;
+        this.startNewSet();
     }
     
     firstHand(){
@@ -273,16 +275,20 @@ class Game{
         this.player.points += this.player.wonCards.reduce((acc, card) => acc + card.points, 0);
         this.adversary.points += this.adversary.wonCards.reduce((acc, card) => acc + card.points, 0);
 
-        if(this.player.points > this.adversary.points){
-            console.log(`Player won with ${this.player.points} points. Adversary has ${this.adversary.points} points.`);
-        } else if(this.player.points < this.adversary.points){
-            console.log(`Adversary won with ${this.adversary.points} points. Player has ${this.player.points} points.`);
+        if (this.player.points >= this.totalPointsToWin || this.adversary.points >= this.totalPointsToWin) {
+            if (this.player.points > this.adversary.points) {
+                console.log(`Player won the game with ${this.player.points} points. Adversary has ${this.adversary.points} points.`);
+            } else if (this.player.points < this.adversary.points) {
+                console.log(`Adversary won the game with ${this.adversary.points} points. Player has ${this.player.points} points.`);
+            } else {
+                console.log(`It's a tie! Both players have ${this.player.points} points.`);
+            }
         } else {
-            console.log(`It's a tie! Both players have ${this.player.points} points.`);
+            console.log(`End of set. Player has ${this.player.points} points. Adversary has ${this.adversary.points} points.`);
+            this.startNewSet();
         }
-
     }
-    
+
     // Metodo per salvare la partita 
     async saveGame() {
         const gameState = {
@@ -390,6 +396,22 @@ class Game{
             console.log('L\'avversario ha già dichiarato questo seme');
         }
         console.log(`Adversary declared ${suit}`);
+    }
+
+    startNewSet() {
+        this.deck = new Deck();
+        this.player.hand = [];
+        this.adversary.hand = [];
+        this.firstHand();
+        this.briscola = null;
+        this.briscolaDeclared = false;
+        this.playerIsFirst = true;
+        this.isPlayerTurn = true;
+        this.ui.drawAdversaryHand();
+        this.ui.drawPlayerHand();
+        this.ui.drawDeck();
+        this.turn();
+        this.declaredSuits = [];
     }
 }
 
