@@ -30,6 +30,20 @@
                 width: 50%;
             }
 
+            .intro {
+                width: 45%;
+                height: 15%;
+                display: flex;
+                flex-direction: column;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 12px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                align-items: center;
+                justify-content: center;
+            }
+
             .buttons a {
                 background-color: red;
                 color: white;
@@ -61,13 +75,8 @@
         
     <body>
         <?php include '../php/top_navigation.php' ?>
-        <header>
-            <a class="toggle-menu" href="#"></a>
-        </header>
 
-        <div id="content-wrap">
-            <!--Sezione introduttiva con tasti rapidi-->
-            <section id="Intro">
+        <div class="intro">
                 <h1 class="intro-heading">Cinquecento</h1>
                 <div class="buttons">
                     <a class="button" href="game.php" title>Vai al gioco</a>
@@ -75,7 +84,9 @@
                     <a class="button" href="regole.html" title>Regole</a>
                     <a class="button" href="statistiche.html" title>Statistiche</a>
                 </div>
-            </section>
+        </div>
+
+        <div id="content-wrap">
 
             <!--Sezione storia del gioco-->
             <section id="Storia">
@@ -90,10 +101,5 @@
     </body>
 
     <footer>
-        <div id="main-footer">
-            <div class="footer-info-wrap">
-                
-            </div>
-        </div>
     </footer>
 </html>
