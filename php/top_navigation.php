@@ -9,7 +9,7 @@
     </div>
 
     <ul class="center">
-        <li><a href="index.php">Home</a></li>
+        <li><a href="home.php">Home</a></li>
         <li><a href="regole.php">Regole</a></li>
         <li><a href="statistiche.php">Statistiche</a></li> 
     </ul>
