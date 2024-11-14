@@ -19,7 +19,7 @@
     flex: 0 0 auto;
     font-family: 'Arial', sans-serif; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    background-color: #f4ffe5; 
+    background-color: #fbfff5; 
 }
 
 .topNavigation .logo {
@@ -30,7 +30,7 @@
     white-space: nowrap;
     border: 1px inset black;
     border-radius: 0 5px 10px 5px;
-    background-color: #f4ffe5; /* Updated background color */
+    background-color: #fbfff5; 
     display: flex;
     align-items: center; 
     padding: 0 10px; 

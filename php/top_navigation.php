@@ -18,7 +18,7 @@
         <section class="userBox">
             <h2>
                 <?php if (isset($_SESSION['user']) && $_SESSION['initiated'] == true): ?>
-                    <?php echo $_SESSION['username']; ?>
+                    <?php echo $_SESSION['user']; ?>
                 <?php else: ?>
                     <a href="login.php">LOGIN</a>
                 <?php endif; ?>
@@ -28,9 +28,9 @@
 
         <nav class='userNav'>
             <ul>
-                <?php if ($_SESSION['initiated'] == true): ?>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user'] == true): ?>
                     <li><a href="profile.php">Profilo</a></li>
-                    <li><a href="./logout.php">Logout</a></li>
+                    <li><a href="../php/logout.php">Logout</a></li>
                 <?php else: ?>
                     <li>Login to see more</li>
                 <?php endif; ?>
