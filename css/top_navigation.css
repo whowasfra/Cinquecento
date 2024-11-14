@@ -1,34 +1,9 @@
-.navbar {
-    background-color: #e3cba2; 
-    color: white;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-}
-
-.navbar-brand, .nav-link {
-    color: white;
-}
-
-.nav-link:hover {
-    color: #3E2723; 
-}
-
-.navbar-toggler {
-    border-color: white;
-}
-
-/* 
-.navbar-toggler-icon {
-} 
-*/
-
 .dropdown-menu {
-    background-color: #e3cba2;
+    background-color: #f4f4f9; /* Updated background color */
 }
 
 .dropdown-item {
-    color: white;
+    color: #333; /* Updated text color */
 }
 
 .topNavigation {
@@ -42,8 +17,9 @@
     flex-direction: row;
     align-items: center;
     flex: 0 0 auto;
-    font-family: sans-serif;
-    box-shadow: 0 0 10px rgb(0, 0, 0, 0.15);
+    font-family: 'Arial', sans-serif; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    background-color: #f4ffe5; 
 }
 
 .topNavigation .logo {
@@ -54,7 +30,7 @@
     white-space: nowrap;
     border: 1px inset black;
     border-radius: 0 5px 10px 5px;
-    background-color: #fffce0e8;
+    background-color: #f4ffe5; /* Updated background color */
     display: flex;
     align-items: center; 
     padding: 0 10px; 
@@ -84,7 +60,7 @@
     text-decoration: none;
     text-transform: uppercase;
     font-size: 1.2em;
-    color: black;
+    color: #444; /* Updated text color */
     display: block;
     padding-left: 5px;
     padding-right: 5px;
@@ -98,7 +74,7 @@
     min-width: 70px;
     height: 88%;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgb(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Updated box shadow */
     display: flex;
     justify-content: space-between;
 }
@@ -145,7 +121,7 @@
     width: 150px;
     border-radius: 10px;
     box-shadow: 0 1px 10px rgb(0, 0, 0, 0.15);
-    background-color: #FAFDF3;
+    background-color: #fff; /* Updated background color */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -175,6 +151,7 @@
     white-space: nowrap;
     margin: 10px 0;
     cursor: pointer;
+    color: #666; /* Updated text color */
 }
 
 .topNavigation .userNav li {
