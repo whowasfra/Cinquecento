@@ -33,18 +33,18 @@
                 margin-top: 20px;
             }
             .menu button {
-            background-color: #e3cba2;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 12px;
-            transition: background-color 0.3s ease;
+                background-color: #e3cba2;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 12px;
+                transition: background-color 0.3s ease;
             }
 
             .menu button:hover {
@@ -56,16 +56,6 @@
     <body>
         <?php include '../php/top_navigation.php' ?>
         <header>
-                <?php
-                    if(isset($_SESSION["user"])){
-                        echo("<p>Benvenuto, " . $_SESSION["user"] . " <a href='./logout.php'>Logout</a> </p>");
-                    }
-                    else{
-                        echo("<p>Utente non autenticato</p>");
-                    }
-                ?>
-
-            </div>
         </header>
         <main>
             <div class="menu-container">
