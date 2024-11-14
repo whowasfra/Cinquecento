@@ -10,7 +10,6 @@
         <title>Cinquecento</title>
         <link rel="stylesheet" href="../css/style.css"/>
         <link rel="stylesheet" href="../css/top_navigation.css"/>
-        <link rel="stylesheet" href="../css/game.css"/>
         <script src="../scripts/deck.js"></script>
         <script src="../scripts/player.js"></script>
         <script src="../scripts/gameLogic.js"></script>
@@ -32,6 +31,24 @@
                 justify-content: center;
                 align-items: center;
                 margin-top: 20px;
+            }
+            .menu button {
+            background-color: #e3cba2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+            }
+
+            .menu button:hover {
+                background-color: #3E2723;
             }
         </style>
     </head>
