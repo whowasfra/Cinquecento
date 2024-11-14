@@ -1,6 +1,7 @@
 <?php
     // Configurazione delle sessioni
     include_once("session_config.php");
+    include_once("db_config.php");
 
     $user = trim($_POST["user"]);
     $password = trim($_POST["password"]);
@@ -11,12 +12,6 @@
             window.history.back();
         </script>");
         exit();
-    }
-
-    // Connessione al database
-    $db_connection = mysqli_connect('localhost', 'root', '', 'chiera_564449');
-    if( mysqli_connect_errno() ) {
-        exit('Connessione a database non riuscita. (' . mysqli_connect_error() . ')');
     }
     
     // Devo registrare l'utente
@@ -53,7 +48,8 @@
             // Rigenera l'id di sessione per evitare attacchi di session fixation
             session_regenerate_id(true);
             $_SESSION["user"] = $user;
-            header("Location: ./game.php");
+            $_SESSION['initiated'] = true;
+            header("Location: ../html/game.php");
             exit();
         } else{
         echo("<script>alert('Login fallito');
