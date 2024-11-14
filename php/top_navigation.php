@@ -17,7 +17,7 @@
     <div class="user" id="topNavUser">
         <section class="userBox">
             <h2>
-                <?php if (isset($_SESSION['user']) && $_SESSION['initiated'] == true): ?>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user'] == true): ?>
                     <?php echo $_SESSION['user']; ?>
                 <?php else: ?>
                     <a href="login.php">LOGIN</a>
