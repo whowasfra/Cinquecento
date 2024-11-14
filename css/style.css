@@ -2,42 +2,10 @@ html{
     font-family: 'sans-serif';
 }
 body {
-    background-color: #fdf3e2; 
-    color: #e3cba2; 
+    background-color: #f4f4f9; 
+    color: #333; 
     margin: 0;
     min-width: 900px;
 }
 
-/* header {
-    background-color: #e3cba2; 
-    color: white;
-    text-align: center;
-    padding: 1em 0;
-    font-size: 1.5em;
-} */
-
-
-.buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.button {
-    background-color: #e3cba2; 
-    color: white;
-    border: none;
-    border-radius: 50px; 
-    padding: 1em 2em;
-    margin: 0.5em 0;
-    text-align: center;
-    text-decoration: none;
-    font-size: 1em;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
-}
-
-.button:hover {
-    background-color: #3E2723; 
-}
 
