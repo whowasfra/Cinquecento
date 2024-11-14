@@ -15,6 +15,12 @@
         <script src="../scripts/gameLogic.js"></script>
         <script src="../scripts/ui.js"></script>
         <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f4f4f9;
+                color: #333;
+                line-height: 1.6;
+            }
             .menu-container{
                 display: flex;
                 justify-content: center;
@@ -41,7 +47,7 @@
                 text-decoration: none;
                 display: inline-block;
                 font-size: 16px;
-                margin: 4px 2px;
+                margin: 10px 2px;
                 cursor: pointer;
                 border-radius: 12px;
                 transition: background-color 0.3s ease;
