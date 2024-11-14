@@ -39,7 +39,7 @@
                 margin-top: 20px;
             }
             .menu button {
-                background-color: #e3cba2;
+                background-color: red;
                 color: white;
                 border: none;
                 padding: 10px 20px;
@@ -54,7 +54,7 @@
             }
 
             .menu button:hover {
-                background-color: #3E2723;
+                background-color: black ;
             }
         </style>
     </head>
