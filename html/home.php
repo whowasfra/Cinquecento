@@ -9,44 +9,42 @@
         <style>
             body {
                 font-family: 'Arial', sans-serif;
-                background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('../images/background.jpeg') no-repeat center center fixed;
-                background-size: cover;
                 color: #333;
                 line-height: 1.6;
-                
+                margin: 0;
             }
-
-            main {
-                display: flex;
-                flex-direction: row;
-            }
-
-            main section {
-                display: flex;
-                justify-content: space-around;
-            }
-
-            main > div {
-                width: 50%;
+            body::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: url('../images/background.jpeg') no-repeat center center fixed;
+                background-size: cover;
+                filter: blur(3px); 
+                z-index: -1;
             }
 
             .intro {
-                width: 45%;
-                height: 15%;
+                width: 80%;
+                height: 10%;
                 display: flex;
                 flex-direction: column;
                 margin: 0 auto;
                 padding: 20px;
                 background-color: rgba(255, 255, 255, 0.8);
-                border-radius: 12px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                border-radius: 12px; 
+                /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  */
                 align-items: center;
                 justify-content: center;
+                position: relative;
+                z-index: 1;
             }
 
             .buttons a {
-                background-color: red;
-                color: white;
+                background-color: #d4edda;
+                color: black;
                 border: none;
                 padding: 10px 20px;
                 text-align: center;
@@ -60,7 +58,7 @@
             }
 
             .buttons a:hover {
-                background-color: black ;
+                background-color: #bdd4c2 ;
             }
 
             .intro-heading {
@@ -77,27 +75,15 @@
         <?php include '../php/top_navigation.php' ?>
 
         <div class="intro">
-                <h1 class="intro-heading">Cinquecento</h1>
+                <img src="../images/logo/logo-round-transparent.png" alt="Cinquecento">
                 <div class="buttons">
                     <a class="button" href="game.php" title>Vai al gioco</a>
                     <a class="button" href="login.php" title>Accedi / Registrati</a>
-                    <a class="button" href="regole.html" title>Regole</a>
-                    <a class="button" href="statistiche.html" title>Statistiche</a>
+                    <a class="button" href="regole.php" title>Regole</a>
+                    <a class="button" href="classifica.php" title>Classifica</a>
                 </div>
         </div>
 
-        <div id="content-wrap">
-
-            <!--Sezione storia del gioco-->
-            <section id="Storia">
-
-            </section>
-
-            <!--Sezione info progetto-->
-            <section id="Info">
-                
-            </section>
-        </div>
     </body>
 
     <footer>

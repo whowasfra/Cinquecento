@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #fbfff5;
+    background-color: #f4f4f9; 
     margin: 0;
 }
 
@@ -16,9 +16,10 @@ h1 {
 }
 
 table {
-    width: 100%;
+    background-color: white;
+    width: 80%; 
+    margin: 0 auto; 
     border-collapse: collapse;
-    margin: 0; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow: hidden;
@@ -33,7 +34,7 @@ th, td {
 }
 
 th {
-    background-color: #f4f4f9;
+    background-color: #d4edda;
     color: #333;
 }
 
