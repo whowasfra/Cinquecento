@@ -8,13 +8,13 @@
         <style>
             body {
                 font-family: 'Arial', sans-serif;
-                background-color: #fbfff5;
+                background-color: #f4f4f9;
                 color: #333;
                 line-height: 1.6;
             }
             form {
-                width: 300px;
-                height: auto;
+                width: 40%;
+                height: 20%;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -33,13 +33,13 @@
             form input {
                 margin-top: 10px;
                 padding: 10px;
-                border: 1px solid #e3cba2;
+                border: 1px solid #bdd4c2;
                 border-radius: 12px;
                 width: 100%;
                 box-sizing: border-box;
             }
             form input[type="submit"] {
-                background-color: #e3cba2;
+                background-color: #bdd4c2;
                 color: white;
                 border: none;
                 padding: 10px 20px;
@@ -54,7 +54,7 @@
                 width: auto;
             }
             form input[type="submit"]:hover {
-                background-color: #3E2723;
+                background-color: #a8c1a8;
             }
         </style>
     </head>
