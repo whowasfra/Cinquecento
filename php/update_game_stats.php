@@ -14,11 +14,6 @@
         $isPlayerWinner = $data['isPlayerWinner'] ? 1 : 0;
         $userId = $_SESSION['user'];
     
-        if (!$db_connection) {
-            echo 'Database connection failed';
-            exit();
-        }
-    
         $query = "UPDATE users SET played_games = played_games + 1, won_games = won_games + ? WHERE username = ?";
         $statement = mysqli_prepare($db_connection, $query);
         mysqli_stmt_bind_param($statement, "is", $isPlayerWinner, $userId);
