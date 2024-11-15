@@ -11,6 +11,51 @@
     <title>Profilo Utente</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/top_navigation.css">
+    <style>
+        .profile-container {
+            background-color: #fbfff5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-info, .game-stats {
+            margin-bottom: 20px;
+        }
+
+        .profile-info p, .game-stats p {
+            color: #333;
+        }
+
+        .game-stats h2 {
+            color: #444;
+        }
+
+        .profile-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .profile-container table, .profile-container th, .profile-container td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        .profile-container th {
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .profile-container tr:nth-child(even) {
+            background-color: #fbfff5;
+        }
+
+        .profile-container tr:hover {
+            background-color: #f4f4f9;
+        }
+    </style>
 </head>
 <body>
     <?php include '../php/top_navigation.php'; ?>
