@@ -67,7 +67,7 @@
             <div class="menu-container">
                 <div class="menu">
                     <button id="startGameButton" onclick="startGame()">Inizia partita</button>
-                    <button id="endGameButton" onclick="endGame()">Fine partita</button>
+                    <button id="endGameButton" onclick="stopGame()">Fine partita</button>
                     <button id="saveGame" onclick="saveGame()">Salva la partita</button>
                     <button id="loadGame" onclick="loadGame()">Carica una partita</button>
                 </div>
