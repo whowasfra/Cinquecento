@@ -2,25 +2,33 @@ class Game{
     constructor(){
         this.deck = new Deck();
         this.player = new Player();
+        this.player.points = 500;
         this.adversary = new Player();
+        this.addCardEventListeners();
+        this.ui = new ui(this);
+        this.totalPointsToWin = 500;
+        this.startNewSet();
+    }
+
+    startNewSet() {
+        this.determineSetWinner();
+        this.deck = new Deck();
         this.player.hand = [];
+        this.player.wonCards = [];
         this.adversary.hand = [];
+        this.adversary.wonCards = [];
         this.firstHand();
         this.briscola = null;
         this.briscolaDeclared = false;
         this.playerIsFirst = true;
         this.isPlayerTurn = true;
-        this.addCardEventListeners();
-        this.ui = new ui(this);
         this.ui.drawAdversaryHand();
         this.ui.drawPlayerHand();
         this.ui.drawDeck();
         this.turn();
         this.declaredSuits = [];
-        this.totalPointsToWin = 500;
-        this.startNewSet();
     }
-    
+
     firstHand(){
         for(let i = 0; i < 5; i++){
             this.player.hand.push(this.deck.dealCard());
@@ -194,7 +202,6 @@ class Game{
         if(this.deck.cards.length === 0 && this.player.hand.length === 0 && this.adversary.hand.length === 0 && this.player.playedCard === null && this.adversary.playedCard === null){
             this.determineSetWinner();
         }
-
         this.turn();
    }
 
@@ -279,10 +286,13 @@ class Game{
         if (this.player.points >= this.totalPointsToWin || this.adversary.points >= this.totalPointsToWin) {
             if (this.player.points > this.adversary.points) {
                 console.log(`Player won the game with ${this.player.points} points. Adversary has ${this.adversary.points} points.`);
+                this.endGame(true);
             } else if (this.player.points < this.adversary.points) {
                 console.log(`Adversary won the game with ${this.adversary.points} points. Player has ${this.player.points} points.`);
+                this.endGame(false);
             } else {
                 console.log(`It's a tie! Both players have ${this.player.points} points.`);
+                this.startNewSet();
             }
         } else {
             console.log(`End of set. Player has ${this.player.points} points. Adversary has ${this.adversary.points} points.`);
@@ -290,79 +300,27 @@ class Game{
         }
     }
 
-    // Metodo per salvare la partita 
-    async saveGame() {
-        const gameState = {
-            deck: this.deck.cards,
-            player: {
-                hand: this.player.hand,
-                wonCards: this.player.wonCards,
-                points: this.player.points
+    endGame(isPlayerWinner) {
+        fetch('../php/update_game_stats.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             },
-            adversary: {
-                hand: this.adversary.hand,
-                wonCards: this.adversary.wonCards,
-                points: this.adversary.points
-            },
-            briscola: this.briscola,
-            briscolaDeclared: this.briscolaDeclared,
-            playerIsFirst: this.playerIsFirst,
-            isPlayerTurn: this.isPlayerTurn
-        };
-
-        try {
-            const response = await fetch('save_game.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(gameState)
-            });
-
+            body: JSON.stringify({ isPlayerWinner: isPlayerWinner })
+        })
+        .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to save game');
+                throw new Error('Network response was not ok ' + response.statusText);
             }
-
-            const result = await response.json();
-            console.log(result);
-        } catch (error) {
-            console.error('Error saving game:', error);
-        }
-    }
-
-    async loadGame() {
-        try {
-            const response = await fetch('load_game.php');
-
-            if (!response.ok) {
-                throw new Error('Failed to load game');
-            }
-
-            const gameState = await response.json();
-
-            if (gameState.status !== 'no_saved_game') {
-                this.deck.cards = gameState.deck;
-                this.player.hand = gameState.player.hand;
-                this.player.wonCards = gameState.player.wonCards;
-                this.player.points = gameState.player.points;
-                this.adversary.hand = gameState.adversary.hand;
-                this.adversary.wonCards = gameState.adversary.wonCards;
-                this.adversary.points = gameState.adversary.points;
-                this.briscola = gameState.briscola;
-                this.briscolaDeclared = gameState.briscolaDeclared;
-                this.playerIsFirst = gameState.playerIsFirst;
-                this.isPlayerTurn = gameState.isPlayerTurn;
-                this.ui.drawAdversaryHand();
-                this.ui.drawPlayerHand();
-                this.ui.drawDeck();
-                this.turn();
-                console.log('Game loaded');
-            } else {
-                console.log('No saved game found');
-            }
-        } catch (error) {
-            console.error('Error loading game:', error);
-        }
+            return response.text(); // Get the raw response text
+        })
+        .then(text => {
+            console.log('Game stats updated:', text);
+            stopGame();
+        })
+        .catch((error) => {
+            console.error('Error updating game stats:', error);
+        });
     }
 
     // Method to check if the adversary can declare
@@ -375,7 +333,7 @@ class Game{
             suitsCount[card.suit].push(card.value);
         }
 
-        for (let suit in suitsCount) {
+        for (let suit of Object.keys(suitsCount)) {
             if (suitsCount[suit].includes('9') && suitsCount[suit].includes('10') && this.briscola !== suit) {
                 this.adversaryDeclare(suit);
                 break;
@@ -394,28 +352,12 @@ class Game{
             this.adversary.points += 20;
             this.declaredSuits.push(suit);
         } else {
-            console.log('L\'avversario ha già dichiarato questo seme');
+            console.log('Avversario ha già dichiarato questo seme');
         }
         console.log(`Adversary declared ${suit}`);
     }
 
-    startNewSet() {
-        this.deck = new Deck();
-        this.player.hand = [];
-        this.player.wonCards = [];
-        this.adversary.hand = [];
-        this.adversary.wonCards = [];
-        this.firstHand();
-        this.briscola = null;
-        this.briscolaDeclared = false;
-        this.playerIsFirst = true;
-        this.isPlayerTurn = true;
-        this.ui.drawAdversaryHand();
-        this.ui.drawPlayerHand();
-        this.ui.drawDeck();
-        this.turn();
-        this.declaredSuits = [];
-    }
+    
 }
 
 function startGame(){
@@ -423,15 +365,13 @@ function startGame(){
     window.gameInstance = game;
 }
 
-function endGame(){
+function stopGame(){
     if(window.gameInstance){
-        window.gameInstance.ui.clearCanvas();
+        window.gameInstance.player.hand = [];
+        window.gameInstance.adversary.hand = [];
+        window.gameInstance.ui.drawAdversaryHand();
+        window.gameInstance.ui.drawPlayerHand();
+        window.gameInstance.ui.clearDeck();
         window.gameInstance = null;
     }
 }
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     console.log('DOM fully loaded and parsed');
-//     const game = new Game();
-//     window.gameInstance = game;
-// });
