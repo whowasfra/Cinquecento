@@ -5,13 +5,13 @@
 
 <nav class="topNavigation">
     <div class="logo">
-        <h1>Cinquecento</h1>
+        <img src="../images/logo/logo-white.png" alt="Cinquecento Logo">
     </div>
 
     <ul class="center">
         <li><a href="home.php">Home</a></li>
         <li><a href="regole.php">Regole</a></li>
-        <li><a href="statistiche.php">Statistiche</a></li> 
+        <li><a href="classifica.php">Classifica</a></li> 
     </ul>
 
     <div class="user" id="topNavUser">
