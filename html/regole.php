@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Regole del Gioco 500</title>
-    <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/top_navigation.css">
     <style>
         body {
@@ -12,6 +11,7 @@
             background-color: #f4f4f9;
             color: #333;
             line-height: 1.6;
+            margin: 0;
         }
         
         p {
@@ -19,13 +19,14 @@
             padding: 0;
             color: #666;
         }
+
         ul {
             list-style-type: disc;
             padding-left: 40px;
         }
-       
+        
         .container {
-            max-width: 800px;
+            width: 80%;
             margin: auto;
             background-color: #fff;
             padding: 20px;
