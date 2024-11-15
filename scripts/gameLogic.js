@@ -2,7 +2,6 @@ class Game{
     constructor(){
         this.deck = new Deck();
         this.player = new Player();
-        this.player.points = 500;
         this.adversary = new Player();
         this.addCardEventListeners();
         this.ui = new ui(this);
@@ -11,7 +10,6 @@ class Game{
     }
 
     startNewSet() {
-        this.determineSetWinner();
         this.deck = new Deck();
         this.player.hand = [];
         this.player.wonCards = [];
