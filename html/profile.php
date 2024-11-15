@@ -29,13 +29,17 @@
         </div>
     </main>
     <script>
-        fetch("../php/getGameStats.php")
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('games-played').textContent = data.gamesPlayed;
-                document.getElementById('games-won').textContent = data.gamesWon;
-            })
-            .catch(error => console.error('Error fetching game stats:', error));
+        const gamesPlayed = document.getElementById('games-played');
+        const gamesWon = document.getElementById('games-won');
+
+        fetch('../php/get_game_stats.php')
+        .then((response) => response.json())
+        .then((data) => {
+            gamesPlayed.textContent = data.gamesPlayed;
+            gamesWon.textContent = data.gamesWon;
+        }).catch((error) => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
     </script>
 </body>
 </html>
