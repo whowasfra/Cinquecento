@@ -4,11 +4,11 @@
         <meta charset="utf-8"/>
         <title>Login</title>
         <link rel="stylesheet" href="../css/style.css"/> 
-        <link rel="stylesheet" href="../css/top_Navigation.css"/>
+        <link rel="stylesheet" href="../css/top_navigation.css"/>
         <style>
             body {
                 font-family: 'Arial', sans-serif;
-                background-color: #f4f4f9;
+                background-color: #fbfff5;
                 color: #333;
                 line-height: 1.6;
             }
@@ -23,7 +23,7 @@
                 padding: 20px;
                 background-color: #fff;
                 border-radius: 12px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
             }
             form label {
                 margin-top: 10px;
