@@ -24,7 +24,7 @@
         <?php include '../php/top_navigation.php'; ?>
         <div class="container">
             <h1>Classifica Giocatori per Partite Vinte</h1>
-            <table border="1">
+            <table>
                 <tr>
                     <th>Giocatore</th>
                     <th>Partite Vinte</th>
@@ -43,7 +43,7 @@
 
         <div class="container">
             <h1>Classifica Giocatori per Partite Giocate</h1>
-            <table border="1">
+            <table>
                 <tr>
                     <th>Giocatore</th>
                     <th>Partite Giocate</th>
