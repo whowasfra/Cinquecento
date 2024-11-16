@@ -10,6 +10,7 @@ class Game{
     }
 
     startNewSet() {
+        this.ui.clearCanvas();
         this.deck = new Deck();
         this.player.hand = [];
         this.player.wonCards = [];
@@ -211,12 +212,16 @@ class Game{
     winsRound(playerCard, adversaryCard, whoWon) {
         if (whoWon === 'player') {
             console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCard.points} + ${adversaryCard.points}`);
+            this.ui.updateMessage("Hai vinto la mano con " + playerCard.value + " " + playerCard.suit + " contro " + adversaryCard.value + " " + adversaryCard.suit);
             this.player.wonCards.push(playerCard, adversaryCard);
+            this.ui.drawTakenCard(true);
             this.isPlayerTurn = true;
             this.playerIsFirst = true;  
         } else {
             console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${adversaryCard.points} + ${playerCard.points}`);
+            this.ui.updateMessage("Avversario ha vinto la mano con " + adversaryCard.value + " " + adversaryCard.suit + " contro " + playerCard.value + " " + playerCard.suit  );
             this.adversary.wonCards.push(playerCard, adversaryCard);
+            this.ui.drawTakenCard(false);
             this.isPlayerTurn = false;
             this.playerIsFirst = false;
         }
@@ -296,7 +301,6 @@ class Game{
             } else {
                 console.log(`It's a tie! Both players have ${this.player.points} points.`);
                 this.ui.updateMessage("Pareggio siete entrambi a " + this.player.points);
-                this.ui.clearMessages();
                 this.startNewSet();
             }
         } else {
@@ -370,18 +374,25 @@ class Game{
     
 }
 
-function startGame(){
+function startGame() {
+    if (window.gameInstance) {
+        stopGame();
+    }
     const game = new Game();
     window.gameInstance = game;
+    game.ui.toggleStartButton();
+    game.ui.toggleEndButton();
 }
 
-function stopGame(){
-    if(window.gameInstance){
+function stopGame() {
+    if (window.gameInstance) {
         window.gameInstance.player.hand = [];
         window.gameInstance.adversary.hand = [];
-        window.gameInstance.ui.drawAdversaryHand();
-        window.gameInstance.ui.drawPlayerHand();
-        window.gameInstance.ui.clearDeck();
+        window.gameInstance.ui.clearCanvas();
+        window.gameInstance.ui.clearMessages();
         window.gameInstance = null;
     }
+    const uiInstance = new ui();
+    uiInstance.toggleStartButton();
+    uiInstance.toggleEndButton();
 }
