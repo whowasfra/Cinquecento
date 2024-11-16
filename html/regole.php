@@ -50,9 +50,7 @@
         
         <p><b>Le carte</b>:</p>
         <p>Per giocare al Cinquecento è necessario un mazzo di 40 carte, qualsiasi 
-            di quelli regionali italiani è adatto, ma può andare bene anche 
-            un mazzo di 52 carte francesi da cui vengano preventivamente rimossi gli Otto, 
-            i Nove e i Dieci.</p>
+            di quelli regionali italiani è adatto.</p>
         
         <p><b>Scopo del gioco</b>:</p>
         <p>Lo scopo del Cinquecento è quello di ottenere più 
@@ -60,19 +58,19 @@
             Il giocatore che per primo raggiunge i 500 punti vince la partita.</p>
         
         <p><b>Distribuzione delle carte</b>:</p>
-        <p>Il ruolo del cartaio viene determinato a caso, mediante la regola del "<i>bàs 
-            fà màs</i>" per esempio, e nel corso delle smazzate i giocatori 
+        <p>Il ruolo del cartaio viene determinato a caso e nel corso delle smazzate i giocatori 
             si alternano in questo ruolo, seguendo l'ordine di gioco.<br>
-            Il cartaio distribuisce le carte in senso antiorario cinque carte a testa, 
-            le carte che avanzano costituiscono il tallone.</p>
+            Il cartaio distribuisce le carte in senso antiorario cinque carte a testa.
+        </p>
         
         <p><b>Svolgimento del gioco</b>:</p>
         <p>A questo punto inizia il gioco vero e proprio, il primo giocatore, a destra 
             del cartaio, gioca una carta.<br>
             I suoi avversari, seguendo l'ordine di gioco, devono, a loro volta giocare 
-            una carta. Colui che cala la carta con il maggior valore di presa ottiene <br>
+            una carta. Colui che cala la carta con il maggior valore di presa ottiene
             tutte le carte giocate, e le mette in pila vicino a sè stesso.<br>
-        </p><p>L'ordine di presa nel Cinquecento, dal più forte al più debole, 
+        </p>
+        <p>L'ordine di presa nel Cinquecento, dal più forte al più debole, 
             è il seguente:<br>
             Asso, Tre, Re, Cavallo, Fante, Sette, Sei, Cinque, Quattro, Due.</p>
         <p>Dopo che tutti i giocatori hanno fatto la propria giocata, si passa alla 
@@ -81,7 +79,7 @@
             seguendo l'ordine di gioco. Il giocatore che ha pescato per primo, sarà
             anche il primo a giocare.</p>
 
-        <p>Durante la smazzata, quando il giocatore lo desidera può effettuare 
+        <p>Durante il prorio turno il giocatore lo desidera può effettuare 
             una dichiarazione incassando subito 40 punti.<br>
             Per dichiarare è necessario possedere la coppia Cavallo - Re dello stesso
             seme, da questo momento fino al termine della smazzata questo seme sarà detto 
@@ -112,12 +110,6 @@
         <li>20 punti per le successive.</li>
         </ul>
         <p>Il giocatore che per primo raggiunge il tetto di 500 punti vince la partita.</p>
-        
-        <p><b>Terminologia</b>:</p>
-        <p>L'Asso e il Tre sono denominati in questo gioco "carichi".<br>
-        Re, Donna e Fante sono ovviamente le "figure".<br>
-        Le altre invece sono denominate "lisci" o "scartine" perchè
-        non forniscono punti. </p>
     </div>
 </body>
 </html>
