@@ -56,7 +56,10 @@
                 border-radius: 12px;
                 transition: background-color 0.3s ease;
             }
-
+            .menu button:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+            }
             .menu button:hover {
                 background-color: #bdd4c2 ;
             }
@@ -67,7 +70,7 @@
                 background-color: #fff;
                 border: 2px solid #d4edda;
                 border-radius: 8px;
-                width: 250px;
+                width: 300px;
                 height: 400px; 
                 display: flex;
                 flex-direction: column;
@@ -107,12 +110,47 @@
             .message {
                 background-color: yellow;
                 font-weight: bold;
-                transition: background-color 1s ease, font-weight 1s ease;
+                margin-top : 10px;
             }
 
-            .message.highlight {
-                background-color: white;
-                font-weight: normal;
+            .declaration-container {
+                margin-left: 20px;
+                margin-top: 10px;
+                display: flex;
+                flex-direction: column;
+                padding: 10px;
+                background-color: #fff;
+                border: 2px solid #d4edda;
+                border-radius: 8px;
+                width: 300px;
+                height: 150px;
+                align-items: center;
+                text-align: center;
+            }
+
+            .declaration-container h3, .declaration-container div {
+                width: 100%;
+            }
+
+            .declaration-container button {
+                width: 80%;
+                padding: 10px 20px;
+                margin: 5px;
+                border: none;
+                border-radius: 8px;
+                background-color: #bdd4c2;
+                color: black;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .declaration-container button:hover {
+                background-color: #a8c1a8;
+            }
+
+            .side-bar{
+                display: flex;
+                flex-direction: column;
             }
         </style>
     </head>
@@ -122,36 +160,40 @@
         <header>
         </header>
         <main>
-            
             <div class="table">
                 <canvas id="gameCanvas" width="800" height="600"></canvas>
-                <div class="info-panel" id="infoPanel">
-                    <h3>Info Partita</h3>
-                    <div class="message-panel" id="messagePanel"></div>
-                    <p id="playerPoints">Punti Giocatore: 0</p>
-                    <p id="adversaryPoints">Punti Avversario: 0</p>
+                <div class="side-bar">
+                    <div class="info-panel" id="infoPanel">
+                        <h3>Info Partita</h3>
+                        <div class="message-panel" id="messagePanel"></div>
+                        <p id="playerPoints">Punti Giocatore: 0</p>
+                        <p id="adversaryPoints">Punti Avversario: 0</p>
 
-                    <div class="menu">
-                        <button id="startGameButton" onclick="startGame()">Inizia partita</button>
-                        <button id="endGameButton" onclick="stopGame()">Fine partita</button>
-                        <!-- <button id="saveGame" onclick="saveGame()">Salva la partita</button>
-                        <button id="loadGame" onclick="loadGame()">Carica una partita</button> -->
+                        <div class="menu">
+                            <button id="startGameButton" onclick="startGame()">Inizia partita</button>
+                            <button id="endGameButton" onclick="stopGame()">Fine partita</button>
+                            <!-- <button id="saveGame" onclick="saveGame()">Salva la partita</button>
+                            <button id="loadGame" onclick="loadGame()">Carica una partita</button> -->
+                        </div>
+                    </div>
+                    <div class="declaration-container">
+                        <h3>Dichiarazioni</h3>
+                        <div class="declaration-bastoni">
+                            
+                        </div>
+                        <div class="declaration-spade">
+                        
+                        </div>
+                        <div class="declaration-oro">
+                        
+                        </div>
+                        <div class="declaration-coppe">
+                        
+                        </div>  
                     </div>
                 </div>
-                
-            </div>   
-            <div class="declaration-container">
-                <div class="declaration-bastoni"></div>
-                <div class="declaration-spade"></div>
-                <div class="declaration-oro"></div>
-                <div class="declaration-coppe"></div>
             </div>
         </main>
-        <footer>
-            <div class="footer-title-container">
-                <h2>Realizzato da: <br> Francesco</h2>
-            </div>
-        </footer>
     </body>
 </html>
 
