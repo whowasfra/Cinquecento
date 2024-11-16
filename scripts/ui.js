@@ -39,7 +39,7 @@
         }
 
         drawHand(hand, yPosition, isPlayer) {
-            this.ctx.clearRect(0, yPosition, this.canvas.width, this.cardHeight);
+            this.ctx.clearRect(0, yPosition, this.canvas.width - 200, this.cardHeight);
             for (let i = 0; i < hand.length; i++) {
                 const card = hand[i];
                 const img = new Image();
@@ -59,7 +59,6 @@
             this.drawHand(this.game.adversary.hand, 50, false);
         }
 
-        // disegna il mazzo
         drawDeck(){
             if (this.game.deck.cards.length === 0) {
                 this.clearDeck();
@@ -76,16 +75,16 @@
         // disegna le carte sul tavolo
         drawPlayedCards() {
             // Clear only the areas where the played cards are drawn
-            this.ctx.clearRect(350, 250, this.cardWidth, this.cardHeight);
-            this.ctx.clearRect(450, 250, this.cardWidth, this.cardHeight);
-
+            this.ctx.clearRect(350, 225, this.cardWidth, this.cardHeight);
+            this.ctx.clearRect(450, 225, this.cardWidth, this.cardHeight);
+            
             if (this.game.player.playedCard) {
                 const card = this.game.player.playedCard;
                 const img = new Image();
                 img.src = `../images/carte/${card.suit}${card.value}.bmp`;
                 img.onload = () => {
                     const roundedImg = this.setRoundedCorners(img);
-                    this.ctx.drawImage(roundedImg, 350, 250, this.cardWidth, this.cardHeight);
+                    this.ctx.drawImage(roundedImg, 350, 225, this.cardWidth, this.cardHeight);
                 };
             }
 
@@ -95,14 +94,23 @@
                 img.src = `../images/carte/${card.suit}${card.value}.bmp`;
                 img.onload = () => {
                     const roundedImg = this.setRoundedCorners(img);
-                    this.ctx.drawImage(roundedImg, 450, 250, this.cardWidth, this.cardHeight);
+                    this.ctx.drawImage(roundedImg, 450, 225, this.cardWidth, this.cardHeight);
                 };
             }
         }
-
-        drawTakenCard(x, y) {
+     
+        drawTakenCard(isPlayer) {
             const img = new Image();
             img.src = `../images/carte/dorso.bmp`;
+            let x = 0;
+            let y = 0;
+            if(isPlayer){                                   
+                x = this.canvas.width - 2*this.cardWidth;
+                y = this.canvas.height - this.cardHeight;
+            } else{
+                x = this.canvas.width - 2*this.cardWidth;
+                y = 0;
+            }
             img.onload = () => {
                 const roundedImg = this.setRoundedCorners(img);
                 this.ctx.drawImage(roundedImg, x, y, this.cardWidth, this.cardHeight);
@@ -123,13 +131,25 @@
             newMessage.className = 'message';
             newMessage.innerText = message;
             messagePanel.appendChild(newMessage);
-            messagePanel.scrollTop = messagePanel.scrollHeight; 
+            messagePanel.scrollTop = messagePanel.scrollHeight;
+            setTimeout(() => {
+            newMessage.style.backgroundColor = 'white';
+            }, 5000);
         }
 
         clearMessages() {
             const messagePanel = document.getElementById('messagePanel');
             messagePanel.innerHTML = '';
         }
+
+        toggleStartButton() {
+            document.getElementById('startGameButton').disabled = !document.getElementById('startGameButton').disabled;
+        }
+
+        toggleEndButton() {
+            document.getElementById('endGameButton').disabled = !document.getElementById('startGameButton').disabled;
+        }
+
     }
 
     window.ui = ui;
