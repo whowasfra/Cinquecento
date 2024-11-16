@@ -13,7 +13,10 @@
             line-height: 1.6;
             margin: 0;
         }
-        
+        h1{
+            text-align: center;
+            margin: 20px;
+        }
         p {
             margin: 20px;
             padding: 0;
@@ -29,6 +32,7 @@
             width: 80%;
             margin: auto;
             background-color: #fff;
+            border : 2px solid #d4edda;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -38,6 +42,7 @@
 <body>
     <?php include '../php/top_Navigation.php' ?> 
     <div class="container">
+        <h1>Regole del Gioco 500</h1>
         <p>Al Cinquecento si può giocare in due, tre o quattro persone. Le regole 
             sono piuttosto semplici e basate sul gioco Briscola a cui si aggiungono 
             la possibilità di effettuare le dichiarazioni, questo permette ai giocatori di 
