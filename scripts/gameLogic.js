@@ -3,22 +3,31 @@ class Game{
         this.deck = new Deck();
         this.player = new Player();
         this.adversary = new Player();
+        this.addCardEventListeners();
+        this.ui = new ui(this);
+        this.totalPointsToWin = 500;
+        this.startNewSet();
+    }
+
+    startNewSet() {
+        this.ui.clearCanvas();
+        this.deck = new Deck();
         this.player.hand = [];
+        this.player.wonCards = [];
         this.adversary.hand = [];
+        this.adversary.wonCards = [];
         this.firstHand();
         this.briscola = null;
         this.briscolaDeclared = false;
         this.playerIsFirst = true;
         this.isPlayerTurn = true;
-        this.addCardEventListeners();
-        this.ui = new ui(this);
         this.ui.drawAdversaryHand();
         this.ui.drawPlayerHand();
         this.ui.drawDeck();
         this.turn();
         this.declaredSuits = [];
     }
-    
+
     firstHand(){
         for(let i = 0; i < 5; i++){
             this.player.hand.push(this.deck.dealCard());
@@ -28,6 +37,8 @@ class Game{
     
     addCardEventListeners(){
         document.getElementById('gameCanvas').addEventListener('click', (event) => {
+            if (!this.isPlayerTurn) return; // Ensure it's the player's turn before proceeding
+
             const rect = this.ui.canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
@@ -41,6 +52,7 @@ class Game{
                     if(x > cardX && x < cardX + this.ui.cardWidth && y > cardY && y < cardY + this.ui.cardHeight){
                         this.player.playedCard = this.player.playCard(i);
                         this.ui.drawPlayedCards(this);
+                        this.ui.drawPlayerHand(this); 
                         this.turn();
                         break;
                     }
@@ -67,7 +79,7 @@ class Game{
 
     // Metodo per simulare il turno dell'avversario in modo automatico
     adversaryTurn() {
-        this.checkForAdversaryDeclaration(); // Ensure adversary declares before playing a card
+        this.checkForAdversaryDeclaration(); 
 
         let bestCardIndex = 0;
         let bestCardValue = -1;
@@ -121,6 +133,7 @@ class Game{
 
         this.adversary.playedCard = this.adversary.playCard(bestCardIndex);
         this.ui.drawPlayedCards();
+        this.ui.drawAdversaryHand(this); 
         if (this.player.playedCard === null) {
             this.isPlayerTurn = true;
             this.turn();
@@ -170,6 +183,8 @@ class Game{
         this.player.playedCard = null;
         this.adversary.playedCard = null;
         this.ui.drawPlayedCards();
+        this.ui.drawPlayerHand(this); // Update player hand
+        this.ui.drawAdversaryHand(this); // Update adversary hand
 
         // se le carte non sono finite distribuire una carta a ciascun giocatore
         if(this.deck.cards.length > 0){
@@ -181,7 +196,6 @@ class Game{
             }
         } else {
             this.ui.clearDeck();
-            console.log('Carte finite');
         }
 
         this.ui.drawPlayerHand(this);
@@ -189,9 +203,8 @@ class Game{
 
         // se la partita è finita bisogna definire il vincitore
         if(this.deck.cards.length === 0 && this.player.hand.length === 0 && this.adversary.hand.length === 0 && this.player.playedCard === null && this.adversary.playedCard === null){
-            this.determineGameWinner();
+            this.determineSetWinner();
         }
-
         this.turn();
    }
 
@@ -199,12 +212,16 @@ class Game{
     winsRound(playerCard, adversaryCard, whoWon) {
         if (whoWon === 'player') {
             console.log(`Player wins with ${playerCard.value} of ${playerCard.suit} vs ${adversaryCard.value} of ${adversaryCard.suit} making ${playerCard.points} + ${adversaryCard.points}`);
+            this.ui.updateMessage("Hai vinto la mano con " + playerCard.value + " " + playerCard.suit + " contro " + adversaryCard.value + " " + adversaryCard.suit);
             this.player.wonCards.push(playerCard, adversaryCard);
+            this.ui.drawTakenCard(true);
             this.isPlayerTurn = true;
             this.playerIsFirst = true;  
         } else {
             console.log(`Adversary wins with ${adversaryCard.value} of ${adversaryCard.suit} vs ${playerCard.value} of ${playerCard.suit} making ${adversaryCard.points} + ${playerCard.points}`);
+            this.ui.updateMessage("Avversario ha vinto la mano con " + adversaryCard.value + " " + adversaryCard.suit + " contro " + playerCard.value + " " + playerCard.suit  );
             this.adversary.wonCards.push(playerCard, adversaryCard);
+            this.ui.drawTakenCard(false);
             this.isPlayerTurn = false;
             this.playerIsFirst = false;
         }
@@ -228,8 +245,6 @@ class Game{
                 this.hideDeclarationButton(suit);
             }
         }
-
-        // Da definire il fatto che anche l'avversario possa dichiarare
     }    
 
     // Metodo per mostrare il pulsante per dichiarare
@@ -266,96 +281,59 @@ class Game{
         }
         console.log(`Hai dichiarato ${suit}`);
         this.hideDeclarationButton(suit);
+        this.ui.updateMessage("Hai dichiarato a " + suit );
     }
 
     // Metodo per determinare il vincitore della partita
-    determineGameWinner(){
+    determineSetWinner(){
         this.player.points += this.player.wonCards.reduce((acc, card) => acc + card.points, 0);
         this.adversary.points += this.adversary.wonCards.reduce((acc, card) => acc + card.points, 0);
 
-        if(this.player.points > this.adversary.points){
-            console.log(`Player won with ${this.player.points} points. Adversary has ${this.adversary.points} points.`);
-        } else if(this.player.points < this.adversary.points){
-            console.log(`Adversary won with ${this.adversary.points} points. Player has ${this.player.points} points.`);
-        } else {
-            console.log(`It's a tie! Both players have ${this.player.points} points.`);
-        }
-
-    }
-    
-    // Metodo per salvare la partita 
-    async saveGame() {
-        const gameState = {
-            deck: this.deck.cards,
-            player: {
-                hand: this.player.hand,
-                wonCards: this.player.wonCards,
-                points: this.player.points
-            },
-            adversary: {
-                hand: this.adversary.hand,
-                wonCards: this.adversary.wonCards,
-                points: this.adversary.points
-            },
-            briscola: this.briscola,
-            briscolaDeclared: this.briscolaDeclared,
-            playerIsFirst: this.playerIsFirst,
-            isPlayerTurn: this.isPlayerTurn
-        };
-
-        try {
-            const response = await fetch('save_game.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(gameState)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to save game');
-            }
-
-            const result = await response.json();
-            console.log(result);
-        } catch (error) {
-            console.error('Error saving game:', error);
-        }
-    }
-
-    async loadGame() {
-        try {
-            const response = await fetch('load_game.php');
-
-            if (!response.ok) {
-                throw new Error('Failed to load game');
-            }
-
-            const gameState = await response.json();
-
-            if (gameState.status !== 'no_saved_game') {
-                this.deck.cards = gameState.deck;
-                this.player.hand = gameState.player.hand;
-                this.player.wonCards = gameState.player.wonCards;
-                this.player.points = gameState.player.points;
-                this.adversary.hand = gameState.adversary.hand;
-                this.adversary.wonCards = gameState.adversary.wonCards;
-                this.adversary.points = gameState.adversary.points;
-                this.briscola = gameState.briscola;
-                this.briscolaDeclared = gameState.briscolaDeclared;
-                this.playerIsFirst = gameState.playerIsFirst;
-                this.isPlayerTurn = gameState.isPlayerTurn;
-                this.ui.drawAdversaryHand();
-                this.ui.drawPlayerHand();
-                this.ui.drawDeck();
-                this.turn();
-                console.log('Game loaded');
+        if (this.player.points >= this.totalPointsToWin || this.adversary.points >= this.totalPointsToWin) {
+            if (this.player.points > this.adversary.points) {
+                console.log(`Player won the game with ${this.player.points} points. Adversary has ${this.adversary.points} points.`);
+                this.ui.updateMessage("Hai vinto con " + this.player.points + "contro" + this.adversary.points);
+                this.endGame(true);
+            } else if (this.player.points < this.adversary.points) {
+                console.log(`Adversary won the game with ${this.adversary.points} points. Player has ${this.player.points} points.`);
+                this.ui.updateMessage("Ha vinto l'avversario con " + this.adversary.points + "contro" + this.player.points);
+                this.endGame(false);
             } else {
-                console.log('No saved game found');
+                console.log(`It's a tie! Both players have ${this.player.points} points.`);
+                this.ui.updateMessage("Pareggio siete entrambi a " + this.player.points);
+                this.startNewSet();
             }
-        } catch (error) {
-            console.error('Error loading game:', error);
+        } else {
+            console.log(`End of set. Player has ${this.player.points} points. Adversary has ${this.adversary.points} points.`);
+            this.ui.updateMessage("Fine del set, nessuno dei giocatori ha raggiunto il punteggio necessario per vincere");
+            this.ui.clearMessages(); 
+            this.startNewSet();
         }
+        this.ui.updatePlayerPoints(this.player.points);
+        this.ui.updateAdversaryPoints(this.adversary.points);
+    }
+
+    endGame(isPlayerWinner) {
+        fetch('../php/update_game_stats.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ isPlayerWinner: isPlayerWinner })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.text(); // Get the raw response text
+        })
+        .then(text => {
+            console.log('Game stats updated:', text);
+            stopGame();
+        })
+        .catch((error) => {
+            console.error('Error updating game stats:', error);
+        });
     }
 
     // Method to check if the adversary can declare
@@ -368,7 +346,7 @@ class Game{
             suitsCount[card.suit].push(card.value);
         }
 
-        for (let suit in suitsCount) {
+        for (let suit of Object.keys(suitsCount)) {
             if (suitsCount[suit].includes('9') && suitsCount[suit].includes('10') && this.briscola !== suit) {
                 this.adversaryDeclare(suit);
                 break;
@@ -387,24 +365,34 @@ class Game{
             this.adversary.points += 20;
             this.declaredSuits.push(suit);
         } else {
-            console.log('L\'avversario ha già dichiarato questo seme');
+            console.log('Avversario ha già dichiarato questo seme');
         }
         console.log(`Adversary declared ${suit}`);
+        this.ui.updateMessage("L' avversario ha dichiarato a " + suit);
     }
+
+    
 }
 
-function startGame(){
+function startGame() {
+    if (window.gameInstance) {
+        stopGame();
+    }
     const game = new Game();
     window.gameInstance = game;
+    game.ui.toggleStartButton();
+    game.ui.toggleEndButton();
 }
 
-function endGame(){
-    window.gameInstance.ui.ctx.clearRect(0, 0, window.gameInstance.ui.canvas.width, window.gameInstance.ui.canvas.height);
-    window.gameInstance = null;
+function stopGame() {
+    if (window.gameInstance) {
+        window.gameInstance.player.hand = [];
+        window.gameInstance.adversary.hand = [];
+        window.gameInstance.ui.clearCanvas();
+        window.gameInstance.ui.clearMessages();
+        window.gameInstance = null;
+    }
+    const uiInstance = new ui();
+    uiInstance.toggleStartButton();
+    uiInstance.toggleEndButton();
 }
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     console.log('DOM fully loaded and parsed');
-//     const game = new Game();
-//     window.gameInstance = game;
-// });

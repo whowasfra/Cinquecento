@@ -5,20 +5,20 @@
 
 <nav class="topNavigation">
     <div class="logo">
-        <h1>Cinquecento</h1>
+        <img src="../images/logo/logo-white.png" alt="Cinquecento Logo">
     </div>
 
     <ul class="center">
         <li><a href="home.php">Home</a></li>
         <li><a href="regole.php">Regole</a></li>
-        <li><a href="statistiche.php">Statistiche</a></li> 
+        <li><a href="classifica.php">Classifica</a></li> 
     </ul>
 
     <div class="user" id="topNavUser">
         <section class="userBox">
             <h2>
-                <?php if (isset($_SESSION['user']) && $_SESSION['initiated'] == true): ?>
-                    <?php echo $_SESSION['username']; ?>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user'] == true): ?>
+                    <?php echo $_SESSION['user']; ?>
                 <?php else: ?>
                     <a href="login.php">LOGIN</a>
                 <?php endif; ?>
@@ -28,9 +28,9 @@
 
         <nav class='userNav'>
             <ul>
-                <?php if ($_SESSION['initiated'] == true): ?>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user'] == true): ?>
                     <li><a href="profile.php">Profilo</a></li>
-                    <li><a href="./logout.php">Logout</a></li>
+                    <li><a href="../php/logout.php">Logout</a></li>
                 <?php else: ?>
                     <li>Login to see more</li>
                 <?php endif; ?>

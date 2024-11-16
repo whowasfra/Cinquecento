@@ -4,7 +4,7 @@
         <meta charset="utf-8"/>
         <title>Login</title>
         <link rel="stylesheet" href="../css/style.css"/> 
-        <link rel="stylesheet" href="../css/top_Navigation.css"/>
+        <link rel="stylesheet" href="../css/top_navigation.css"/>
         <style>
             body {
                 font-family: 'Arial', sans-serif;
@@ -13,8 +13,8 @@
                 line-height: 1.6;
             }
             form {
-                width: 300px;
-                height: auto;
+                width: 40%;
+                height: 20%;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -23,7 +23,7 @@
                 padding: 20px;
                 background-color: #fff;
                 border-radius: 12px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
             }
             form label {
                 margin-top: 10px;
@@ -33,13 +33,13 @@
             form input {
                 margin-top: 10px;
                 padding: 10px;
-                border: 1px solid #e3cba2;
+                border: 1px solid #bdd4c2;
                 border-radius: 12px;
                 width: 100%;
                 box-sizing: border-box;
             }
             form input[type="submit"] {
-                background-color: #e3cba2;
+                background-color: #bdd4c2;
                 color: white;
                 border: none;
                 padding: 10px 20px;
@@ -54,15 +54,15 @@
                 width: auto;
             }
             form input[type="submit"]:hover {
-                background-color: #3E2723;
+                background-color: #a8c1a8;
             }
         </style>
     </head>
 
     <body>
         <?php include '../php/top_Navigation.php' ?>
-        <form method="post" action="login.php">
-            <label>User</label><input type="text" name="user" placeholder="Franco" required>
+        <form method="post" action="../php/login.php">
+            <label>User</label><input type="text" name="user" placeholder="Username" required>
             <label>Password</label><input type="password" name="password" placeholder="Password" required>
             <input type="submit" value="Login">
             <input type="submit" name="register" value="Register">

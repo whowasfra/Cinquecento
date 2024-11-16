@@ -1,128 +1,156 @@
-class ui{
-    constructor(myGame){
-        this.canvas = document.getElementById('gameCanvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.cardWidth = 75;
-        this.cardHeight = 120;
-        this.game = myGame;
-    }
+(function() {
+    class ui{
+        constructor(myGame){
+            this.canvas = document.getElementById('gameCanvas');
+            this.ctx = this.canvas.getContext('2d');
+            this.cardWidth = 75;
+            this.cardHeight = 120;
+            this.game = myGame;
+        }
 
-    setShadows(){
-        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; 
-        this.ctx.shadowBlur = 20;
-        this.ctx.shadowOffsetX = 5;
-        this.ctx.shadowOffsetY = 5;
-    }
+        clearCanvas(){
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+        
+        clearDeck(){
+            this.ctx.clearRect(0,this.canvas.height/2 - this.cardHeight/2, this.cardWidth, this.cardHeight);
+        }
 
-    resetShadows(){
-        this.ctx.shadowColor = 'transparent';
-        this.ctx.shadowBlur = 0;
-        this.ctx.shadowOffsetX = 0;
-        this.ctx.shadowOffsetY = 0;
-    }
+        setRoundedCorners(img) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(10, 0);
+            ctx.lineTo(canvas.width - 10, 0);
+            ctx.quadraticCurveTo(canvas.width, 0, canvas.width, 10);
+            ctx.lineTo(canvas.width, canvas.height - 10);
+            ctx.quadraticCurveTo(canvas.width, canvas.height, canvas.width - 10, canvas.height);
+            ctx.lineTo(10, canvas.height);
+            ctx.quadraticCurveTo(0, canvas.height, 0, canvas.height - 10);
+            ctx.lineTo(0, 10);
+            ctx.quadraticCurveTo(0, 0, 10, 0);
+            ctx.closePath();
+            ctx.clip();
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            return canvas;
+        }
 
-    clearDeck(){
-        this.ctx.clearRect(0,this.canvas.height/2 - this.cardHeight/2, this.cardWidth, this.cardHeight);
-    }
+        drawHand(hand, yPosition, isPlayer) {
+            this.ctx.clearRect(0, yPosition, this.canvas.width - 200, this.cardHeight);
+            for (let i = 0; i < hand.length; i++) {
+                const card = hand[i];
+                const img = new Image();
+                img.src = isPlayer ? `../images/carte/${card.suit}${card.value}.bmp` : `../images/carte/dorso.bmp`;
+                img.onload = () => {
+                    const roundedImg = this.setRoundedCorners(img);
+                    this.ctx.drawImage(roundedImg, 50 + i * (this.cardWidth + 5), yPosition, this.cardWidth, this.cardHeight);
+                };
+            }
+        }
 
-    renderCards(){
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-        this.ctx.shadowBlur = 5;
-        this.ctx.shadowOffsetX = 5;
-        this.ctx.shadowOffsetY = 5;
-    }
+        drawPlayerHand() {
+            this.drawHand(this.game.player.hand, 400, true);
+        }
 
-    setRoundedCorners(img) {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.beginPath();
-        ctx.moveTo(10, 0);
-        ctx.lineTo(canvas.width - 10, 0);
-        ctx.quadraticCurveTo(canvas.width, 0, canvas.width, 10);
-        ctx.lineTo(canvas.width, canvas.height - 10);
-        ctx.quadraticCurveTo(canvas.width, canvas.height, canvas.width - 10, canvas.height);
-        ctx.lineTo(10, canvas.height);
-        ctx.quadraticCurveTo(0, canvas.height, 0, canvas.height - 10);
-        ctx.lineTo(0, 10);
-        ctx.quadraticCurveTo(0, 0, 10, 0);
-        ctx.closePath();
-        ctx.clip();
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        return canvas;
-    }
+        drawAdversaryHand() {
+            this.drawHand(this.game.adversary.hand, 50, false);
+        }
 
-    drawHand(hand, yPosition, isPlayer) {
-        this.ctx.clearRect(0, yPosition, this.canvas.width, this.cardHeight);
-        for (let i = 0; i < hand.length; i++) {
-            const card = hand[i];
+        drawDeck(){
+            if (this.game.deck.cards.length === 0) {
+                this.clearDeck();
+                return;
+            }
             const img = new Image();
-            img.src = isPlayer ? `../images/carte/${card.suit}${card.value}.bmp` : `../images/carte/dorso.bmp`;
+            img.src = `../images/carte/dorso.bmp`;
             img.onload = () => {
                 const roundedImg = this.setRoundedCorners(img);
-                this.ctx.drawImage(roundedImg, 50 + i * (this.cardWidth + 5), yPosition, this.cardWidth, this.cardHeight);
-            };
-        }
-    }
-
-    drawPlayerHand() {
-        this.drawHand(this.game.player.hand, 400, true);
-    }
-
-    drawAdversaryHand() {
-        this.drawHand(this.game.adversary.hand, 50, false);
-    }
-
-    // disegna il mazzo
-    drawDeck(){
-        if (this.game.deck.cards.length === 0) {
-            this.clearDeck();
-            return;
-        }
-        const img = new Image();
-        img.src = `../images/carte/dorso.bmp`;
-        img.onload = () => {
-            const roundedImg = this.setRoundedCorners(img);
-            this.ctx.drawImage(roundedImg, 0,this.canvas.height/2 - this.cardHeight/2, this.cardWidth, this.cardHeight);
-        };
-    }
-
-    // disegna le carte sul tavolo
-    drawPlayedCards() {
-        // Clear only the areas where the played cards are drawn
-        this.ctx.clearRect(350, 250, this.cardWidth, this.cardHeight);
-        this.ctx.clearRect(450, 250, this.cardWidth, this.cardHeight);
-
-        if (this.game.player.playedCard) {
-            const card = this.game.player.playedCard;
-            const img = new Image();
-            img.src = `../images/carte/${card.suit}${card.value}.bmp`;
-            img.onload = () => {
-                const roundedImg = this.setRoundedCorners(img);
-                this.ctx.drawImage(roundedImg, 350, 250, this.cardWidth, this.cardHeight);
+                this.ctx.drawImage(roundedImg, 0,this.canvas.height/2 - this.cardHeight/2, this.cardWidth, this.cardHeight);
             };
         }
 
-        if (this.game.adversary.playedCard) {
-            const card = this.game.adversary.playedCard;
+        // disegna le carte sul tavolo
+        drawPlayedCards() {
+            // Clear only the areas where the played cards are drawn
+            this.ctx.clearRect(350, 225, this.cardWidth, this.cardHeight);
+            this.ctx.clearRect(450, 225, this.cardWidth, this.cardHeight);
+            
+            if (this.game.player.playedCard) {
+                const card = this.game.player.playedCard;
+                const img = new Image();
+                img.src = `../images/carte/${card.suit}${card.value}.bmp`;
+                img.onload = () => {
+                    const roundedImg = this.setRoundedCorners(img);
+                    this.ctx.drawImage(roundedImg, 350, 225, this.cardWidth, this.cardHeight);
+                };
+            }
+
+            if (this.game.adversary.playedCard) {
+                const card = this.game.adversary.playedCard;
+                const img = new Image();
+                img.src = `../images/carte/${card.suit}${card.value}.bmp`;
+                img.onload = () => {
+                    const roundedImg = this.setRoundedCorners(img);
+                    this.ctx.drawImage(roundedImg, 450, 225, this.cardWidth, this.cardHeight);
+                };
+            }
+        }
+     
+        drawTakenCard(isPlayer) {
             const img = new Image();
-            img.src = `../images/carte/${card.suit}${card.value}.bmp`;
+            img.src = `../images/carte/dorso.bmp`;
+            let x = 0;
+            let y = 0;
+            if(isPlayer){                                   
+                x = this.canvas.width - 2*this.cardWidth;
+                y = this.canvas.height - this.cardHeight;
+            } else{
+                x = this.canvas.width - 2*this.cardWidth;
+                y = 0;
+            }
             img.onload = () => {
                 const roundedImg = this.setRoundedCorners(img);
-                this.ctx.drawImage(roundedImg, 450, 250, this.cardWidth, this.cardHeight);
+                this.ctx.drawImage(roundedImg, x, y, this.cardWidth, this.cardHeight);
             };
         }
+
+        updatePlayerPoints(points) {
+            document.getElementById('playerPoints').innerText = `Punti Giocatore: ${points}`;
+        }
+
+        updateAdversaryPoints(points) {
+            document.getElementById('adversaryPoints').innerText = `Punti Avversario: ${points}`;
+        }
+
+        updateMessage(message) {
+            const messagePanel = document.getElementById('messagePanel');
+            const newMessage = document.createElement('div');
+            newMessage.className = 'message';
+            newMessage.innerText = message;
+            messagePanel.appendChild(newMessage);
+            messagePanel.scrollTop = messagePanel.scrollHeight;
+            setTimeout(() => {
+            newMessage.style.backgroundColor = 'white';
+            }, 5000);
+        }
+
+        clearMessages() {
+            const messagePanel = document.getElementById('messagePanel');
+            messagePanel.innerHTML = '';
+        }
+
+        toggleStartButton() {
+            document.getElementById('startGameButton').disabled = !document.getElementById('startGameButton').disabled;
+        }
+
+        toggleEndButton() {
+            document.getElementById('endGameButton').disabled = !document.getElementById('startGameButton').disabled;
+        }
+
     }
 
-    drawTakenCard(x, y) {
-        const img = new Image();
-        img.src = `../images/carte/dorso.bmp`;
-        img.onload = () => {
-            const roundedImg = this.setRoundedCorners(img);
-            this.ctx.drawImage(roundedImg, x, y, this.cardWidth, this.cardHeight);
-        };
-    }
-}
+    window.ui = ui;
+})();

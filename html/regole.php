@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Regole del Gioco 500</title>
-    <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/top_navigation.css">
     <style>
         body {
@@ -12,35 +11,28 @@
             background-color: #f4f4f9;
             color: #333;
             line-height: 1.6;
+            margin: 0;
         }
-        h1, h2 {
-            color: #444;
-        }
-        h1 {
+        h1{
             text-align: center;
-            margin-top: 20px;
-            font-size: 2.5em;
+            margin: 20px;
         }
-        h2 {
-            margin-top: 20px;
-            font-size: 1.8em;
-        }
-        p, ul {
+        p {
             margin: 20px;
             padding: 0;
             color: #666;
         }
+
         ul {
             list-style-type: disc;
             padding-left: 40px;
         }
-        li {
-            margin-bottom: 10px;
-        }
+        
         .container {
-            max-width: 800px;
+            width: 80%;
             margin: auto;
             background-color: #fff;
+            border : 2px solid #d4edda;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -51,35 +43,73 @@
     <?php include '../php/top_Navigation.php' ?> 
     <div class="container">
         <h1>Regole del Gioco 500</h1>
-        <p>Il gioco del 500 è un gioco di carte tradizionale italiano. Ecco le regole principali:</p>
-        <h2>Obiettivo del Gioco</h2>
-        <p>L'obiettivo del gioco è raggiungere esattamente 500 punti.</p>
-        <h2>Preparazione</h2>
+        <p>Al Cinquecento si può giocare in due, tre o quattro persone. Le regole 
+            sono piuttosto semplici e basate sul gioco Briscola a cui si aggiungono 
+            la possibilità di effettuare le dichiarazioni, questo permette ai giocatori di 
+            seguire diverse strategie.</p>
+        
+        <p><b>Le carte</b>:</p>
+        <p>Per giocare al Cinquecento è necessario un mazzo di 40 carte, qualsiasi 
+            di quelli regionali italiani è adatto.</p>
+        
+        <p><b>Scopo del gioco</b>:</p>
+        <p>Lo scopo del Cinquecento è quello di ottenere più 
+            punti dell'avversario, mediante le prese e le dichiarazioni.<br>
+            Il giocatore che per primo raggiunge i 500 punti vince la partita.</p>
+        
+        <p><b>Distribuzione delle carte</b>:</p>
+        <p>Il ruolo del cartaio viene determinato a caso e nel corso delle smazzate i giocatori 
+            si alternano in questo ruolo, seguendo l'ordine di gioco.<br>
+            Il cartaio distribuisce le carte in senso antiorario cinque carte a testa.
+        </p>
+        
+        <p><b>Svolgimento del gioco</b>:</p>
+        <p>A questo punto inizia il gioco vero e proprio, il primo giocatore, a destra 
+            del cartaio, gioca una carta.<br>
+            I suoi avversari, seguendo l'ordine di gioco, devono, a loro volta giocare 
+            una carta. Colui che cala la carta con il maggior valore di presa ottiene
+            tutte le carte giocate, e le mette in pila vicino a sè stesso.<br>
+        </p>
+        <p>L'ordine di presa nel Cinquecento, dal più forte al più debole, 
+            è il seguente:<br>
+            Asso, Tre, Re, Cavallo, Fante, Sette, Sei, Cinque, Quattro, Due.</p>
+        <p>Dopo che tutti i giocatori hanno fatto la propria giocata, si passa alla 
+            fase di pescaggio.<br>
+            Per primo pesca, colui che si è aggiudicato la presa, e poi gli altri, 
+            seguendo l'ordine di gioco. Il giocatore che ha pescato per primo, sarà
+            anche il primo a giocare.</p>
+
+        <p>Durante il prorio turno il giocatore lo desidera può effettuare 
+            una dichiarazione incassando subito 40 punti.<br>
+            Per dichiarare è necessario possedere la coppia Cavallo - Re dello stesso
+            seme, da questo momento fino al termine della smazzata questo seme sarà detto 
+            di briscola.<br>
+            Eventuali dichiarazioni successive forniranno solo 20 punti e non modificheranno
+            il seme di briscola.<br>
+            Le carte del seme di briscola potranno essere battute solo da altre carte dello stesso seme.<br>
+            E.g.: <i>Il Fante di briscola può essere battuto dal Cavallo di briscola ma non dal 
+            Cavallo di seme diverso, mentre un Asso di un seme qualsiasi può essere battuto anche dal 
+            Due di briscola a meno che sia a sua volta di briscola.</i></p>
+        
+        <p><b>Conteggio dei punti</b>:</p>
+        <p>In totale ci sono 120 punti che vengono suddivisi tra i giocatori durante 
+            la smazzata, in base alle prese. Al termine della smazzata ogni giocatore 
+            conta i punti che sono presenti nella pila delle carte da lui intascate.</p>
+        <p>Verranno assegnati:</p>
         <ul>
-            <li>Il gioco si gioca con un mazzo di 40 carte italiane.</li>
-            <li>Si può giocare in 2, 3 o 4 giocatori.</li>
-            <li>Ogni giocatore riceve 10 carte.</li>
+            <li>11 punti per l'Asso</li>
+            <li>10 punti per il Tre</li>
+            <li>4 punti per il Re</li>
+            <li>3 punti per il Cavallo</li>
+            <li>2 punti per il Fante</li>
+            <li>Le altre carte non danno punti.</li>
         </ul>
-        <h2>Svolgimento del Gioco</h2>
+        <p>Inoltre verranno assegnati dei punti per le dichiarazioni effettuate.</p>
         <ul>
-            <li>Il gioco si svolge in turni.</li>
-            <li>Ad ogni turno, i giocatori giocano una carta a testa.</li>
-            <li>Il giocatore che gioca la carta più alta vince il turno e prende le carte giocate.</li>
+        <li>40 punti per la prima dichiarazione;</li>
+        <li>20 punti per le successive.</li>
         </ul>
-        <h2>Punteggio</h2>
-        <ul>
-            <li>Le carte hanno i seguenti valori: Asso (11 punti), Tre (10 punti), Re (4 punti), Cavallo (3 punti), Fante (2 punti).</li>
-            <li>Le altre carte non hanno valore.</li>
-            <li>Il punteggio totale di ogni giocatore viene calcolato sommando i valori delle carte vinte.</li>
-        </ul>
-        <h2>Vittoria</h2>
-        <p>Il primo giocatore a raggiungere esattamente 500 punti vince la partita. Se un giocatore supera i 500 punti, il suo punteggio viene ridotto a 300 punti.</p>
-        <h2>Dichiarazioni</h2>
-        <p>Il gioco del 500 è simile alla Briscola. Il giocatore che ha in mano un Cavallo e un Re dello stesso seme può dichiarare.</p>
-        <ul>
-            <li>La prima dichiarazione indica la Briscola e il giocatore che ha dichiarato riceve 40 punti bonus.</li>
-            <li>Le dichiarazioni successive non cambiano la Briscola e assegnano al giocatore solo 20 punti.</li>
-        </ul>
+        <p>Il giocatore che per primo raggiunge il tetto di 500 punti vince la partita.</p>
     </div>
 </body>
 </html>
