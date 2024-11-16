@@ -51,6 +51,7 @@ class Game{
                     if(x > cardX && x < cardX + this.ui.cardWidth && y > cardY && y < cardY + this.ui.cardHeight){
                         this.player.playedCard = this.player.playCard(i);
                         this.ui.drawPlayedCards(this);
+                        this.ui.drawPlayerHand(this); 
                         this.turn();
                         break;
                     }
@@ -77,7 +78,7 @@ class Game{
 
     // Metodo per simulare il turno dell'avversario in modo automatico
     adversaryTurn() {
-        this.checkForAdversaryDeclaration(); // Ensure adversary declares before playing a card
+        this.checkForAdversaryDeclaration(); 
 
         let bestCardIndex = 0;
         let bestCardValue = -1;
@@ -131,6 +132,7 @@ class Game{
 
         this.adversary.playedCard = this.adversary.playCard(bestCardIndex);
         this.ui.drawPlayedCards();
+        this.ui.drawAdversaryHand(this); 
         if (this.player.playedCard === null) {
             this.isPlayerTurn = true;
             this.turn();
@@ -180,6 +182,8 @@ class Game{
         this.player.playedCard = null;
         this.adversary.playedCard = null;
         this.ui.drawPlayedCards();
+        this.ui.drawPlayerHand(this); // Update player hand
+        this.ui.drawAdversaryHand(this); // Update adversary hand
 
         // se le carte non sono finite distribuire una carta a ciascun giocatore
         if(this.deck.cards.length > 0){
@@ -236,8 +240,6 @@ class Game{
                 this.hideDeclarationButton(suit);
             }
         }
-
-        // Da definire il fatto che anche l'avversario possa dichiarare
     }    
 
     // Metodo per mostrare il pulsante per dichiarare
@@ -274,6 +276,7 @@ class Game{
         }
         console.log(`Hai dichiarato ${suit}`);
         this.hideDeclarationButton(suit);
+        this.ui.updateMessage("Hai dichiarato a " + suit );
     }
 
     // Metodo per determinare il vincitore della partita
@@ -284,18 +287,26 @@ class Game{
         if (this.player.points >= this.totalPointsToWin || this.adversary.points >= this.totalPointsToWin) {
             if (this.player.points > this.adversary.points) {
                 console.log(`Player won the game with ${this.player.points} points. Adversary has ${this.adversary.points} points.`);
+                this.ui.updateMessage("Hai vinto con " + this.player.points + "contro" + this.adversary.points);
                 this.endGame(true);
             } else if (this.player.points < this.adversary.points) {
                 console.log(`Adversary won the game with ${this.adversary.points} points. Player has ${this.player.points} points.`);
+                this.ui.updateMessage("Ha vinto l'avversario con " + this.adversary.points + "contro" + this.player.points);
                 this.endGame(false);
             } else {
                 console.log(`It's a tie! Both players have ${this.player.points} points.`);
+                this.ui.updateMessage("Pareggio siete entrambi a " + this.player.points);
+                this.ui.clearMessages();
                 this.startNewSet();
             }
         } else {
             console.log(`End of set. Player has ${this.player.points} points. Adversary has ${this.adversary.points} points.`);
+            this.ui.updateMessage("Fine del set, nessuno dei giocatori ha raggiunto il punteggio necessario per vincere");
+            this.ui.clearMessages(); 
             this.startNewSet();
         }
+        this.ui.updatePlayerPoints(this.player.points);
+        this.ui.updateAdversaryPoints(this.adversary.points);
     }
 
     endGame(isPlayerWinner) {
@@ -353,6 +364,7 @@ class Game{
             console.log('Avversario ha già dichiarato questo seme');
         }
         console.log(`Adversary declared ${suit}`);
+        this.ui.updateMessage("L' avversario ha dichiarato a " + suit);
     }
 
     
