@@ -62,7 +62,7 @@
     <body>
         <?php include '../php/top_Navigation.php' ?>
         <form method="post" action="../php/login.php">
-            <label>User</label><input type="text" name="user" placeholder="Franco" required>
+            <label>User</label><input type="text" name="user" placeholder="Username" required>
             <label>Password</label><input type="password" name="password" placeholder="Password" required>
             <input type="submit" value="Login">
             <input type="submit" name="register" value="Register">
