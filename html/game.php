@@ -21,26 +21,30 @@
                 color: #333;
                 line-height: 1.6;
             }
-            .menu-container{
+            .menu{
                 display: flex;
-                justify-content: center;
+                flex-direction: column;
                 align-items: center;
                 margin-top: 20px;
-            }
-            .menu {
-                display: flex;
-                flex-direction: row;
                 gap: 10px;
             }
             .table {
                 display: flex;
                 justify-content: center;
-                align-items: center;
+                align-items: flex-start;
                 margin-top: 20px;
             }
+
+            #gameCanvas {
+                background-color: green;
+                border: 2px solid #006400;
+                box-shadow: inset 0 0 10px #004d00;
+                border-radius: 15px;
+            }
+
             .menu button {
-                background-color: red;
-                color: white;
+                background-color: #d4edda;
+                color: black;
                 border: none;
                 padding: 10px 20px;
                 text-align: center;
@@ -54,7 +58,61 @@
             }
 
             .menu button:hover {
-                background-color: black ;
+                background-color: #bdd4c2 ;
+            }
+
+            .info-panel {
+                margin-left: 20px;
+                padding: 10px;
+                background-color: #fff;
+                border: 2px solid #d4edda;
+                border-radius: 8px;
+                width: 250px;
+                height: 400px; 
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .info-panel p {
+                text-align: center;
+                margin: 5px;
+                color: #333;
+                padding: 5px;
+                font-weight: bold;
+            }
+
+            .info-panel h3 {
+                text-align: center;
+                margin: 5px;
+                color: #333; 
+                font-size: 1.2em;
+                margin-bottom: 5px; 
+            }
+
+            .message-panel {
+                margin: 10px auto;
+                padding: 10px;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                width: 80%;
+                text-align: center;
+                height: 100px;
+                overflow-y: auto;
+                color: #333; 
+            }
+
+            .message {
+                background-color: yellow;
+                font-weight: bold;
+                transition: background-color 1s ease, font-weight 1s ease;
+            }
+
+            .message.highlight {
+                background-color: white;
+                font-weight: normal;
             }
         </style>
     </head>
@@ -64,17 +122,24 @@
         <header>
         </header>
         <main>
-            <div class="menu-container">
-                <div class="menu">
-                    <button id="startGameButton" onclick="startGame()">Inizia partita</button>
-                    <button id="endGameButton" onclick="stopGame()">Fine partita</button>
-                    <button id="saveGame" onclick="saveGame()">Salva la partita</button>
-                    <button id="loadGame" onclick="loadGame()">Carica una partita</button>
-                </div>
-            </div>
+            
             <div class="table">
                 <canvas id="gameCanvas" width="800" height="600"></canvas>
-            </div>    
+                <div class="info-panel" id="infoPanel">
+                    <h3>Info Partita</h3>
+                    <div class="message-panel" id="messagePanel"></div>
+                    <p id="playerPoints">Punti Giocatore: 0</p>
+                    <p id="adversaryPoints">Punti Avversario: 0</p>
+
+                    <div class="menu">
+                        <button id="startGameButton" onclick="startGame()">Inizia partita</button>
+                        <button id="endGameButton" onclick="stopGame()">Fine partita</button>
+                        <!-- <button id="saveGame" onclick="saveGame()">Salva la partita</button>
+                        <button id="loadGame" onclick="loadGame()">Carica una partita</button> -->
+                    </div>
+                </div>
+                
+            </div>   
             <div class="declaration-container">
                 <div class="declaration-bastoni"></div>
                 <div class="declaration-spade"></div>
