@@ -76,25 +76,27 @@ class Game{
             setTimeout(() => this.determineWinner(), 500);
         }
     }
-
-    // Metodo per simulare il turno dell'avversario in modo automatico
+    // turno avversario
     adversaryTurn() {
-        this.checkForAdversaryDeclaration(); 
-
+        this.checkForAdversaryDeclaration();
+    
         let bestCardIndex = 0;
         let bestCardValue = -1;
         let lowestCardIndex = 0;
         let lowestCardValue = Infinity;
         let hasNineOrTen = false;
-
+    
+        // Valutazione delle carte nella mano dell'avversario
         for (let i = 0; i < this.adversary.hand.length; i++) {
             let card = this.adversary.hand[i];
             let cardValue = card.points;
-
+    
+            // Aggiungi valore extra per le carte di briscola
             if (this.briscola && card.suit === this.briscola) {
                 cardValue += 10;
             }
-
+    
+            // Aggiungi valore extra per le carte che possono battere la carta del giocatore
             if (this.player.playedCard) {
                 if (card.suit === this.player.playedCard.suit) {
                     cardValue += 5;
@@ -102,45 +104,53 @@ class Game{
                     cardValue += 3;
                 }
             }
-
+    
+            // Controlla se la carta è un 9 o un 10
             if (card.value === '9' || card.value === '10') {
                 hasNineOrTen = true;
             }
-
+    
+            // Trova la carta con il valore più alto
             if (cardValue > bestCardValue) {
                 bestCardValue = cardValue;
                 bestCardIndex = i;
             }
-
+    
+            // Trova la carta con il valore più basso
             if (cardValue < lowestCardValue) {
                 lowestCardValue = cardValue;
                 lowestCardIndex = i;
             }
         }
-
+    
+        // Strategia difensiva: se l'avversario non può battere la carta del giocatore, gioca la carta più bassa
         if (this.player.playedCard) {
             let playerCard = this.player.playedCard;
             let canBeatPlayer = this.adversary.hand.some(card => card.suit === playerCard.suit && card.points > playerCard.points);
-
+    
             if (!canBeatPlayer) {
                 bestCardIndex = lowestCardIndex;
             }
         }
-
+    
+        // Strategia offensiva: se l'avversario ha un 9 o un 10, gioca la carta più bassa
         if (hasNineOrTen) {
             bestCardIndex = lowestCardIndex;
         }
-
+    
+        // Gioca la carta selezionata
         this.adversary.playedCard = this.adversary.playCard(bestCardIndex);
         this.ui.drawPlayedCards();
-        this.ui.drawAdversaryHand(this); 
+        this.ui.drawAdversaryHand(this);
+    
+        // Determina il vincitore del round
         if (this.player.playedCard === null) {
             this.isPlayerTurn = true;
             this.turn();
         } else {
             setTimeout(() => this.determineWinner(), 500);
         }
-
+    
         this.checkForAdversaryDeclaration();
     }
 
