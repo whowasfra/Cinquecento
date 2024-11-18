@@ -83,7 +83,7 @@
             gamesPlayed.textContent = data.gamesPlayed;
             gamesWon.textContent = data.gamesWon;
 
-            const gamesWonPercentage = (data.gamesWon / (data.gamesPlayed + data.gamesWon)) * 100;
+            const gamesWonPercentage = (data.gamesWon / data.gamesPlayed ) * 100;
 
             const gamesWonChart = document.getElementById('gamesWonChart');
             
