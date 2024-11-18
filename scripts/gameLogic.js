@@ -6,6 +6,8 @@ class Game{
         this.addCardEventListeners();
         this.ui = new ui(this);
         this.totalPointsToWin = 500;
+        this.playerIsFirst = true;
+        this.isPlayerTurn = true;
         this.startNewSet();
     }
 
@@ -19,8 +21,6 @@ class Game{
         this.firstHand();
         this.briscola = null;
         this.briscolaDeclared = false;
-        this.playerIsFirst = true;
-        this.isPlayerTurn = true;
         this.ui.drawAdversaryHand();
         this.ui.drawPlayerHand();
         this.ui.drawDeck();
@@ -151,7 +151,6 @@ class Game{
             setTimeout(() => this.determineWinner(), 500);
         }
     
-        this.checkForAdversaryDeclaration();
     }
 
     //Determina il vincitore del round
@@ -315,8 +314,8 @@ class Game{
             }
         } else {
             console.log(`End of set. Player has ${this.player.points} points. Adversary has ${this.adversary.points} points.`);
+            this.ui.clearMessages();
             this.ui.updateMessage("Fine del set, nessuno dei giocatori ha raggiunto il punteggio necessario per vincere");
-            this.ui.clearMessages(); 
             this.startNewSet();
         }
         this.ui.updatePlayerPoints(this.player.points);
@@ -399,7 +398,6 @@ function stopGame() {
         window.gameInstance.player.hand = [];
         window.gameInstance.adversary.hand = [];
         window.gameInstance.ui.clearCanvas();
-        window.gameInstance.ui.clearMessages();
         window.gameInstance = null;
     }
     const uiInstance = new ui();
