@@ -137,7 +137,7 @@ class Game{
             }
         }
     
-        // Strategia offensiva: se l'avversario ha un 9 o un 10, gioca la carta più bassa
+        // Strategia difensiva: se l'avversario ha un 9 o un 10, gioca la carta più bassa provando a dichiarare
         if (hasNineOrTen) {
             bestCardIndex = lowestCardIndex;
         }
@@ -145,7 +145,7 @@ class Game{
         // Gioca la carta selezionata
         this.adversary.playedCard = this.adversary.playCard(bestCardIndex);
         this.ui.drawPlayedCards();
-        this.ui.drawAdversaryHand(this);
+        this.ui.drawAdversaryHand();
     
         // Determina il vincitore del round
         if (this.player.playedCard === null) {
@@ -196,8 +196,8 @@ class Game{
         this.player.playedCard = null;
         this.adversary.playedCard = null;
         this.ui.drawPlayedCards();
-        this.ui.drawPlayerHand(this); // Update player hand
-        this.ui.drawAdversaryHand(this); // Update adversary hand
+        this.ui.drawPlayerHand(); // Update player hand
+        this.ui.drawAdversaryHand(); // Update adversary hand
 
         // se le carte non sono finite distribuire una carta a ciascun giocatore
         if(this.deck.cards.length > 0){
@@ -211,8 +211,8 @@ class Game{
             this.ui.clearDeck();
         }
 
-        this.ui.drawPlayerHand(this);
-        this.ui.drawAdversaryHand(this);
+        this.ui.drawPlayerHand();
+        this.ui.drawAdversaryHand();
 
         // se la partita è finita bisogna definire il vincitore
         if(this.deck.cards.length === 0 && this.player.hand.length === 0 && this.adversary.hand.length === 0 && this.player.playedCard === null && this.adversary.playedCard === null){
