@@ -101,8 +101,8 @@
                 border: 1px solid #ccc;
                 border-radius: 8px;
                 width: 80%;
-                text-align: center;
                 height: 100px;
+                text-align: center;
                 overflow-y: auto;
                 color: #333; 
             }
