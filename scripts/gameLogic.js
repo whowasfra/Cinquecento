@@ -6,9 +6,13 @@ class Game{
         this.addCardEventListeners();
         this.ui = new ui(this);
         this.totalPointsToWin = 500;
-        this.playerIsFirst = true;
-        this.isPlayerTurn = true;
+        this.randomizeStartingPlayer();
         this.startNewSet();
+    }
+    
+    randomizeStartingPlayer(){
+        this.isPlayerTurn = Math.random() > 0.5;
+        this.playerIsFirst = this.isPlayerTurn;
     }
 
     startNewSet() {
